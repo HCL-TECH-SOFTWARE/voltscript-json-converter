@@ -1,0 +1,113 @@
+%REM
+	Copyright 2022-2023 HCL America, Inc.
+	Licensed under the Apache License, Version 2.0 (the "License"); 
+	you may not use this file except in compliance with the License. 
+	You may obtain a copy of the License at
+
+	http://www.apache.org/licenses/LICENSE-2.0
+
+	Unless required by applicable law or agreed to in writing, 
+	software distributed under the License is distributed on an "AS IS" BASIS, 
+	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
+	See the License for the specific language governing permissions and limitations under the License	
+%END REM
+
+Option Public
+Option Declare
+Use "../src/VoltScriptJsonConverter"
+Use "../libs/VoltScriptTesting"
+'Runs through fromJsonString,asNoArgsObject,createNoArgsObject,resetGlobals,fromJson,
+'getCustomConverter,SamsaraArrayConverter,SamsaraScalarConverter
+
+Class BasicArrayClass
+
+    Public name as String
+    Public type as String
+    Public myStrings as Variant
+    Public myInts as Variant
+
+End Class
+
+Function runArrayTest as Boolean
+
+    Dim testRunner as New TestRunner("Class With Arrays Conversion")
+    Dim helper as new JsonConversionHelper
+    Dim testObj as BasicArrayClass
+    Dim json as String
+    Dim result as Boolean
+    Call testRunner.setOutputFormat("BOTH")
+
+    'Call converter.enableDebug()
+	json = |{"name":"paul","type":"person","myStrings":["Hello", "World"],"myInts":[1,2,3]}|
+    
+    Try
+        Dim deserializeSuite as New TestSuite("Test Class With Arrays deserialization")
+        Call testRunner.addTestSuite(deserializeSuite)
+        Call deserializeSuite.describe("Deserialization")
+        Set testObj = helper.fromJsonString(json, "BasicArrayClass", "../test/ClassWithArraysTest")
+        call deserializeSuite.addResult(True, "")
+        Call testDeserializationA(deserializeSuite, testObj)
+    Catch
+        Call deserializeSuite.addError("Error deserializing JSON: " & Error() & " on line " & Erl, ||)
+        print "Error " & Error() & " on line " & Erl
+    Finally
+        result = deserializeSuite.ranSuccessfully()
+    end Try
+
+    Try
+        Dim jsonObj as jsonObject
+        Dim serializeSuite as New TestSuite("Test Class with Arrays serialization")
+        Call testRunner.addTestSuite(serializeSuite)
+        Call serializeSuite.describe("Serialization")
+        Call helper.withScalarConverter("name").withScalarConverter("type").withArrayConverter("myStrings").withArrayConverter("myInts")
+        Set jsonObj = helper.toJson(testObj)
+        Call serializeSuite.addResult(True, "")
+        Call testSerializationA(serializeSuite, jsonObj)
+    Catch
+        Call serializeSuite.addError("Error serializing JSON: " & Error() & " on line " & Erl, ||)
+        print "Error " & Error() & " on line " & Erl()
+    Finally
+        result = result And serializeSuite.ranSuccessfully()
+    End Try
+
+    Return result
+End Function
+
+Function testDeserializationA(testSuite as TestSuite, testObj as BasicArrayClass)
+
+    On Error GoTo logErr
+
+    Call testSuite.describe("Test String").assertEqualsString("paul", testObj.name, false)
+    Call testSuite.describe("Test type").assertEqualsString("person", testObj.type, false)
+    Call testSuite.describe("Test my strings").assertEqualsNumeric(1, UBound(testObj.myStrings))
+    Call testSuite.describe("Test myStrings(0) is a string").assertIs("string", testObj.myStrings(0))
+    Call testSuite.describe("Test myStrings elem 0").assertEqualsString("Hello", testObj.myStrings(0), false)
+    Call testSuite.describe("Test myStrings elem 1").assertEqualsString("World", testObj.myStrings(1), false)
+    Call testSuite.describe("Test UBound myInts").assertEqualsNumeric(2, UBound(testObj.myInts))
+    Call testSuite.describe("Test myInts elem 0").assertEqualsNumeric(1, testObj.myInts(0))
+    Call testSuite.describe("Test myInts elem 1").assertEqualsNumeric(2, testObj.myInts(1))
+    Call testSuite.describe("Test myInts elem 2").assertEqualsNumeric(3, testObj.myInts(2))
+
+getOut:
+    Exit Function
+
+logErr:
+    Call testSuite.addError(|Error | & Error() & |(| & Err() & |) on line | & CStr(Erl), ||)
+	Resume Next
+
+End Function
+
+Function testSerializationA(testSuite as TestSuite, testObj as JsonObject)
+
+    Call testSuite.describe("Test String").assertEqualsString("paul", testObj.getChild("name").scalarValue, false)
+    Call testSuite.describe("Test type").assertEqualsString("person", testObj.getChild("type").scalarValue, false)
+    Call testSuite.describe("Test my strings").assertEqualsNumeric(2, testObj.getChild("myStrings").childCount)
+    Call testSuite.describe("Test myStrings(0) is a string").assertIs("string", testObj.getChild("myStrings").getChildren()(0).scalarValue)
+    Call testSuite.describe("Test myStrings elem 0").assertEqualsString("Hello", testObj.getChild("myStrings").getChildren()(0).scalarValue, false)
+    Call testSuite.describe("Test myStrings elem 1").assertEqualsString("World", testObj.getChild("myStrings").getChildren()(1).scalarValue, false)
+    Call testSuite.describe("Test UBound myInts").assertEqualsNumeric(3, testObj.getChild("myInts").childCount)
+    Call testSuite.describe("Test myInts elem 0").assertEqualsNumeric(1, testObj.getChild("myInts").getChildren()(0).scalarValue)
+    Call testSuite.describe("Test myInts elem 1").assertEqualsNumeric(2, testObj.getChild("myInts").getChildren()(1).scalarValue)
+    Call testSuite.describe("Test myInts elem 2").assertEqualsNumeric(3, testObj.getChild("myInts").getChildren()(2).scalarValue)
+
+End Function

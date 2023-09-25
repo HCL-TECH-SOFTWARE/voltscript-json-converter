@@ -1,0 +1,9 @@
+title: Serialization
+
+nav:
+    - index.md
+    - Convert an Object to JSON: helper.md
+    - scalar-array-converter.md
+    - basic-object-converter.md
+    - custom-converter.md
+    - getter-converter.md

@@ -1,0 +1,91 @@
+%REM
+	Copyright 2022-2023 HCL America, Inc.
+	Licensed under the Apache License, Version 2.0 (the "License"); 
+	you may not use this file except in compliance with the License. 
+	You may obtain a copy of the License at
+
+	http://www.apache.org/licenses/LICENSE-2.0
+
+	Unless required by applicable law or agreed to in writing, 
+	software distributed under the License is distributed on an "AS IS" BASIS, 
+	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
+	See the License for the specific language governing permissions and limitations under the License	
+%END REM
+
+Option Public
+Option Declare
+
+' Modify use statement as appropriate for your environent to point to relative path
+Use "../../../src/VoltScriptJsonConverter" 
+
+Class ObjectSummary
+
+    Public unid as String
+    Public modified as Variant
+    Public action as String
+
+End Class
+
+Class DateTimeSerializer as AbstractJsonConverter
+
+    Function toJson(source As Variant) As Variant
+        toJson = Format(source, "yyyy-mm-ddThh:nn:ssZ")
+    End Function
+
+End Class
+
+Class DateTimeOrNothingSerializer as AbstractJsonConverter
+
+    Sub serialize(source As Variant, target as JsonObject)
+        If (Not IsEmpty(source.modified)) Then
+            Call target.insertValue(Me.labelName, Format(source.modified, "yyyy-mm-ddThh:nn:ssZ"))
+        End If
+    End Sub
+
+End Class
+
+Sub Initialize()
+    Print "Running Sample1"
+    Call sample1()
+    Print "Running Sample2"
+    Call sample2()
+End Sub
+
+Sub sample1()
+    Dim helper as new JsonConversionHelper
+    Dim dateConverter as New DateTimeSerializer
+    Dim obj as New ObjectSummary
+    Dim jsonObj as JsonObject
+
+    obj.unid = "12345678901234567890123456789012"
+    obj.action = "created"
+    obj.modified = DateNumber(2022,2,2) + TimeNumber(2,2,22)
+    Call helper.withCustomConverter("modified", dateConverter)._
+        withScalarConverter("action")._
+        withScalarConverter("unid")
+    Set jsonObj = helper.toJson(obj)
+    Print jsonObj.toString(true)
+End Sub
+
+Sub sample2()
+    Dim helper as new JsonConversionHelper
+    Dim dateConverter as New DateTimeOrNothingSerializer
+    Dim obj as New ObjectSummary
+    Dim jsonObj as JsonObject
+
+    obj.unid = "12345678901234567890123456789012"
+    obj.action = "created"
+    obj.modified = DateNumber(2022,2,2) + TimeNumber(2,2,22)
+    Call helper.withCustomConverter("modified", dateConverter)._
+        withScalarConverter("action")._
+        withScalarConverter("unid")
+    Set jsonObj = helper.toJson(obj)
+    Print jsonObj.toString(true)
+
+    Set obj = new ObjectSummary
+    obj.unid = "12345678901234567890123456789012"
+    obj.action = "created"
+    Set jsonObj = helper.toJson(obj)
+    Print jsonObj.toString(true)
+End Sub
+

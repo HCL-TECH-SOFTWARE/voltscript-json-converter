@@ -1,0 +1,58 @@
+%REM
+	Copyright 2022-2023 HCL America, Inc.
+	Licensed under the Apache License, Version 2.0 (the "License"); 
+	you may not use this file except in compliance with the License. 
+	You may obtain a copy of the License at
+
+	http://www.apache.org/licenses/LICENSE-2.0
+
+	Unless required by applicable law or agreed to in writing, 
+	software distributed under the License is distributed on an "AS IS" BASIS, 
+	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
+	See the License for the specific language governing permissions and limitations under the License	
+%END REM
+
+Option Public
+Option Declare
+Use "../src/VoltScriptJsonConverter"
+UseVSE "*JsonVSE"
+
+Class Employee
+
+    Public firstName as String
+    Public lastName as String
+
+    Function getName() as String
+        getName = firstName & " " & lastName
+    End Function
+
+End Class
+
+Sub Initialize
+
+    Dim json as String
+    Dim employees() as Employee
+    Dim returnArr as Variant
+    Dim helper as New JsonConversionHelper
+    Dim parser as New Jsonparser
+    Dim jsonObj as JsonObject
+    dim i as Integer
+
+    json = |{
+"employees":[
+    {"firstName":"John", "lastName":"Doe"},
+    {"firstName":"Anna", "lastName":"Smith"},
+    {"firstName":"Peter", "lastName":"Jones"}
+]
+}|
+
+    Call parser.Loadfromjson(json)
+    Set jsonObj = parser.getRootobject
+    returnArr = helper.jsonArrayToObjects(jsonObj.getChild("employees"), "Employee", "Employees")
+    Redim employees(UBound(returnArr))
+    For i = 0 to UBound(returnArr)
+        Set employees(i) = returnArr(i)
+        Print employees(i).getName()
+    Next
+
+End Sub

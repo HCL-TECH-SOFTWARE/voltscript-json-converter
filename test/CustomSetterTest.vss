@@ -1,0 +1,146 @@
+%REM
+	Copyright 2022-2023 HCL America, Inc.
+	Licensed under the Apache License, Version 2.0 (the "License"); 
+	you may not use this file except in compliance with the License. 
+	You may obtain a copy of the License at
+
+	http://www.apache.org/licenses/LICENSE-2.0
+
+	Unless required by applicable law or agreed to in writing, 
+	software distributed under the License is distributed on an "AS IS" BASIS, 
+	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
+	See the License for the specific language governing permissions and limitations under the License	
+%END REM
+
+Option Public
+Option Declare
+Use "../src/VoltScriptJsonConverter"
+Use "../libs/VoltScriptTesting"
+
+Private Const RELATIVE_PATH_PREFIX = "../test/"
+
+Class PersonS
+
+    Private firstName as String
+    Private lastName as String
+    Private gender as String
+    Private age as Integer
+    Public basicProperty as Integer
+    Public zzzz as String
+
+    Function getName() as String
+        getName = firstName & " " & lastName
+    End Function
+
+    Function getFirstName() as String
+        getFirstName = firstName
+    End Function
+
+    Function getLastName() as String
+        getLastName = lastName
+    End Function
+
+    Function setName(fullName as String)
+        If (fullName = "") Then
+            'Print "****No name passed****"
+        Else
+            firstName = StrLeft(fullName, " ")
+            lastName = StrRight(fullName, " ")
+        End If
+    End Function
+
+    Function setGender(gender as String)
+        Me.gender = gender
+    End Function
+
+    Function getGender() as String
+        getGender = Me.gender
+    End Function
+
+    Function setAge(age as Integer)
+        Me.age = age
+    End Function
+
+    Function getAge()
+        getAge = age
+    End Function
+
+End Class
+
+Function runSetterTest() as Boolean
+
+    Dim testRunner as New TestRunner("Person Class with Custom Setter Conversion")
+    Dim helper as new JsonConversionHelper()
+    'Call helper.enableDebug()
+    Dim nameConverter as New JsonSetterConverter()
+    Dim genderConverter as New JsonSetterConverter()
+    Dim ageConverter as New JsonSetterConverter()
+    Dim person as PersonS
+    Dim json as String
+    Dim badJson as String
+    Dim result as Boolean
+    Call testRunner.setOutputFormat("BOTH")
+    
+	json = |{"fullName":"Paul Withers","basicProperty":1,"zzzz":"yyyy","gender":"Male","dummyAge":18,"age":49}|
+    badJson = |{"fullName":"","basicProperty":1,"zzzz":"yyyy","gender":"Male","dummyAge":12}|
+    
+    Try
+        Dim deserializeSuite as New TestSuite("Test Person Class with Custom Setter Deserialization")
+        Call testRunner.addTestSuite(deserializeSuite)
+        Call deserializeSuite.describe("Deserialization")
+        Call nameConverter.forSetter("setName").withValueParam()
+        Call genderConverter.forSetter("setGender").withLiteralParam("M")
+        ' Run setAge function, using age value, if it exists, else 18
+        Call ageConverter.forSetter("setAge").withSiblingParam("age", 18)
+        Call helper.withCustomConverter("fullName", nameConverter).withCustomConverter("gender", genderConverter)._
+        withCustomConverter("dummyAge", ageConverter).ignoreLabel("age")
+        Set person = helper.fromJsonString(json, "PersonS", RELATIVE_PATH_PREFIX & "CustomSetterTest")
+        call deserializeSuite.addResult(True, "")
+        Call testSerializationS(deserializeSuite, person)
+    Catch
+        Call deserializeSuite.addError("Error deserializing JSON: " & Error() & " on line " & Erl, ||)
+        print "Error " & Error() & " on line " & Erl
+    Finally
+        result = deserializeSuite.ranSuccessfully()
+    end Try
+        
+    Try
+        Dim badDeserializeSuite as New TestSuite("Test Person Class with Custom Setter No Name deserialization")
+        Call testRunner.addTestSuite(badDeserializeSuite)
+        Call badDeserializeSuite.describe("Deserialization")
+        Set person = helper.fromJsonString(badjson, "PersonS", RELATIVE_PATH_PREFIX & "CustomSetterTest")
+        call badDeserializeSuite.addResult(True, "")
+        Call testBadSerializationS(badDeserializeSuite, person)
+    Catch
+        Call deserializeSuite.addError("Error deserializing JSON: " & Error() & " on line " & Erl, ||)
+        print "Error " & Error() & " on line " & Erl
+    Finally
+        result = result And badDeserializeSuite.ranSuccessfully()
+    end Try
+
+    return result
+End Function
+
+Function testSerializationS(testSuite as TestSuite, testObj as PersonS)
+
+    Call testSuite.describe("Test person first name").assertEqualsString("Paul", testObj.getFirstName(), false)
+    Call testSuite.describe("Test person last name").assertEqualsString("Withers", testObj.getLastName(), false)
+    Call testSuite.describe("Test full name").assertEqualsString("Paul Withers", testObj.getName(), false)
+    Call testSuite.describe("Test basic property").assertEqualsInteger(1, testObj.basicProperty)
+    Call testSuite.describe("Test zzzz").assertEqualsString("yyyy", testObj.zzzz, false)
+    Call testSuite.describe("Test gender").assertEqualsString("M", testObj.getGender(), false)
+    Call testSuite.describe("Test age").assertEqualsInteger(49, testObj.getAge())
+    
+End Function
+
+Function testBadSerializationS(testSuite as TestSuite, testObj as PersonS)
+
+    Call testSuite.describe("Test person first name").assertEqualsString("", testObj.getFirstName(), false)
+    Call testSuite.describe("Test person last name").assertEqualsString("", testObj.getLastName(), false)
+    Call testSuite.describe("Test full name").assertEqualsString(" ", testObj.getName(), false)
+    Call testSuite.describe("Test basic property").assertEqualsInteger(1, testObj.basicProperty)
+    Call testSuite.describe("Test zzzz").assertEqualsString("yyyy", testObj.zzzz, false)
+    Call testSuite.describe("Test gender").assertEqualsString("M", testObj.getGender(), false)
+    Call testSuite.describe("Test age").assertEqualsInteger(18, testObj.getAge())
+
+End Function

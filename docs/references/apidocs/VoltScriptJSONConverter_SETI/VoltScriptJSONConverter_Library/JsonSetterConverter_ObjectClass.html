@@ -1,0 +1,201 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<!-- {{balidocgenerated}} -->
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>Class: JsonSetterConverter</title>
+	<meta name="date" content="2023-04-14">
+	<meta name="keywords" content="New()"><meta name="keywords" content="serialize()"><meta name="keywords" content="forSetter()"><meta name="keywords" content="withValueParam()"><meta name="keywords" content="deserialize()"><meta name="keywords" content="withSiblingParam()"><meta name="keywords" content="VoltScriptJSONConverter.VoltScriptJSONConverter.JsonSetterConverter Class">
+	<link rel="stylesheet" type="text/css" href="..\..\resources/balidoc.css" title="balistyle">
+	<script type="text/javascript" src="..\..\resources/script.js"></script>
+</head>
+<body>
+<script type="text/javascript"></script>
+<noscript><div>JavaScript is disabled on your browser.</div></noscript>
+
+
+<header id="masterHeader" class="dark master-header dark-master">
+	<div id="header-topbar" class="header-topbar">
+		<div class="container">
+			<div class="row">
+				<div class="col-xs-6 text-left">
+					<a href="https://www.hcltechsw.com/" target="_blank" class="logo-hcl" rel="nofollow"><img src="..\..\resources/hcl-white.png" class="img-responsive"></a>
+				</div>
+				<div class="col-xs-6 text-right">
+					<a href="https://www.hcltechsw.com/" target="_blank" class="logo-hcl-tech" rel="nofollow">HCL Software</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</header>
+<!-- ========= START OF TOP NAVBAR ======= -->
+<div class="topNav">
+	<a name="navbar.top">
+	<!--   -->
+	</a>
+	<div class="skipNav"><a href="#skip.navbar.top" title="Skip navigation links">Skip navigation links</a></div>
+	<a name="navbar.top.firstrow">
+	<!--   -->
+	</a>	
+	<ul class="navList" title="Navigation">
+		<!-- -->
+		<li><a href="..\VoltScriptJSONConverter_SETI.html" title="Navigate to VoltScriptJSONConverter">VoltScript JSON Converter</a></li><li><a href="..\VoltScriptJSONConverter_Library.html" title="Navigate to VoltScriptJSONConverter.VoltScriptJSONConverter">VoltScriptJSONConverter</a></li> 
+		<li class="navBarCell1Rev">JsonSetterConverter</li>
+	</ul>
+</div>
+
+<div class="subNav">
+	<ul class="navList">
+	<!-- --> 
+	</ul>
+	<div><!--  -->
+		<script type="text/javascript"><!--
+		navcontentLink = document.getElementById("navcontent_navbar_top");
+		if (!!navcontentLink) {
+		  if(window==top) {
+			navcontentLink.style.display = "block";
+		  }
+		  else {
+			navcontentLink.style.display = "none";
+		  }
+		}
+		  //-->
+		</script>
+	</div>
+	<div>
+		<ul class="subNavList">
+			
+		</ul>
+	</div>
+	<a name="skip.navbar.top">
+	<!--   -->
+	</a>
+</div>
+<!-- ========= END OF TOP NAVBAR ========= -->
+
+<!-- Class -->
+
+<!-- ======== START OF CLASS DATA ======== -->
+<div class="header">
+	<h1 title="Class JsonSetterConverter" class="title">Class JsonSetterConverter</h1>
+</div>
+
+<div class="contentContainer">
+	<ul class="inheritance">
+		<!-- --> 
+
+		<ul class="inheritance">
+		<!-- --> 
+
+			<ul class="inheritance">
+				<li><h2>VoltScriptJSONConverter.VoltScriptJSONConverter.JsonSetterConverter</h2></li>
+			</ul>
+		</ul>
+	</ul>
+
+	<hr />
+
+	<div class="description">	<ul class="blockList">		<li class="blockList">			<div class="comments"><!-- comment --><pre>Custom Converter to convert between a JSON value or values and VoltScript datatype or objects, using a specific sub or function in the underlying class. During deserialization, the relevant JSON objects will then be removed from the parent JSON object, to ensure they are not re-processed.</pre></div>			<hr />		</li>	</ul></div>
+	<ul class="blockList">	<li class="blockList">		<a name="class.summary"><!--   --></a>		<h3>Class Summary</h3>		<table class="memberSummary" border="0" cellpadding="3" cellspacing="0" summary="Class Summary Table">			<thead>						</thead>			<tbody>			<tr class="altColor"><td class="colFirst"><span class="memberNameLabel" title="{{fqn}}">Project ID</span></td><td class="colLast">086680CD3A1F050280258935003E6DFD</td></tr><tr class="rowColor"><td class="colFirst"><span class="memberNameLabel" title="{{fqn}}">Version</span></td><td class="colLast">3</td></tr><tr class="altColor"><td class="colFirst"><span class="memberNameLabel" title="{{fqn}}">Class ID</span></td><td class="colLast">3D9DEC30A1FAFF688025893500440480</td></tr><tr class="rowColor"><td class="colFirst"><span class="memberNameLabel" title="{{fqn}}">Class Type</span></td><td class="colLast">Derived</td></tr><tr class="altColor"><td class="colFirst"><span class="memberNameLabel" title="{{fqn}}">Derived From</span></td><td class="colLast">AbstractJsonFunctionConverter</td></tr><tr class="rowColor"><td class="colFirst"><span class="memberNameLabel" title="{{fqn}}">Attributes</span></td><td class="colLast"></td></tr>			</tbody>		</table>	</li></ul>
+	
+	<div class="summary">
+		<ul class="blockList">
+			<li class="blockList">
+				
+				 
+				
+				
+				 
+				  
+				<ul class="blockList">	<li class="blockList">		<a name="methods.summary"><!--   --></a>		<h3>Method Summaries</h3>		<table class="memberSummary" border="0" cellpadding="3" cellspacing="0" summary="Method Summary table, listing methods and comments">			<thead>						</thead>			<tbody>			<tr class="altColor"><td class="colFirst"><code><span class="memberNameLink"><a href="#VoltScriptJSONConverter.VoltScriptJSONConverter.JsonSetterConverter.serialize-">serialize</a></span>(source As Variant, target As JsonObject)</code></td></tr><tr class="rowColor"><td class="colFirst"><code><span class="memberNameLink"><a href="#VoltScriptJSONConverter.VoltScriptJSONConverter.JsonSetterConverter.deserialize-">deserialize</a></span>(holder As JsonCustomConstructor, source As JsonObject)</code></td></tr><tr class="altColor"><td class="colFirst"><code><span class="memberNameLink"><a href="#VoltScriptJSONConverter.VoltScriptJSONConverter.JsonSetterConverter.New-">New</a></span>()</code></td></tr><tr class="rowColor"><td class="colFirst"><code><span class="memberNameLink"><a href="#VoltScriptJSONConverter.VoltScriptJSONConverter.JsonSetterConverter.forSetter-">forSetter</a></span>(setterName As String) As JsonSetterConverter</code></td></tr><tr class="altColor"><td class="colFirst"><code><span class="memberNameLink"><a href="#VoltScriptJSONConverter.VoltScriptJSONConverter.JsonSetterConverter.withValueParam-">withValueParam</a></span>() As JsonSetterConverter</code></td></tr><tr class="rowColor"><td class="colFirst"><code><span class="memberNameLink"><a href="#VoltScriptJSONConverter.VoltScriptJSONConverter.JsonSetterConverter.withSiblingParam-">withSiblingParam</a></span>(labelName As String, defaultValue As Variant) As JsonSetterConverter</code></td></tr>			</tbody>		</table>	</li></ul> 
+			</li>
+		</ul>
+	</div>
+
+	<div class="details">
+		<ul class="blockList">
+			<li class="blockList">
+				<!-- ========= CONSTRUCTOR DETAIL ======== --><ul class="blockList">	<li class="blockList">		<a name="constructor.detail"><!-- --></a>		<h3>Constructor Detail</h3>		<ul class="blockListLast">			<li class="blockList">				<h4>JsonSetterConverter</h4>				<strong class="text-darkred"></strong>				<pre class="codesample">Function New()</pre>				<div class="block"><pre>Instantiates a new JsonSetterConverter instance.</pre></div>				<!-- --> 			</li>		</ul>	</li></ul>
+				<!-- ========= CODE SAMPLE ======== --><ul class="blockList">	<li class="blockList">		<a name="{{fqn}}.codesample"><!-- --></a>		<h3>Code Sample</h3>		<ul class="blockListLast">			<li class="blockList">				<pre class="codesample">%REM<br />The following code is in sample1 of deser-50.txt. When processing the firstName label in the JSON object, the JsonSetterConverter will be used to call the setName sub, passing the current value (the first name) as the first parameter and the lastName, a sibling of the firstName element in the JSON object, as the second parameter.<br />%END REM<br />Dim jsonObj as JsonObject  'populate accordingly<br />Dim converter as New JsonSetterConverter<br />Dim mainHolder as New Person()<br />Call converter.forSetter("setName").withValueParam().withSiblingParam("lastName")<br />Dim helper as New JsonConversionHelper()<br />Call helper.withCustomConverter("firstName", converter)<br />Call converter.deserialize(mainHolder, jsonObj)</pre>			</li>		</ul>	</li></ul>
+				
+				
+				
+				<!-- ============ METHOD DETAIL ========== --><ul class="blockList">	<li class="blockList">		<a name="method.detail"><!--   --></a>		<h3>Methods Detail</h3>		<!-- Method Detail Element --><a name="VoltScriptJSONConverter.VoltScriptJSONConverter.JsonSetterConverter.serialize-"><!--  --></a><ul class="blockList">	<li class="blockList">		<a name="VoltScriptJSONConverter.VoltScriptJSONConverter.JsonSetterConverter.serialize"><!--   --></a>		<h4>serialize</h4>		<table class="methoddetail" border="0" cellpadding="3" cellspacing="0" summary="serialize method detail table">			<thead>				<tr><th class="colFirst" scope="col" colspan="5"><pre>Sub serialize<em>(source As Variant, target As JsonObject)</em></pre></th></tr>			</thead>			<tbody>	<tr class="altColor"><td class="colFirst" colspan="5"><a name="VoltScriptJSONConverter.VoltScriptJSONConverter.JsonSetterConverter.serialize.comments"><!--   --></a>Overridden function, throws error</td></tr>	<tr>	<th class="colFirst min" scope="col">idx</th>	<th class="colOne" scope="col"><a name="VoltScriptJSONConverter.VoltScriptJSONConverter.JsonSetterConverter.serialize.arguments"><!--   --></a>Argument</th>	<th class="colOne" scope="col">Data Type</th>	<th class="colOne attributes" scope="col">Attributes</th>	<th class="colLast comment" scope="col">Comments</th></tr><tr class="altColor"><td class="colFirst min">1</strong></td><td class="colOne"><strong>source</strong></td><td class="colOne">Variant</td><td class="colOne attributes"></td><td class="colLast comment"><em>VoltScript object from which to serialize&nbsp;</em></td></tr><tr class="altColor"><td class="colFirst min">2</strong></td><td class="colOne"><strong>target</strong></td><td class="colOne">JsonObject</td><td class="colOne attributes"></td><td class="colLast comment"><em>JsonObject to write value to&nbsp;</em></td></tr>		<tr><td>&nbsp;</td></tr><tr><th class="colFirst" scope="col" colspan="5">Throws Exceptions</th></tr><tr>	<th class="colFirst" scope="col"><a name="VoltScriptJSONConverter.VoltScriptJSONConverter.JsonSetterConverter.serialize.exceptions"><!--   --></a>Message</th>	<th class="colOne" scope="col">Error Code</th>	<th class="colLast" scope="col" colspan="3">Comments</th></tr><!-- ExceptionElement  --><tr class="altColor"><td class="colFirst min">JsonSettersConverters can only be used for deserialization</td><td class="colOne">1400</td><td class="colLast comment" colspan="3"><em>&nbsp;</em></td></tr>	</tbody>		</table>			</li></ul><!-- Method Detail Element --><a name="VoltScriptJSONConverter.VoltScriptJSONConverter.JsonSetterConverter.deserialize-"><!--  --></a><ul class="blockList">	<li class="blockList">		<a name="VoltScriptJSONConverter.VoltScriptJSONConverter.JsonSetterConverter.deserialize"><!--   --></a>		<h4>deserialize</h4>		<table class="methoddetail" border="0" cellpadding="3" cellspacing="0" summary="deserialize method detail table">			<thead>				<tr><th class="colFirst" scope="col" colspan="5"><pre>Sub deserialize<em>(holder As JsonCustomConstructor, source As JsonObject)</em></pre></th></tr>			</thead>			<tbody>	<tr class="altColor"><td class="colFirst" colspan="5"><a name="VoltScriptJSONConverter.VoltScriptJSONConverter.JsonSetterConverter.deserialize.comments"><!--   --></a>Overridden function.</td></tr>	<tr>	<th class="colFirst min" scope="col">idx</th>	<th class="colOne" scope="col"><a name="VoltScriptJSONConverter.VoltScriptJSONConverter.JsonSetterConverter.deserialize.arguments"><!--   --></a>Argument</th>	<th class="colOne" scope="col">Data Type</th>	<th class="colOne attributes" scope="col">Attributes</th>	<th class="colLast comment" scope="col">Comments</th></tr><tr class="altColor"><td class="colFirst min">1</strong></td><td class="colOne"><strong>holder</strong></td><td class="colOne">JsonCustomConstructor</td><td class="colOne attributes"></td><td class="colLast comment"><em>Object to deserialize to&nbsp;</em></td></tr><tr class="altColor"><td class="colFirst min">2</strong></td><td class="colOne"><strong>source</strong></td><td class="colOne">JsonObject</td><td class="colOne attributes"></td><td class="colLast comment"><em>JSON object to deserialize from&nbsp;</em></td></tr>	<tr><td>&nbsp;</td></tr><tr><th class="colFirst" scope="col" colspan="5">Code Sample</th></tr><tr class="altColor"><td class="colFirst" colspan="5" style="padding-top:0;"><a name="VoltScriptJSONConverter.VoltScriptJSONConverter.JsonSetterConverter.deserialize.codesample"><!--   --></a><pre class="codesample">%REM<br />The following code is in sample1 of deser-50.txt. When processing the firstName label in the JSON object, the JsonSetterConverter will be used to call the setName sub, passing the current value (the first name) as the first parameter and the lastName, a sibling of the firstName element in the JSON object, as the second parameter.<br />%END REM<br />Dim jsonObj as JsonObject  'populate accordingly<br />Dim converter as New JsonSetterConverter<br />Dim mainHolder as New Person()<br />Call converter.forSetter("setName").withValueParam().withSiblingParam("lastName")<br />Dim helper as New JsonConversionHelper()<br />Call helper.withCustomConverter("firstName", converter)<br />Call converter.deserialize(mainHolder, jsonObj)</pre></td></tr>		</tbody>		</table>			</li></ul><!-- Method Detail Element --><a name="VoltScriptJSONConverter.VoltScriptJSONConverter.JsonSetterConverter.New-"><!--  --></a><ul class="blockList">	<li class="blockList">		<a name="VoltScriptJSONConverter.VoltScriptJSONConverter.JsonSetterConverter.New"><!--   --></a>		<h4>New</h4>		<table class="methoddetail" border="0" cellpadding="3" cellspacing="0" summary="New method detail table">			<thead>				<tr><th class="colFirst" scope="col" colspan="5"><pre>Function New<em>()</em></pre></th></tr>			</thead>			<tbody>					</tbody>		</table>			</li></ul><!-- Method Detail Element --><a name="VoltScriptJSONConverter.VoltScriptJSONConverter.JsonSetterConverter.forSetter-"><!--  --></a><ul class="blockList">	<li class="blockList">		<a name="VoltScriptJSONConverter.VoltScriptJSONConverter.JsonSetterConverter.forSetter"><!--   --></a>		<h4>forSetter</h4>		<table class="methoddetail" border="0" cellpadding="3" cellspacing="0" summary="forSetter method detail table">			<thead>				<tr><th class="colFirst" scope="col" colspan="5"><pre>Function forSetter<em>(setterName As String)</em> As JsonSetterConverter</pre></th></tr>			</thead>			<tbody>	<tr class="altColor"><td class="colFirst" colspan="5"><a name="VoltScriptJSONConverter.VoltScriptJSONConverter.JsonSetterConverter.forSetter.comments"><!--   --></a>Passes the setter name to look for in the relevant class</td></tr>	<tr>	<th class="colFirst min" scope="col">idx</th>	<th class="colOne" scope="col"><a name="VoltScriptJSONConverter.VoltScriptJSONConverter.JsonSetterConverter.forSetter.arguments"><!--   --></a>Argument</th>	<th class="colOne" scope="col">Data Type</th>	<th class="colOne attributes" scope="col">Attributes</th>	<th class="colLast comment" scope="col">Comments</th></tr><tr class="altColor"><td class="colFirst min">1</strong></td><td class="colOne"><strong>setterName</strong></td><td class="colOne">String</td><td class="colOne attributes"></td><td class="colLast comment"><em>Sub or function in the target class&nbsp;</em></td></tr>	<tr><td>&nbsp;</td></tr><tr><th class="colFirst" scope="col" colspan="5">Code Sample</th></tr><tr class="altColor"><td class="colFirst" colspan="5" style="padding-top:0;"><a name="VoltScriptJSONConverter.VoltScriptJSONConverter.JsonSetterConverter.forSetter.codesample"><!--   --></a><pre class="codesample">%REM<br />The following code is in sample1 of deser-50.txt. When processing the firstName label in the JSON object, the JsonSetterConverter will be used to call the setName sub, passing the current value (the first name) as the first parameter and the lastName, a sibling of the firstName element in the JSON object, as the second parameter.<br />%END REM<br />Dim jsonObj as JsonObject  'populate accordingly<br />Dim converter as New JsonSetterConverter<br />Dim mainHolder as New Person()<br />Call converter.forSetter("setName").withValueParam().withSiblingParam("lastName")<br />Dim helper as New JsonConversionHelper()<br />Call helper.withCustomConverter("firstName", converter)<br />Call converter.deserialize(mainHolder, jsonObj)</pre></td></tr>		</tbody>		</table>			</li></ul><!-- Method Detail Element --><a name="VoltScriptJSONConverter.VoltScriptJSONConverter.JsonSetterConverter.withValueParam-"><!--  --></a><ul class="blockList">	<li class="blockList">		<a name="VoltScriptJSONConverter.VoltScriptJSONConverter.JsonSetterConverter.withValueParam"><!--   --></a>		<h4>withValueParam</h4>		<table class="methoddetail" border="0" cellpadding="3" cellspacing="0" summary="withValueParam method detail table">			<thead>				<tr><th class="colFirst" scope="col" colspan="5"><pre>Function withValueParam<em>()</em> As JsonSetterConverter</pre></th></tr>			</thead>			<tbody>	<tr class="altColor"><td class="colFirst" colspan="5"><a name="VoltScriptJSONConverter.VoltScriptJSONConverter.JsonSetterConverter.withValueParam.comments"><!--   --></a>Uses the scalar value of the JSON element the converter is associated with.<br />The value will be added to the end of the params array, as the nth parameter to pass to the relevant setter.</td></tr>		<tr><td>&nbsp;</td></tr><tr><th class="colFirst" scope="col" colspan="5">Code Sample</th></tr><tr class="altColor"><td class="colFirst" colspan="5" style="padding-top:0;"><a name="VoltScriptJSONConverter.VoltScriptJSONConverter.JsonSetterConverter.withValueParam.codesample"><!--   --></a><pre class="codesample">%REM<br />The following code is from deser-50.txt. It deserializes a JSON object that contains firstName and lastName properties. During the deserialization it calls Laureate.setName(firstName as String, lastName as String). To do this, it uses a JsonSetterConverter tied to the firstName property, so withValueParam picks up that property.<br />%END REM<br />Dim json as String<br />Dim helper as new JsonConversionHelper()<br />Dim setterConverter as New JsonSetterConverter()<br />Dim json as |{"firstname":"Guglielmo", "surname":"Marconi", "share": 2}|<br />Call setterConverter.forSetter("setName")._<br />    withValueParam()._<br />    withSiblingParam("surname", "")<br />Call helper.withCustomCnverter("firstName", setterConverter)</pre></td></tr>		</tbody>		</table>			</li></ul><!-- Method Detail Element --><a name="VoltScriptJSONConverter.VoltScriptJSONConverter.JsonSetterConverter.withSiblingParam-"><!--  --></a><ul class="blockList">	<li class="blockList">		<a name="VoltScriptJSONConverter.VoltScriptJSONConverter.JsonSetterConverter.withSiblingParam"><!--   --></a>		<h4>withSiblingParam</h4>		<table class="methoddetail" border="0" cellpadding="3" cellspacing="0" summary="withSiblingParam method detail table">			<thead>				<tr><th class="colFirst" scope="col" colspan="5"><pre>Function withSiblingParam<em>(labelName As String, defaultValue As Variant)</em> As JsonSetterConverter</pre></th></tr>			</thead>			<tbody>	<tr class="altColor"><td class="colFirst" colspan="5"><a name="VoltScriptJSONConverter.VoltScriptJSONConverter.JsonSetterConverter.withSiblingParam.comments"><!--   --></a>Fluent method to retrieve a parameter value fr the setter from the JSON object, or a default value to use if the label is not in the JSON object. The relevant value is passed as the nth parameter to pass to the relevant setter.</td></tr>	<tr>	<th class="colFirst min" scope="col">idx</th>	<th class="colOne" scope="col"><a name="VoltScriptJSONConverter.VoltScriptJSONConverter.JsonSetterConverter.withSiblingParam.arguments"><!--   --></a>Argument</th>	<th class="colOne" scope="col">Data Type</th>	<th class="colOne attributes" scope="col">Attributes</th>	<th class="colLast comment" scope="col">Comments</th></tr><tr class="altColor"><td class="colFirst min">1</strong></td><td class="colOne"><strong>labelName</strong></td><td class="colOne">String</td><td class="colOne attributes"></td><td class="colLast comment"><em>Label to search for at the same level as the JSON object being parsed&nbsp;</em></td></tr><tr class="altColor"><td class="colFirst min">2</strong></td><td class="colOne"><strong>defaultValue</strong></td><td class="colOne">Variant</td><td class="colOne attributes"></td><td class="colLast comment"><em>Default to use if the label is not found in the JSON&nbsp;</em></td></tr>	<tr><td>&nbsp;</td></tr><tr><th class="colFirst" scope="col" colspan="5">Code Sample</th></tr><tr class="altColor"><td class="colFirst" colspan="5" style="padding-top:0;"><a name="VoltScriptJSONConverter.VoltScriptJSONConverter.JsonSetterConverter.withSiblingParam.codesample"><!--   --></a><pre class="codesample">%REM<br />The following code is in sample1 of deser-50.txt. When processing the firstName label in the JSON object, the JsonSetterConverter will be used to call the setName sub, passing the current value (the first name) as the first parameter and the lastName, a sibling of the firstName element in the JSON object, as the second parameter.<br />%END REM<br />Dim jsonObj as JsonObject  'populate accordingly<br />Dim converter as New JsonSetterConverter<br />Dim mainHolder as New Person()<br />Call converter.forSetter("setName").withValueParam().withSiblingParam("lastName", "")<br />Dim helper as New JsonConversionHelper()<br />Call helper.withCustomConverter("firstName", converter)<br />Call converter.deserialize(mainHolder, jsonObj)</pre></td></tr>		</tbody>		</table>			</li></ul>	</li></ul>
+			</li>
+		</ul>
+	</div> 
+
+</div>
+<!-- ========= END OF CLASS DATA ========= -->
+<!-- ======= START OF BOTTOM NAVBAR ====== -->
+<div class="bottomNav">
+	<a name="navbar.bottom"><!--   --></a>
+	<div class="skipNav"><a href="#skip.navbar.bottom" title="Skip navigation links">Skip navigation links</a></div>
+	
+	<a name="navbar.bottom.firstrow"><!--   --></a>
+	<ul class="navList" title="Navigation">
+		<!--  -->
+	</ul>
+</div>
+
+<div class="subNav">
+	<ul class="navList">
+		<!-- 
+		<li><a href="prevelement (class or package)url.html" title="previous element (class or package) fqn in parent/package"><span element (class or package)="typeNameLink">Previous element (class or package) Name</span></a></li>
+		{{link_prevelement}}
+		-->
+
+		<!-- 
+		<li><a href="nextelement (class or package)url.html" title="next element (class or package) fqn in parent/package"><span element (class or package)="typeNameLink">Next element (class or package) Name</span></a></li>
+		{{link_nextelement}}
+		-->
+	</ul>
+	<ul class="navList">
+	<!-- 
+		<li><a href="../../../../index.html?url for frames" target="_top">Frames</a></li>
+		<li><a href="{{elementurl}}" target="_top">No&nbsp;Frames</a></li>
+	-->
+	</ul>
+	<ul class="navList" id="navcontent_navbar_bottom">
+	<!-- 
+		<li><a href="../../../nav-content-noframe.html">All&nbsp;Classes</a></li>
+	 -->
+	</ul>
+	
+	<div>
+		<script type="text/javascript"><!--
+		  navcontentLink = document.getElementById("navcontent_navbar_bottom");
+		  if(window==top) {
+			navcontentLink.style.display = "block";
+		  }
+		  else {
+			navcontentLink.style.display = "none";
+		  }
+		  //-->
+		</script>
+	</div>
+	
+	<div>
+		<ul class="subNavList">
+		<!-- 
+			<li>Summary:&nbsp;</li>
+			<li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
+			<li><a href="#method.summary">Method</a></li>
+		 -->
+		</ul>
+		<ul class="subNavList">
+		<!-- 
+			<li>Detail:&nbsp;</li>
+			<li>Field&nbsp;|&nbsp;</li>
+			<li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
+			<li><a href="#method.detail">Method</a></li>
+		 -->
+		</ul>
+	</div>
+	
+	<a name="skip.navbar.bottom"><!--   --></a>
+</div>
+<!-- ======== END OF BOTTOM NAVBAR ======= -->
+<p class="legalCopy"><small>Copyright &#169; <a href="https://www.hcltechsw.com/">HCL Software</a> 2022. All Rights Reserved.</small></p>
+</body>
+</html>

@@ -1,0 +1,822 @@
+[
+  {
+    "id": "Ad01",
+    "resourceId": "C",
+    "start": "2022-05-25T16:00:00",
+    "end": "2022-05-25T16:23:00",
+    "title": "Domino HA",
+    "className": "ses-Ad ses-roundcal",
+    "type": "Normal",
+    "products": "Domino"
+  },
+  {
+    "id": "Ad02",
+    "resourceId": "C",
+    "start": "2022-05-25T14:45:00",
+    "end": "2022-05-25T15:45:00",
+    "title": "HCL Nomad - Reimagine Your Notes Client Deployments",
+    "className": "ses-Ad ses-roundcal",
+    "type": "Normal",
+    "products": "Domino"
+  },
+  {
+    "id": "Ad03",
+    "resourceId": "E",
+    "start": "2022-05-24T11:30:00",
+    "end": "2022-05-24T12:30:00",
+    "title": "HCL Notes 12.0.1 Upgrades",
+    "className": "ses-Ad ses-roundcal",
+    "type": "Normal",
+    "products": "Domino"
+  },
+  {
+    "id": "Ad04",
+    "resourceId": "A",
+    "start": "2022-05-24T13:30:00",
+    "end": "2022-05-24T14:30:00",
+    "title": "Connections Admin Toolbox",
+    "className": "ses-Ad ses-roundcal",
+    "type": "Normal",
+    "products": "Connections"
+  },
+  {
+    "id": "Ad05",
+    "resourceId": "A",
+    "start": "2022-05-24T15:45:00",
+    "end": "2022-05-24T16:30:00",
+    "title": "Domino 12.0.1 & 12.0.2 Backup",
+    "className": "ses-Ad ses-roundcal",
+    "type": "Normal",
+    "products": "Domino"
+  },
+  {
+    "id": "Ad06",
+    "resourceId": "C",
+    "start": "2022-05-24T11:30:00",
+    "end": "2022-05-24T12:30:00",
+    "title": "Domino 12.0.1 Certificate management",
+    "className": "ses-Ad ses-roundcal",
+    "type": "Normal",
+    "products": "Domino"
+  },
+  {
+    "id": "Ad08",
+    "resourceId": "C",
+    "start": "2022-05-25T13:30:00",
+    "end": "2022-05-25T14:30:00",
+    "title": "30+ Admin Tips",
+    "className": "ses-Ad ses-roundcal",
+    "type": "Normal",
+    "products": "Domino"
+  },
+  {
+    "id": "Ad09",
+    "resourceId": "A",
+    "start": "2022-05-25T13:30:00",
+    "end": "2022-05-25T14:30:00",
+    "title": "Secrets of Notes 12.0.1",
+    "className": "ses-Ad ses-roundcal",
+    "type": "Normal",
+    "products": "Domino"
+  },
+  {
+    "id": "Ad10",
+    "resourceId": "A",
+    "start": "2022-05-25T11:30:00",
+    "end": "2022-05-25T12:30:00",
+    "title": "Notes & Domino Shortcuts",
+    "className": "ses-Ad ses-roundcal",
+    "type": "Normal",
+    "products": "Domino"
+  },
+  {
+    "id": "Ad11",
+    "resourceId": "C",
+    "start": "2022-05-25T09:00:00",
+    "end": "2022-05-25T10:00:00",
+    "title": "Starting with Domino on Docker",
+    "className": "ses-Ad ses-roundcal",
+    "type": "Normal",
+    "products": "Domino"
+  },
+  {
+    "id": "Ad12",
+    "resourceId": "A",
+    "start": "2022-05-25T08:00:00",
+    "end": "2022-05-25T08:45:00",
+    "title": "Domino, Vault, 2FA/TOTP",
+    "className": "ses-Ad ses-roundcal",
+    "type": "Normal",
+    "products": "Domino"
+  },
+  {
+    "id": "Ad13",
+    "resourceId": "C",
+    "start": "2022-05-25T16:23:00",
+    "end": "2022-05-25T16:45:00",
+    "title": "Nomad Web Cloud",
+    "className": "ses-Ad ses-roundcal",
+    "type": "Normal",
+    "products": "Domino"
+  },
+  {
+    "id": "Ad14",
+    "resourceId": "A",
+    "start": "2022-05-25T14:45:00",
+    "end": "2022-05-25T15:45:00",
+    "title": "Sametime Design Workshop A",
+    "className": "ses-Ad ses-roundcal",
+    "type": "Normal",
+    "products": "Sametime"
+  },
+  {
+    "id": "Ad15",
+    "resourceId": "A",
+    "start": "2022-05-25T16:00:00",
+    "end": "2022-05-25T16:45:00",
+    "title": "Sametime Design Workshop B",
+    "className": "ses-Ad ses-roundcal",
+    "type": "Normal",
+    "products": "Sametime"
+  },
+  {
+    "id": "Ad16",
+    "resourceId": "B",
+    "start": "2022-05-25T16:00:00",
+    "end": "2022-05-25T16:45:00",
+    "title": "Colaborate around Business Applications in Communities",
+    "className": "ses-Ad ses-roundcal",
+    "type": "Normal",
+    "products": "Domino,Connections,Volt"
+  },
+  {
+    "id": "Ad17",
+    "resourceId": "E",
+    "start": "2022-05-24T16:45:00",
+    "end": "2022-05-24T17:30:00",
+    "title": "Domino on Linux Deep Dive",
+    "className": "ses-Ad ses-roundcal",
+    "type": "Normal",
+    "products": "Domino"
+  },
+  {
+    "id": "Bu01",
+    "resourceId": "D",
+    "start": "2022-05-25T09:00:00",
+    "end": "2022-05-25T09:30:00",
+    "title": "Engaging Experience",
+    "className": "ses-Bu ses-roundcal",
+    "type": "Normal",
+    "products": "Connections"
+  },
+  {
+    "id": "Bu02",
+    "resourceId": "D",
+    "start": "2022-05-25T09:30:00",
+    "end": "2022-05-25T10:00:00",
+    "title": "Apps Overload!",
+    "className": "ses-Bu ses-roundcal",
+    "type": "Normal",
+    "products": "Domino"
+  },
+  {
+    "id": "Bu03",
+    "resourceId": "D",
+    "start": "2022-05-25T11:30:00",
+    "end": "2022-05-25T12:30:00",
+    "title": "Digital Traces of Collaborative Activity",
+    "className": "ses-Bu ses-roundcal",
+    "type": "Normal",
+    "products": "Connections,Other"
+  },
+  {
+    "id": "Bu07",
+    "resourceId": "D",
+    "start": "2022-05-25T13:30:00",
+    "end": "2022-05-25T14:30:00",
+    "title": "HCL Connections: from Teams to SameTime",
+    "className": "ses-Bu ses-roundcal",
+    "type": "Normal",
+    "products": "Connections,Other"
+  },
+  {
+    "id": "Bu08",
+    "resourceId": "D",
+    "start": "2022-05-24T11:30:00",
+    "end": "2022-05-24T12:30:00",
+    "title": "Domino and Connections — Let's play together",
+    "className": "ses-Bu ses-roundcal",
+    "type": "Normal",
+    "products": "Connections,Other"
+  },
+  {
+    "id": "Bu09",
+    "resourceId": "D",
+    "start": "2022-05-24T13:30:00",
+    "end": "2022-05-24T14:30:00",
+    "title": "Fly high with helicopters and Domino",
+    "className": "ses-Bu ses-roundcal",
+    "type": "Normal",
+    "products": "Domino"
+  },
+  {
+    "id": "Co01",
+    "resourceId": "A",
+    "start": "2022-05-24T14:45:00",
+    "end": "2022-05-24T15:30:00",
+    "title": "panagenda: Best Migration Practices",
+    "className": "ses-Co ses-roundcal",
+    "type": "Normal",
+    "products": "Domino"
+  },
+  {
+    "id": "Co02",
+    "resourceId": "A",
+    "start": "2022-05-25T10:15:00",
+    "end": "2022-05-25T11:00:00",
+    "title": "Huddo: Ubiquitous Task Management with Activities+",
+    "className": "ses-Co ses-roundcal",
+    "type": "Normal",
+    "products": "Connections"
+  },
+  {
+    "id": "Co03",
+    "resourceId": "B",
+    "start": "2022-05-24T14:45:00",
+    "end": "2022-05-24T15:30:00",
+    "title": "OnTime: Surprise 'New Normal' Features",
+    "className": "ses-Co ses-roundcal",
+    "type": "Normal",
+    "products": "Domino,Other"
+  },
+  {
+    "id": "Co04",
+    "resourceId": "B",
+    "start": "2022-05-25T10:15:00",
+    "end": "2022-05-25T11:00:00",
+    "title": "BCC: Integration and Coexistence of Domino and Microsoft 365 ",
+    "className": "ses-Co ses-roundcal",
+    "type": "Normal",
+    "products": "Domino,Other"
+  },
+  {
+    "id": "Co06",
+    "resourceId": "C",
+    "start": "2022-05-25T10:15:00",
+    "end": "2022-05-25T11:00:00",
+    "title": "Groupwave: Engage with your visitors",
+    "className": "ses-Co ses-roundcal",
+    "type": "Normal",
+    "products": "Domino"
+  },
+  {
+    "id": "De01",
+    "resourceId": "E",
+    "start": "2022-05-25T12:00:00",
+    "end": "2022-05-25T12:30:00",
+    "title": "Portal: VUE & Node.js",
+    "className": "ses-De ses-roundcal",
+    "type": "Normal",
+    "products": "Other"
+  },
+  {
+    "id": "De02",
+    "resourceId": "C",
+    "start": "2022-05-25T11:30:00",
+    "end": "2022-05-25T12:30:00",
+    "title": "Domino Designer Jam",
+    "className": "ses-De ses-roundcal",
+    "type": "Normal",
+    "products": "Domino"
+  },
+  {
+    "id": "De03",
+    "resourceId": "C",
+    "start": "2022-05-24T15:45:00",
+    "end": "2022-05-24T16:30:00",
+    "title": "Domino Digital Workplace Hub",
+    "className": "ses-De ses-roundcal",
+    "type": "Normal",
+    "products": "Domino,Connections,Other"
+  },
+  {
+    "id": "De05",
+    "resourceId": "D",
+    "start": "2022-05-24T15:45:00",
+    "end": "2022-05-24T16:30:00",
+    "title": "Responsive Design Techniques for Notes Apps",
+    "className": "ses-De ses-roundcal",
+    "type": "Normal",
+    "products": "Domino"
+  },
+  {
+    "id": "De06",
+    "resourceId": "B",
+    "start": "2022-05-25T11:30:00",
+    "end": "2022-05-25T12:30:00",
+    "title": "Augment Notes",
+    "className": "ses-De ses-roundcal",
+    "type": "Normal",
+    "products": "Connections,Domino,Volt"
+  },
+  {
+    "id": "De07",
+    "resourceId": "E",
+    "start": "2022-05-24T15:45:00",
+    "end": "2022-05-24T16:30:00",
+    "title": "Get to know Volt MX",
+    "className": "ses-De ses-roundcal",
+    "type": "Normal",
+    "products": "Volt MX"
+  },
+  {
+    "id": "De09",
+    "resourceId": "E",
+    "start": "2022-05-25T13:30:00",
+    "end": "2022-05-25T14:00:00",
+    "title": "Volt design patterns",
+    "className": "ses-De ses-roundcal",
+    "type": "Normal",
+    "products": "Volt"
+  },
+  {
+    "id": "De10",
+    "resourceId": "E",
+    "start": "2022-05-25T14:00:00",
+    "end": "2022-05-25T14:30:00",
+    "title": "Volt Winner app",
+    "className": "ses-De ses-roundcal",
+    "type": "Normal",
+    "products": "Volt"
+  },
+  {
+    "id": "De11",
+    "resourceId": "E",
+    "start": "2022-05-25T14:45:00",
+    "end": "2022-05-25T15:45:00",
+    "title": "Domino Restyle A",
+    "className": "ses-De ses-roundcal",
+    "type": "Normal",
+    "products": "Domino"
+  },
+  {
+    "id": "De12",
+    "resourceId": "E",
+    "start": "2022-05-25T16:00:00",
+    "end": "2022-05-25T16:45:00",
+    "title": "Domino Restyle B",
+    "className": "ses-De ses-roundcal",
+    "type": "Normal",
+    "products": "Domino"
+  },
+  {
+    "id": "De13",
+    "resourceId": "B",
+    "start": "2022-05-25T08:00:00",
+    "end": "2022-05-25T08:45:00",
+    "title": "APIs for Notes & Domino",
+    "className": "ses-De ses-roundcal",
+    "type": "Normal",
+    "products": "Domino"
+  },
+  {
+    "id": "De14",
+    "resourceId": "D",
+    "start": "2022-05-25T14:45:00",
+    "end": "2022-05-25T15:45:00",
+    "title": "Workflow with Volt v1.0.5",
+    "className": "ses-De ses-roundcal",
+    "type": "Normal",
+    "products": "Volt"
+  },
+  {
+    "id": "De15",
+    "resourceId": "E",
+    "start": "2022-05-25T11:30:00",
+    "end": "2022-05-25T12:00:00",
+    "title": "PBI & Domino",
+    "className": "ses-De ses-roundcal",
+    "type": "Normal",
+    "products": "Domino,Other"
+  },
+  {
+    "id": "De16",
+    "resourceId": "D",
+    "start": "2022-05-25T16:00:00",
+    "end": "2022-05-25T16:46:00",
+    "title": "Combine DX & Volt MX for better outcomes",
+    "className": "ses-De ses-roundcal",
+    "type": "Normal",
+    "products": "DX,Volt MX"
+  },
+  {
+    "id": "De18",
+    "resourceId": "D",
+    "start": "2022-05-24T16:45:00",
+    "end": "2022-05-24T17:30:00",
+    "title": "Testing Matters",
+    "className": "ses-De ses-roundcal",
+    "type": "Normal",
+    "products": "Domino,Other"
+  },
+  {
+    "id": "De19",
+    "resourceId": "A",
+    "start": "2022-05-25T09:00:00",
+    "end": "2022-05-25T10:00:00",
+    "title": "UI design competition",
+    "className": "ses-De ses-roundcal",
+    "type": "Normal",
+    "products": "Domino"
+  },
+  {
+    "id": "De20",
+    "resourceId": "E",
+    "start": "2022-05-24T13:30:00",
+    "end": "2022-05-24T14:30:00",
+    "title": "Domino apps CI with Docker",
+    "className": "ses-De ses-roundcal",
+    "type": "Normal",
+    "products": "Domino"
+  },
+  {
+    "id": "De21",
+    "resourceId": "E",
+    "start": "2022-05-25T09:00:00",
+    "end": "2022-05-25T10:00:00",
+    "title": "The inside scoop on Volt MX Go",
+    "className": "ses-De ses-roundcal",
+    "type": "Normal",
+    "products": "Volt MX,Domino"
+  },
+  {
+    "id": "De22",
+    "resourceId": "A",
+    "start": "2022-05-24T11:30:00",
+    "end": "2022-05-24T12:30:00",
+    "title": "What’s New with Project Keep",
+    "className": "ses-De ses-roundcal",
+    "type": "Normal",
+    "products": "Domino"
+  },
+  {
+    "id": "Ge1",
+    "resourceId": "A",
+    "start": "2022-05-24T09:00:00",
+    "end": "2022-05-24T10:30:00",
+    "title": "Opening General Session <i>in the Plenary Room</i><br><b>with Richard Jefts, Vice President and General Manager of HCL Digital Solutions</b>",
+    "className": "ses-Sp ses-roundcal",
+    "type": "Full",
+    "products": "Connections,Domino,DX,Sametime,Verse,Volt,Other"
+  },
+  {
+    "id": "Ge2",
+    "resourceId": "A",
+    "start": "2022-05-24T10:30:00",
+    "end": "2022-05-24T11:00:00",
+    "title": "Warp Speed Sponsoring <i>in the Plenary Room</i>",
+    "className": "ses-Sp ses-roundcal",
+    "type": "Full",
+    "products": ""
+  },
+  {
+    "id": "Ge3",
+    "resourceId": "A",
+    "start": "2022-05-25T17:00:00",
+    "end": "2022-05-25T17:30:00",
+    "title": "Closing Session with price draw<i>on the Show Floor</i>. Be there to win!",
+    "className": "ses-Sp ses-roundcal",
+    "type": "Full",
+    "products": ""
+  },
+  {
+    "id": "Ge4",
+    "resourceId": "A",
+    "start": "2022-05-24T17:30:00",
+    "end": "2022-05-24T18:45:00",
+    "title": "Speed Sponsoring<br><b>Sponsored by OpenNTF</b>",
+    "className": "ses-Sp ses-roundcal",
+    "type": "Full",
+    "products": ""
+  },
+  {
+    "id": "Ot1",
+    "resourceId": "A",
+    "start": "2022-05-24T12:30:00",
+    "end": "2022-05-24T13:30:00",
+    "title": "Lunch <i>on the Show Floor</i>",
+    "className": "ses-Ot ses-roundcal",
+    "type": "Full",
+    "products": ""
+  },
+  {
+    "id": "Ot2",
+    "resourceId": "A",
+    "start": "2022-05-25T12:30:00",
+    "end": "2022-05-25T13:30:00",
+    "title": "Lunch <i>on the Show Floor</i>",
+    "className": "ses-Ot ses-roundcal",
+    "type": "Full",
+    "products": ""
+  },
+  {
+    "id": "Ot3",
+    "resourceId": "A",
+    "start": "2022-05-25T17:30:00",
+    "end": "2022-05-25T18:00:00",
+    "title": "Farewell Drink <i>on the Show Floor.</i>",
+    "className": "ses-Ot ses-roundcal",
+    "type": "Full",
+    "products": ""
+  },
+  {
+    "id": "Ot5",
+    "resourceId": "A",
+    "start": "2022-05-24T20:00:00",
+    "end": "2022-05-24T23:00:00",
+    "title": "VIP Dinner <i>at the Beer Experience Museum</i><br><b>Sponsored by HCL</b><br>By invite only.",
+    "className": "ses-Ot ses-roundcal",
+    "type": "Full",
+    "products": ""
+  },
+  {
+    "id": "Ot6",
+    "resourceId": "A",
+    "start": "2022-05-25T19:30:00",
+    "end": "2022-05-25T23:00:00",
+    "title": "Speaker Dinner <i>at a cool, secret place</i><br>By invite only.",
+    "className": "ses-Ot ses-roundcal",
+    "type": "Full",
+    "products": ""
+  },
+  {
+    "id": "Ot7",
+    "resourceId": "CP1",
+    "start": "2022-05-23T18:00:00",
+    "end": "2022-05-23T20:00:00",
+    "title": "HCL Ambassadors Drink in the <h5>Bourgogne des Flandres</h5><br><i>For Ambassadors and special invites only</i><br>Make sure you inform Maria Nordin if you are able to attend!<br>Address: Kartuizerinnenstraat 6",
+    "className": "ses-Ot ses-roundcal",
+    "type": "Full",
+    "products": ""
+  },
+  {
+    "id": "Ot8",
+    "resourceId": "A",
+    "start": "2022-05-25T07:45:00",
+    "end": "2022-05-25T08:00:00",
+    "title": "<span class=text_orange>09:00</span>  Welcome Coffee and breakfast snacks <i>in the Sponsor Area</i>",
+    "className": "ses-Ot ses-roundcal",
+    "type": "Full",
+    "products": ""
+  },
+  {
+    "id": "Ot9",
+    "resourceId": "A",
+    "start": "2022-05-24T08:00:00",
+    "end": "2022-05-24T09:00:00",
+    "title": "Welcome Coffee and breakfast snacks <i>in the Entrance Lobby</i>",
+    "className": "ses-Ot ses-roundcal",
+    "type": "Full",
+    "products": ""
+  },
+  {
+    "id": "Ro01",
+    "resourceId": "R",
+    "start": "2022-05-24T16:45:00",
+    "end": "2022-05-24T17:30:00",
+    "title": "Domino Mail",
+    "className": "ses-Ro ses-roundcal",
+    "type": "Round",
+    "products": "Verse"
+  },
+  {
+    "id": "Ro02",
+    "resourceId": "R",
+    "start": "2022-05-24T13:30:00",
+    "end": "2022-05-24T14:30:00",
+    "title": "The WFH Challenge",
+    "className": "ses-Ro ses-roundcal",
+    "type": "Round",
+    "products": "Other"
+  },
+  {
+    "id": "Ro03",
+    "resourceId": "R",
+    "start": "2022-05-24T15:45:00",
+    "end": "2022-05-24T16:30:00",
+    "title": "Connections Power User Round Table",
+    "className": "ses-Ro ses-roundcal",
+    "type": "Round",
+    "products": "Connections"
+  },
+  {
+    "id": "Ro04",
+    "resourceId": "R",
+    "start": "2022-05-25T13:30:00",
+    "end": "2022-05-25T14:30:00",
+    "title": "Domino App Dev Round Table",
+    "className": "ses-Ro ses-roundcal",
+    "type": "Round",
+    "products": "Domino"
+  },
+  {
+    "id": "Ro05",
+    "resourceId": "R",
+    "start": "2022-05-24T11:30:00",
+    "end": "2022-05-24T12:30:00",
+    "title": "Happy Birthday OpenNTF!",
+    "className": "ses-Ro ses-roundcal",
+    "type": "Round",
+    "products": "Other"
+  },
+  {
+    "id": "Ro06",
+    "resourceId": "R",
+    "start": "2022-05-25T11:30:00",
+    "end": "2022-05-25T12:30:00",
+    "title": "Sametime Roundtable",
+    "className": "ses-Ro ses-roundcal",
+    "type": "Round",
+    "products": "Sametime"
+  },
+  {
+    "id": "Ro07",
+    "resourceId": "R",
+    "start": "2022-05-25T09:00:00",
+    "end": "2022-05-25T10:00:00",
+    "title": "Get ready! We want to hear from you!",
+    "className": "ses-Ro ses-roundcal",
+    "type": "Round",
+    "products": "Other"
+  },
+  {
+    "id": "Ro08",
+    "resourceId": "R",
+    "start": "2022-05-25T14:45:00",
+    "end": "2022-05-25T15:45:00",
+    "title": "Licensing for Solution Partners",
+    "className": "ses-Ro ses-roundcal",
+    "type": "Round",
+    "products": "Domino"
+  },
+  {
+    "id": "Ro09",
+    "resourceId": "R",
+    "start": "2022-05-25T16:00:00",
+    "end": "2022-05-25T16:45:00",
+    "title": "HCL on Linux Round Table",
+    "className": "ses-Ro ses-roundcal",
+    "type": "Round",
+    "products": "Domino"
+  },
+  {
+    "id": "St01",
+    "resourceId": "B",
+    "start": "2022-05-25T09:00:00",
+    "end": "2022-05-25T10:00:00",
+    "title": "The next frontier in Domino Mail",
+    "className": "ses-St ses-roundcal",
+    "type": "Normal",
+    "products": "Verse"
+  },
+  {
+    "id": "St02",
+    "resourceId": "A",
+    "start": "2022-05-24T16:45:00",
+    "end": "2022-05-24T17:30:00",
+    "title": "Nomad Deep Dive",
+    "className": "ses-St ses-roundcal",
+    "type": "Normal",
+    "products": "Domino"
+  },
+  {
+    "id": "St03",
+    "resourceId": "B",
+    "start": "2022-05-24T16:45:00",
+    "end": "2022-05-24T17:30:00",
+    "title": "HCL Connections Roadmap",
+    "className": "ses-St ses-roundcal",
+    "type": "Normal",
+    "products": "Connections"
+  },
+  {
+    "id": "St04",
+    "resourceId": "B",
+    "start": "2022-05-24T11:30:00",
+    "end": "2022-05-24T12:30:00",
+    "title": "HCL Digital Solutions Product Strategy",
+    "className": "ses-St ses-roundcal",
+    "type": "Normal",
+    "products": "Connections,Domino,DX,Sametime,Verse,Volt,Volt MX"
+  },
+  {
+    "id": "St05",
+    "resourceId": "B",
+    "start": "2022-05-24T13:30:00",
+    "end": "2022-05-24T14:30:00",
+    "title": "Domino 2022: What to expect",
+    "className": "ses-St ses-roundcal",
+    "type": "Normal",
+    "products": "Domino"
+  },
+  {
+    "id": "St06",
+    "resourceId": "B",
+    "start": "2022-05-25T14:45:00",
+    "end": "2022-05-25T15:45:00",
+    "title": "Connections v8 Live Demo",
+    "className": "ses-St ses-roundcal",
+    "type": "Normal",
+    "products": "Connections"
+  },
+  {
+    "id": "St07",
+    "resourceId": "C",
+    "start": "2022-05-24T13:30:00",
+    "end": "2022-05-24T14:30:00",
+    "title": "Sametime v12 Launch",
+    "className": "ses-St ses-roundcal",
+    "type": "Normal",
+    "products": "Sametime"
+  },
+  {
+    "id": "St08",
+    "resourceId": "B",
+    "start": "2022-05-25T13:30:00",
+    "end": "2022-05-25T14:30:00",
+    "title": "Your trusted enterprise digital experience",
+    "className": "ses-St ses-roundcal",
+    "type": "Normal",
+    "products": "DX"
+  },
+  {
+    "id": "St09",
+    "resourceId": "C",
+    "start": "2022-05-25T08:00:00",
+    "end": "2022-05-25T08:45:00",
+    "title": "HCL Domino Myth Busting 2022",
+    "className": "ses-St ses-roundcal",
+    "type": "Normal",
+    "products": "Domino"
+  },
+  {
+    "id": "St10",
+    "resourceId": "B",
+    "start": "2022-05-24T15:45:00",
+    "end": "2022-05-24T16:30:00",
+    "title": "Notes 12.0.1, 12.0.2 and beyond",
+    "className": "ses-St ses-roundcal",
+    "type": "Normal",
+    "products": "Domino"
+  },
+  {
+    "id": "St11",
+    "resourceId": "C",
+    "start": "2022-05-24T16:45:00",
+    "end": "2022-05-24T17:30:00",
+    "title": "Domino Licensing",
+    "className": "ses-St ses-roundcal",
+    "type": "Normal",
+    "products": "Domino"
+  },
+  {
+    "id": "Wo1",
+    "resourceId": "CP1",
+    "start": "2022-05-23T13:30:00",
+    "end": "2022-05-23T17:00:00",
+    "title": "<h5>Workshop by<br>HCL</h5>HCL Domino on Kubernetes",
+    "className": "ses-Wo ses-roundcal",
+    "type": "Normal",
+    "products": "Domino"
+  },
+  {
+    "id": "Wo2",
+    "resourceId": "CP2",
+    "start": "2022-05-23T13:30:00",
+    "end": "2022-05-23T17:00:00",
+    "title": "<h5>Workshop by<br>HCL</h5>Sametime Deployment",
+    "className": "ses-Wo ses-roundcal",
+    "type": "Normal",
+    "products": "Sametime"
+  },
+  {
+    "id": "Wo3",
+    "resourceId": "CP3",
+    "start": "2022-05-23T13:30:00",
+    "end": "2022-05-23T17:00:00",
+    "title": "<h5>Workshop by<br>HCL</h5>HCL Volt MX for Domino Devs",
+    "className": "ses-Wo ses-roundcal",
+    "type": "Normal",
+    "products": "Volt MX"
+  },
+  {
+    "id": "Wo4",
+    "resourceId": "CP4",
+    "start": "2022-05-23T13:30:00",
+    "end": "2022-05-23T17:00:00",
+    "title": "<h5>Workshop by<br>panagenda</h5>100 new things in Notes, Nomad Web & MarvelClient<h5>SOLD OUT</h5>",
+    "className": "ses-Wo ses-roundcal",
+    "type": "Normal",
+    "products": "Domino"
+  }
+]

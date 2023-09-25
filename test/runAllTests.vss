@@ -1,0 +1,99 @@
+%REM
+	Copyright 2022-2023 HCL America, Inc.
+	Licensed under the Apache License, Version 2.0 (the "License"); 
+	you may not use this file except in compliance with the License. 
+	You may obtain a copy of the License at
+
+	http://www.apache.org/licenses/LICENSE-2.0
+
+	Unless required by applicable law or agreed to in writing, 
+	software distributed under the License is distributed on an "AS IS" BASIS, 
+	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
+	See the License for the specific language governing permissions and limitations under the License	
+%END REM
+
+Option Public
+Option Declare
+
+Use "../test/BasicDataTypeTest"
+Use "../test/BasicFromJsonTest"
+Use "../test/BasicObjTest"
+Use "../test/BasicPersonArrayTest"
+Use "../test/BasicPersonTest"
+Use "../test/ClassWithArraysTest"
+Use "../test/ComplexObjArrayTest"
+Use "../test/ComplexObjTest"
+Use "../test/ComplexPersonCustomConstructorTest"
+Use "../test/ComplexPersonPropertiesTest"
+Use "../test/ComplexPersonTest"
+Use "../test/CustomFunctionTest"
+Use "../test/CustomGetterTest"
+Use "../test/CustomSetterTest"
+
+Sub Initialize
+    Dim result as Boolean
+    Dim lastResult as Boolean
+    Dim tot as Long
+
+    result = runDataTypeTest()
+    If result then tot = 1
+
+    lastResult = runFromJsonTest()
+    If lastResult then tot += 2
+    result = result And lastResult
+
+    lastResult = runZuluTest()
+    If lastResult then tot += 4
+    result = result And lastResult
+
+    lastResult = runPersonArrayTest()
+    If lastResult then tot += 8
+    result = result And lastResult
+
+    lastResult = runPersonTest()
+    If lastResult then tot += 16
+    result = result And lastResult
+
+    lastResult = runArrayTest()
+    If lastResult then tot += 32
+    result = result And lastResult
+
+    lastResult = runObjArrayTest()
+    If lastResult then tot += 64
+    result = result And lastResult
+
+    lastResult = runComplexObjTest()
+    If lastResult then tot += 128
+    result = result And lastResult
+
+    lastResult = runPersonConstructorTests()
+    If lastResult then tot += 256
+    result = result And lastResult
+
+    lastResult = runComplexPersonPropertiesTest()
+    If lastResult then tot += 512
+    result = result And lastResult
+
+    lastResult = runComplexPersonTest()
+    If lastResult then tot += 1024
+    result = result And lastResult
+
+    lastResult = runFunctionTest()
+    If lastResult then tot += 2056
+    result = result And lastResult
+
+    lastResult = runGetterTest()
+    If lastResult then tot += 4112
+    result = result And lastResult
+
+    lastResult = runSetterTest()
+    If lastResult then tot += 8224
+    result = result And lastResult
+
+    If result Then
+        Print ""
+        Print "All tests ran successfully"
+    Else
+        Error 1001, "Tests Failed, tot was " & tot & ". Check results"
+    End If
+End Sub

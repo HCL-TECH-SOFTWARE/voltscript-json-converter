@@ -1,0 +1,5 @@
+nav:
+    - index.md
+    - Deserialization: deserialization
+    - Serialization: serialization
+    - troubleshooting.md

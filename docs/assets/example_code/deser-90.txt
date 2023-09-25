@@ -1,0 +1,65 @@
+%REM
+	Copyright 2022-2023 HCL America, Inc.
+	Licensed under the Apache License, Version 2.0 (the "License"); 
+	you may not use this file except in compliance with the License. 
+	You may obtain a copy of the License at
+
+	http://www.apache.org/licenses/LICENSE-2.0
+
+	Unless required by applicable law or agreed to in writing, 
+	software distributed under the License is distributed on an "AS IS" BASIS, 
+	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
+	See the License for the specific language governing permissions and limitations under the License	
+%END REM
+
+Option Public
+Option Declare
+
+' Modify use statement as appropriate for your environent to point to relative path
+Use "../../../src/VoltScriptJsonConverter" 
+
+Class Pet
+
+    Public name as String
+    Public type as String
+    Public ownerId as Integer
+    Public ownerFirstName as String
+    Public ownerLastName as String
+
+End Class
+
+Sub Initialize
+    Call sample1()
+End Sub
+
+Sub sample1()
+    Dim helper as new JsonConversionHelper()
+    Dim pets as Variant
+    Dim pet as Pet
+    Dim petsJson as String
+    Dim ownerJson as String
+    Dim parser as New JsonParser()
+    Dim ownerObj as JsonObject
+    Dim i as Integer
+    Dim firstNameConverter as New JsonScalarConverter
+    Dim lastNameConverter as New JsonScalarConverter
+    
+    petsJson = |[{"name":"Captain","type":"Gentoo Penguin","ownerId":1},{"name":"Loudy","type":"Gentoo Penguin","ownerId":1},{"name":"Nimrod","type":"Gentoo Penguin","ownerId":1}]|
+    ownerJson = |{"firstName":"Tom","lastName":"Popper"}|
+
+    pets = helper.fromJsonString(petsJson, "Pet", "deser-90")
+    Call parser.loadFromJson(ownerJson)
+    Set ownerObj = parser.getRootObject
+    For i = 0 to UBound(pets)
+        Call helper.withObject(pets(i))._
+            withCustomConverter("firstName", firstNameConverter.forPropertyName("ownerFirstName"))._
+            withCustomConverter("lastName", lastNameConverter.forPropertyName("ownerLastName"))._
+            fromJson(ownerObj)
+    Next
+
+    For i = 0 to UBound(pets)
+        Set pet = pets(i)
+        Print pet.name & " is owned by " & pet.ownerFirstName & " " & pet.ownerLastName
+    Next
+    
+End Sub

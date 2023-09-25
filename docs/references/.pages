@@ -1,0 +1,6 @@
+nav:
+    - index.md
+    - whatsnew.md
+    - API documentation: ./references/apidocs/index.html
+    - example.md
+    - faqs.md

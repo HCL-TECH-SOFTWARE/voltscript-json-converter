@@ -1,0 +1,122 @@
+%REM
+	Copyright 2022-2023 HCL America, Inc.
+	Licensed under the Apache License, Version 2.0 (the "License"); 
+	you may not use this file except in compliance with the License. 
+	You may obtain a copy of the License at
+
+	http://www.apache.org/licenses/LICENSE-2.0
+
+	Unless required by applicable law or agreed to in writing, 
+	software distributed under the License is distributed on an "AS IS" BASIS, 
+	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
+	See the License for the specific language governing permissions and limitations under the License	
+%END REM
+
+Option Public
+Option Declare
+Use "../src/VoltScriptJsonConverter"
+Use "../libs/VoltScriptTesting"
+
+Private Const RELATIVE_PATH_PREFIX = "../test/"
+
+Class PersonC
+
+    Public firstName as String
+    Public lastName as String
+    Public pets as Variant
+
+    Function getName() as String
+        getName = firstName & " " & lastName
+    End Function
+
+End Class
+
+Class PetC
+
+    Public name as String
+    Public type as String
+
+End Class
+
+Function runComplexPersonTest() as Boolean
+
+    Dim testRunner as New TestRunner("Complex Person Class Conversion")
+    Dim helper as new JsonConversionHelper()
+    Dim petConverter as New JsonBasicObjectArrayConverter("PetC", RELATIVE_PATH_PREFIX & "ComplexPersonTest")
+    Dim person as PersonC
+    Dim json as String
+    Dim result as Boolean
+    Call testRunner.setOutputFormat("BOTH")
+    
+	json = |{"firstName":"Paul","lastName":"Withers","pets": [{"name":"Peter","type":"Guinea Pig"},{"name":"Benjamin","type":"Guinea Pig"}]}|
+    'Call converter.enableDebug()
+    
+    Try
+        Dim deserializeSuite as New TestSuite("Test Complex Person Class deserialization")
+        Call testRunner.addTestSuite(deserializeSuite)
+        Call deserializeSuite.describe("Deserialization")
+        Call helper.withCustomConverter("pets", petConverter)
+        Set person = helper.fromJsonString(json, "PersonC", RELATIVE_PATH_PREFIX & "ComplexPersonTest")
+        call deserializeSuite.addResult(True, "")
+        Call testDeserializationC(deserializeSuite, person)
+    Catch
+        Call deserializeSuite.addError("Error deserializing JSON: " & Error() & " on line " & Erl, ||)
+        print "Error " & Error() & " on line " & Erl
+    Finally
+        result = deserializeSuite.ranSuccessfully()
+    end Try
+
+    Try
+        Dim jsonObj as JsonObject
+        Dim serializeSuite as New TestSuite("Test Person Class serialization")
+        Call testRunner.addTestSuite(serializeSuite)
+        Call serializeSuite.describe("Serialization")
+        'Call helper.enableDebug()
+        Call helper.withScalarConverter("firstName").withScalarConverter("lastName")
+        Dim petHelper as New JsonConversionHelper()
+        Call petConverter.withHelper(petHelper.withScalarConverter("name").withScalarConverter("type"))
+        Set jsonObj = helper.toJson(person)
+        Call serializeSuite.addResult(True, "")
+        Call testSerializationC(serializeSuite, jsonObj)
+    Catch
+        Call serializeSuite.addError("Error deserializing JSON: " & Error() & " on line " & Erl, ||)
+        print "Error " & Error() & " on line " & Erl
+    Finally
+        result = result And serializeSuite.ranSuccessfully()
+    end Try
+
+    return result
+End Function
+
+Function testDeserializationC(testSuite as TestSuite, testObj as PersonC)
+
+    On Error GoTo logErr
+
+    Call testSuite.describe("Test person first name").assertEqualsString("Paul", testObj.firstName, false)
+    Call testSuite.describe("Test person last name").assertEqualsString("Withers", testObj.lastName, false)
+    Call testSuite.describe("Test full name").assertEqualsString("Paul Withers", testObj.getName(), false)
+    Call testSuite.describe("Test pets size").assertEqualsInteger(1, UBound(testObj.pets))
+    Call testSuite.describe("Test first pet type").assertIs("PetC", testObj.pets(0))
+    Call testSuite.describe("Test first pet name").assertEqualsString("Peter", testObj.pets(0).name, false)
+    Call testSuite.describe("Test second pet name").assertEqualsString("Benjamin", testObj.pets(1).name, false)
+    Call testSuite.describe("Test first pet type").assertEqualsString("Guinea Pig", testObj.pets(0).type, false)
+
+getOut:
+    Exit Function
+
+logErr:
+    Call testSuite.addError(|Error | & Error() & |(| & Err() & |) on line | & CStr(Erl), ||)
+	Resume Next
+
+End Function
+
+Function testSerializationC(testSuite as TestSuite, testObj as JsonObject)
+
+    Call testSuite.describe("Test person first name").assertEqualsString("Paul", testObj.getChild("firstName").scalarValue, false)
+    Call testSuite.describe("Test person last name").assertEqualsString("Withers", testObj.getChild("lastName").scalarValue, false)
+    Call testSuite.describe("Test pet 1 name").assertEqualsString("Peter", testObj.getChild("pets").getChildren()(0).getChild("name").scalarValue, false)
+    Call testSuite.describe("Test pet 1 type").assertEqualsString("Guinea Pig", testObj.getChild("pets").getChildren()(0).getChild("type").scalarValue, false)
+    Call testSuite.describe("Test pet 2 name").assertEqualsString("Benjamin", testObj.getChild("pets").getChildren()(1).getChild("name").scalarValue, false)
+    Call testSuite.describe("Test pet 2 type").assertEqualsString("Guinea Pig", testObj.getChild("pets").getChildren()(1).getChild("type").scalarValue, false)
+
+End Function

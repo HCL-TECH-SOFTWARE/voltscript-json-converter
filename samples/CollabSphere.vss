@@ -1,0 +1,82 @@
+%REM
+	Copyright 2022-2023 HCL America, Inc.
+	Licensed under the Apache License, Version 2.0 (the "License"); 
+	you may not use this file except in compliance with the License. 
+	You may obtain a copy of the License at
+
+	http://www.apache.org/licenses/LICENSE-2.0
+
+	Unless required by applicable law or agreed to in writing, 
+	software distributed under the License is distributed on an "AS IS" BASIS, 
+	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
+	See the License for the specific language governing permissions and limitations under the License	
+%END REM
+
+Option Public
+Option Declare
+Use "../src/VoltScriptJsonConverter"
+
+Class Session
+    Public debuglog As String 
+    Public id As String 
+    Public title As String
+    Public room As String 
+    Public start As String
+    Public end As String
+    Public backgroundColor As String 
+    Public textColor As String 
+    Public className As String 
+
+    Sub New(title As String)
+        Me.title = title 
+    End Sub
+
+    Sub printSummary()
+        Print "Title:   " & Me.title 
+        Print "Time:    " & Me.start & | - | & Me.end
+        Print "Room:    " & Me.room  
+        Print "Id:      " & Me.id
+    End Sub
+End Class
+
+
+Sub Initialize
+    Dim job As JsonObject
+
+    Dim parser As New JsonParser()
+    Dim helper As New JsonConversionHelper()
+    Dim sessionConstructor As New JsonCustomConstructor()
+    Dim jscDebugLog As New JsonScalarConverter()
+    Dim ogs As Session
+
+    Dim sessions As Variant
+    Dim i As Integer
+
+
+    ' BEGIN IMPLEMENTATION 
+    Call parser.loadFromFile(CurDir() & "/samples/collabsphere.json") 
+	' CurDir() as referenced above is set at RUN-TIME
+    ' it represents the directory from which the script is BEING RUN; 
+	' not the COMPILE-TIME directory in which that the script file resides.	
+
+    Set job = parser.getRootobject
+
+    sessions = helper.withCustomConstructor(sessionConstructor.withParam("title", ""))._
+        withCustomConverter("debug-log", jscDebugLog.forPropertyName("debuglog"))._
+        jsonArrayToObjects(job, "Session", "CollabSphere")
+
+    For i = Lbound(sessions) to Ubound(sessions)
+        ' use unid variable
+        If (|9F3F73226F22F82F862589EB0014CB89| = Cstr(sessions(i).id)) Then
+            Set ogs = sessions(i)
+            Exit For
+        End If
+    Next
+
+    If (ogs is Nothing) Then
+        Print "We could not find the OGS of CollabSphere"
+    Else
+        Print "Found OGS of CollabSphere as session " & i
+        Call ogs.printSummary()
+    End If
+End Sub

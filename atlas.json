@@ -1,0 +1,68 @@
+{
+    "name": "VoltScriptJsonConverter",
+    "library": "VoltScript-Json-Converter",
+    "version": "1.0.0",
+    "displayName": "VoltScript JSON Converter",
+    "description": "JSON serialization and deserialization classes for VoltScript",
+    "authors": [
+        "Paul Withers"
+    ],
+    "license": "Apache 2.0",
+    "publisher": "HCL America, Inc.",
+    "repo": "https://github01.hclpnp.com/Volt-MX-GO/VoltScript-JSON-Converter.git",
+    "sourceDir": "src",
+    "testDir": "test",
+    "libsDir": "libs",
+    "vsesDir": "vses",
+    "mainScripts": [
+        "VoltScriptJsonConverter.vss"
+    ],
+    "unitTestScripts": [
+        "runAllTests.vss",
+        "BasicDataTypeTest.vss",
+        "BasicFromJsonTest.vss",
+        "BasicObjTest.vss",
+        "BasicPersonArrayTest.vss",
+        "BasicPersonTest.vss",
+        "ClassWithArraysTest.vss",
+        "ComplexObjArrayTest.vss",
+        "ComplexObjTest.vss",
+        "ComplexPersonCustomConstructorTest.vss",
+        "ComplexPersonPropertiesTest.vss",
+        "ComplexPersonTest.vss",
+        "CustomFunctionTest.vss",
+        "CustomGetterTest.vss",
+        "CustomSetterTest.vss"
+    ],
+    "integrationTestScripts": [
+        
+    ],
+    "repositories": [
+        {
+            "id": "hcl-github",
+            "type": "github",
+            "url": "https://api.github.com/repos/HCL-TECH-SOFTWARE"
+        },
+        {
+            "id": "volt-mx-marketplace",
+            "type": "marketplace",
+            "url": "https://community.demo-hclvoltmx.com/marketplace/asset"
+        }
+    ],
+    "dependencies": [
+        {
+            "library": "voltscript-testing",
+            "version": "latest",
+            "module": "VoltScriptTesting.vss",
+            "repository": "hcl-github"
+        }
+    ],
+    "vseDependencies": {
+        "JsonVSE": {
+            "library": "25265",
+            "version": "1.0.0",
+            "module": "25264/19416",
+            "repository":"volt-mx-marketplace"
+        }
+    }
+}

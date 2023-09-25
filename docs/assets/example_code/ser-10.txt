@@ -1,0 +1,157 @@
+%REM
+	Copyright 2022-2023 HCL America, Inc.
+	Licensed under the Apache License, Version 2.0 (the "License"); 
+	you may not use this file except in compliance with the License. 
+	You may obtain a copy of the License at
+
+	http://www.apache.org/licenses/LICENSE-2.0
+
+	Unless required by applicable law or agreed to in writing, 
+	software distributed under the License is distributed on an "AS IS" BASIS, 
+	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
+	See the License for the specific language governing permissions and limitations under the License	
+%END REM
+
+Option Public
+Option Declare
+
+' Modify use statement as appropriate for your environent to point to relative path
+Use "../../../src/VoltScriptJsonConverter" 
+
+Class Person
+    Public firstName as String
+    Public lastName as String
+    Public age as Integer
+End Class
+
+Class CustomPerson
+
+    Public firstName as String
+    Public lastName as String
+
+    Function toJson() as JsonObject
+        Dim resp as New JsonObject()
+        Call resp.insertValue("firstName", Me.firstName)
+        Call resp.insertValue("lastName", Me.lastName)
+        Call resp.insertValue("generated", true)
+        Set toJson = resp
+    End Function
+
+End Class
+
+Sub Initialize
+    Print "Running Sample1"
+    Call sample1()
+    Print "Running Sample2"
+    Call sample2()
+    Print "Running Sample3"
+    Call sample3()
+    Print "Running Sample4"
+    Call sample4()
+    Print "Running Sample5"
+    Call sample5()
+    Print "Running Sample6"
+    Call sample6()
+End Sub
+
+Sub sample1()
+    Dim json as String
+    Dim helper as New JsonConversionHelper()
+    Dim jd as New Person()
+
+    jd.firstName = "John"
+    jd.lastName = "Doe"
+    jd.age = 42
+    json = helper.withScalarConverter("firstName")._
+        withScalarConverter("lastName")._
+        withScalarConverter("age")._
+        toJsonString(jd, false)
+    Print json
+End Sub
+
+Sub sample2()
+    Dim jsonObj as JsonObject
+    Dim helper as New JsonConversionHelper()
+    Dim jd as New Person()
+
+    jd.firstName = "John"
+    jd.lastName = "Doe"
+    jd.age = 42
+    Set jsonObj = helper.withScalarConverter("firstName")._
+        withScalarConverter("lastName")._
+        withScalarConverter("age")._
+        toJson(jd)
+    Print jsonObj.toString(false)
+End Sub
+
+Sub sample3()
+    Dim json as String
+    Dim helper as New JsonConversionHelper()
+    Dim jd(1) as Person
+
+    Set jd(0) = New Person()
+    jd(0).firstName = "John"
+    jd(0).lastName = "Doe"
+    jd(0).age = 42
+    Set jd(1) = New Person()
+    jd(1).firstName = "Jane"
+    jd(1).lastName = "Doe"
+    jd(1).age = 30
+    json = helper.withScalarConverter("firstName")._
+        withScalarConverter("lastName")._
+        withScalarConverter("age")._
+        toJsonString(jd, true)
+    Print json
+End Sub
+
+Sub sample4()
+    Dim json as String
+    Dim helper as New JsonConversionHelper()
+    Dim jd(1) as Person
+    Dim objs as Variant
+
+    Set jd(0) = New Person()
+    jd(0).firstName = "John"
+    jd(0).lastName = "Doe"
+    jd(0).age = 42
+    Set jd(1) = New Person()
+    jd(1).firstName = "Jane"
+    jd(1).lastName = "Doe"
+    jd(1).age = 30
+    objs = jd
+    'Pass a variant that is an array instead of an explicit array of Person objects
+    json = helper.withScalarConverter("firstName")._
+        withScalarConverter("lastName")._
+        withScalarConverter("age")._
+        toJsonString(objs, true)
+    Print json
+End Sub
+
+Sub sample5()
+    Dim jsonObj as JsonObject
+    Dim helper as New JsonConversionHelper()
+    Dim jd as New Person()
+
+    jd.firstName = "John"
+    jd.lastName = "Doe"
+    jd.age = 42
+    Dim surnameConverter as New JsonScalarConverter
+    Set jsonObj = helper.withScalarConverter("firstName")._
+        withCustomConverter("surname", surnameConverter.forPropertyName("lastName"))._
+        withScalarConverter("age")._
+        toJson(jd)
+    Print jsonObj.toString(false)
+    Print ""
+End Sub
+
+Sub sample6()
+    Dim jsonObj as JsonObject
+    Dim helper as New JsonConversionHelper()
+    Dim jd as New CustomPerson()
+
+    jd.firstName = "John"
+    jd.lastName = "Doe"
+    Set jsonObj = helper.toJson(jd)
+    Print jsonObj.toString(false)
+    Print ""
+End Sub

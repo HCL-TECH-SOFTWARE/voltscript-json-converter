@@ -1,0 +1,23 @@
+# Bali
+*.bso
+*.vso
+*.so
+
+/unit-test-reports/*/
+test/unit-test-reports/
+bin/
+
+/site/*
+
+# .devcontainer
+.devcontainer/
+.devcontainer.json
+
+# VoltScript
+core
+vses
+libs/VoltScriptTesting.vss
+
+# effective-atlas.json
+effective-atlas.json 
+

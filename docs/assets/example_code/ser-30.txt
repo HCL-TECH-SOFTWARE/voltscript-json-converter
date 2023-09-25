@@ -1,0 +1,179 @@
+%REM
+	Copyright 2022-2023 HCL America, Inc.
+	Licensed under the Apache License, Version 2.0 (the "License"); 
+	you may not use this file except in compliance with the License. 
+	You may obtain a copy of the License at
+
+	http://www.apache.org/licenses/LICENSE-2.0
+
+	Unless required by applicable law or agreed to in writing, 
+	software distributed under the License is distributed on an "AS IS" BASIS, 
+	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
+	See the License for the specific language governing permissions and limitations under the License	
+%END REM
+
+Option Public
+Option Declare
+
+' Modify use statement as appropriate for your environent to point to relative path
+Use "../../../src/VoltScriptJsonConverter" 
+
+Class Person
+
+    Public firstName as String
+    Public lastName as String
+    Public pet as Pet
+
+End Class
+
+Class Pet
+
+    Public name as String
+    Public type as String
+
+End Class
+
+Class ComplexPerson
+
+    Public firstName as String
+    Public lastName as String
+    Public pets as Variant
+
+End Class
+
+Class PetConverter as AbstractJsonConverter
+
+    Function toJson(source as Variant) as Variant
+        Dim helper as New JsonConversionHelper()
+        Dim jsonObj as JsonObject
+        Set jsonObj = helper.withScalarConverter("name")._
+            withScalarConverter("type")._
+            toJson(source)
+        Set toJson = jsonObj
+    End Function
+
+End Class
+
+Sub Initialize()
+    Print "Running Sample1"
+    Call sample1()
+    Print "Running Sample2"
+    Call sample2()
+    Print "Running Sample3"
+    Call sample3()
+    Print "Running Sample4"
+    Call sample4()
+End Sub
+
+Sub sample1()
+    Dim person as New Person
+    Dim pet as New Pet
+
+    pet.name = "Baxter"
+    pet.type = "Guinea Pig"
+    person.firstName = "Ron"
+    person.lastName = "Burgundy"
+    Set person.pet = pet
+
+    Dim helper as New JsonConversionHelper
+    Dim petConverter as New PetConverter
+    Call helper.withScalarConverter("firstName")._
+        withScalarConverter("lastName")._
+        withCustomConverter("pet", petConverter)
+    
+    Dim jsonObj as JsonObject
+    Set jsonObj = helper.toJson(person)
+    Print jsonObj.getChild("firstName").scalarValue & " " & jsonObj.getChild("lastName").scalarValue &_
+        " has a pet called " & jsonObj.getChild("pet").getChild("name").scalarValue
+    
+End Sub
+
+Sub sample2()
+    Dim person as New Person
+    Dim pet as New Pet
+
+    pet.name = "Baxter"
+    pet.type = "Guinea Pig"
+    person.firstName = "Ron"
+    person.lastName = "Burgundy"
+    Set person.pet = pet
+
+    Dim petHelper as New JsonConversionHelper
+    Dim petConverter as New JsonBasicObjectConverter("Pet", "ser-30")
+    Dim helper as New JsonConversionHelper
+    Dim jsonObj as JsonObject
+    Set jsonObj = helper.withScalarConverter("firstName")._
+        withScalarConverter("lastName")._
+        withCustomConverter("pet", petConverter._
+            withHelper(petHelper._
+                withScalarConverter("name")._
+                withScalarConverter("type")))._
+        toJson(person)
+    
+    Print jsonObj.getChild("firstName").scalarValue & " " & jsonObj.getChild("lastName").scalarValue &_
+        " has a pet called " & jsonObj.getChild("pet").getChild("name").scalarValue
+    
+End Sub
+
+Sub sample3()
+    Dim person as New Person
+    Dim pet as New Pet
+
+    pet.name = "Baxter"
+    pet.type = "Guinea Pig"
+    person.firstName = "Ron"
+    person.lastName = "Burgundy"
+    Set person.pet = pet
+
+    Dim petHelper as New JsonConversionHelper
+    Call petHelper.withScalarConverter("name")
+    Call petHelper.withScalarConverter("type")
+    Dim petConverter as New JsonBasicObjectConverter("Pet", "ser-30")
+    Call petConverter.withHelper(petHelper)
+    Dim helper as New JsonConversionHelper
+    Call helper.withScalarConverter("firstName")
+    Call helper.withScalarConverter("lastName")
+    Call helper.withCustomConverter("pet", petConverter)
+    Dim jsonObj as JsonObject
+    Set jsonObj = helper.toJson(person)
+    
+    Print jsonObj.getChild("firstName").scalarValue & " " & jsonObj.getChild("lastName").scalarValue &_
+        " has a pet called " & jsonObj.getChild("pet").getChild("name").scalarValue
+    
+End Sub
+
+Sub sample4()
+    Dim person as New ComplexPerson
+    Dim pets(2) as Pet
+
+    Set pets(0) = new Pet()
+    pets(0).name = "Captain"
+    pets(0).type = "Gentoo Penguin"
+    Set pets(1) = new Pet()
+    pets(1).name = "Loudy"
+    pets(1).type = "Gentoo Penguin"
+    Set pets(2) = new Pet()
+    pets(2).name = "Nimrod"
+    pets(2).type = "Gentoo Penguin"
+    person.firstName = "Ron"
+    person.lastName = "Burgundy"
+    person.pets = pets
+
+    Dim petHelper as New JsonConversionHelper
+    Dim petConverter as New JsonBasicObjectArrayConverter("Pet", "ser-30")
+    Dim helper as New JsonConversionHelper
+    Dim jsonObj as JsonObject
+    Set jsonObj = helper.withScalarConverter("firstName")._
+        withScalarConverter("lastName")._
+        withCustomConverter("pets", petConverter._
+            withHelper(petHelper._
+                withScalarConverter("name")._
+                withScalarConverter("type")))._
+        toJson(person)
+    
+    Print jsonObj.getChild("firstName").scalarValue & " " & jsonObj.getChild("lastName").scalarValue &_
+        " has pets called " & Cstr(jsonObj.getChild("pets").getChildren()(0).getChild("name").scalarValue) &_
+            ", " & Cstr(jsonObj.getChild("pets").getChildren()(1).getChild("name").scalarValue) &_
+            ", " & Cstr(jsonObj.getChild("pets").getChildren()(2).getChild("name").scalarValue)
+    
+End Sub

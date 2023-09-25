@@ -1,0 +1,95 @@
+%REM
+	Copyright 2022-2023 HCL America, Inc.
+	Licensed under the Apache License, Version 2.0 (the "License"); 
+	you may not use this file except in compliance with the License. 
+	You may obtain a copy of the License at
+
+	http://www.apache.org/licenses/LICENSE-2.0
+
+	Unless required by applicable law or agreed to in writing, 
+	software distributed under the License is distributed on an "AS IS" BASIS, 
+	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
+	See the License for the specific language governing permissions and limitations under the License	
+%END REM
+%REM THIS CODE IS ON HOLD PENDING tutorial creation (engage.md) in the docs
+%END REM 
+Option Public
+Option Declare
+Use "../src/VoltScriptJsonConverter"
+
+
+Class Session
+
+    Public id as String
+    Public resourceId as String
+    Public title as String
+    Public startTime as String
+    Public endTime as String
+    Public products as Variant
+
+    Sub New(id as String, title as String)
+        Me.id = id
+        Me.title = title
+    End Sub
+
+    Sub printSummary()
+        Print "Session:  " & Me.id & " - " & Me.title
+        Print "Times:    " & Me.startTime & " - " & Me.endTime
+        Print "Products: " & Join(Me.products, ", ")
+    End Sub
+
+End Class
+
+
+Class StringToArraySerializer as AbstractJsonConverter
+
+    Function fromJson(source as JsonObject) as Variant
+        fromJson = Split(source.scalarValue, ",")
+    End Function
+
+End Class
+
+Sub Initialize
+
+    Dim parser as New JsonParser()
+    Dim jsonArr as JsonObject
+
+    Call parser.loadFromFile(CurDir() & "/samples/engageData.json") 
+	'	' CurDir() above is set at RUN-TIME from the directory is being RUN FROM, 
+	'	' not the COMPILE-TIME directory in which that the script file resides.
+	
+    Set jsonArr = parser.getRootobject
+
+    Dim sessions as Variant
+    Dim helper as New JsonConversionHelper
+    Dim sessionConstructor as new JsonCustomConstructor
+    Dim startSer as New JsonScalarConverter()
+    Dim endSer as New JsonScalarConverter()
+    Dim strToArrSer as New StringToArraySerializer()
+    '   ' startSer.forPropertyName and endSer.forPropertyName are both run before either withCustomConverter is run
+    '   ' So if we use the same variable, both custom converters write to endTime
+    sessions = helper.ignoreLabel("className")._
+        ignoreLabel("type")._
+        withCustomConstructor(sessionConstructor.withParam("id","").withParam("title", ""))._
+        withCustomConverter("start", startSer.forPropertyName("startTime"))._
+        withCustomConverter("end", endSer.forPropertyName("endTime"))._
+        withCustomConverter("products", strToArrSer)._
+        jsonArrayToObjects(jsonArr, "Session", "Engage")
+
+    Dim i as Integer
+    Dim geSession as Session
+    For i = 0 to UBound(sessions)
+        If (Cstr(sessions(i).id) = "Ge1") Then
+            Set geSession = sessions(i)
+            Exit For
+        End If
+    Next
+
+    If (geSession is Nothing) Then
+        Print "We could not find the OGS of Engage"
+    Else
+        Print "Found OGS of Engage as session " & i
+        geSession.printSummary
+    End If
+
+End Sub

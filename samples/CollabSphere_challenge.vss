@@ -1,0 +1,171 @@
+%REM
+	Copyright 2022-2023 HCL America, Inc.
+	Licensed under the Apache License, Version 2.0 (the "License"); 
+	you may not use this file except in compliance with the License. 
+	You may obtain a copy of the License at
+
+	http://www.apache.org/licenses/LICENSE-2.0
+
+	Unless required by applicable law or agreed to in writing, 
+	software distributed under the License is distributed on an "AS IS" BASIS, 
+	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
+	See the License for the specific language governing permissions and limitations under the License	
+%END REM
+
+Option Public
+Option Declare
+Use "../src/VoltScriptJsonConverter"
+
+Property Get MonthNames as Variant 
+    Static result(1 to 12) as String 
+    Static isLoaded as Boolean 
+
+    If Not isLoaded Then 
+        result(1) = |January|
+        result(2) = |February|
+        result(3) = |March|
+        result(4) = |April|
+        result(5) = |May|
+        result(6) = |June|
+        result(7) = |July|
+        result(8) = |August|
+        result(9) = |September|
+        result(10) = |October|
+        result(11) = |November|
+        result(12) = |December|
+        isLoaded = True 
+    End If 
+
+    MonthNames = result 
+End Property 
+
+Class Session
+    Private id_ as String 
+    Private sessiondate_ As String 
+    Private sessiontime_ As String 
+    Public unid as String
+    Public title as String
+    Public startTime as String
+    Public endTime as String
+    Public room as String 
+
+    Public Property Get Id as String 
+        Dim chunks as Variant 
+
+        If (Len(me.id_) < 1) Then 
+            chunks = split(Me.title, | - |)
+            Me.id_ = Trim$(chunks(0))
+        End If 
+
+        Id = Me.id_ 
+    End Property 
+
+    Property Get SessionDate As String 
+        Dim chunks as Variant 
+        Dim dateparts(2) As String 
+
+        If (Len(Me.sessiondate_) > 0) Then return me.sessiondate_
+       
+        chunks = split(me.startTime, |T|)
+        If (ubound(chunks) > 0) Then 
+            chunks = split(chunks(Lbound(chunks)), |-|)
+
+            dateParts(0) = chunks(2)
+            dateParts(1) = MonthNames(cint(chunks(1)))
+            dateParts(2) = chunks(0)
+            me.sessiondate_ = Join(dateParts, | |)
+        End If 
+
+        return me.sessiondate_ 
+    End Property 
+
+    Property Get SessionTime As String 
+        Dim chunks as Variant 
+        Dim strTemp as String 
+
+        If (Len(Me.sessiontime_) > 0) Then return me.sessiontime_
+        
+        If (Len(me.SessionDate) < 1) || (Len(Me.endTime) < 1) Then return
+
+        chunks = split(me.startTime, |T|)
+        strTemp = Left$(chunks(Ubound(chunks)), 5)
+
+        chunks = split(me.endTime, |T|)
+        chunks(0) = strTemp 
+        strTemp = Left$(chunks(Ubound(chunks)), 5)
+        chunks(1) = strTemp 
+        Me.sessiontime_ = Join(chunks, | - |)
+
+        return me.sessiontime_ 
+    End Property 
+
+    Property Get SessionName As String 
+        If (len(Me.Id) > 0) Then 
+            return Trim$(Mid$(Me.title, Len(Me.Id & | - |), Len(Me.title)))
+        Else 
+            return  Me.title  
+        End If 
+    End Property 
+
+    Sub New(unid as String, title as String)
+        Me.unid = unid
+        Me.title = title 
+    End Sub
+
+    Sub printSummary()
+        Print "Id:      " & Me.Id
+        Print "Session: " & Me.SessionName 
+        Print "Date:    " & Me.SessionDate
+        Print "Time:    " & Me.SessionTime 
+        Print "Room:    " & Me.room  
+        Print "Unid:    " & Me.unid
+    End Sub
+End Class
+
+Sub Initialize
+    Dim job As JsonObject
+
+    Dim parser As New JsonParser()
+    Dim helper As New JsonConversionHelper()
+    Dim sessionConstructor As New JsonCustomConstructor()
+    Dim jscStart As New JsonScalarConverter()
+    Dim jscEnd As New JsonScalarConverter()
+    Dim sess As Session
+
+    Dim sessions As Variant
+    Dim i As Integer
+
+    Call parser.loadFromFile(CurDir() & "/samples/collabsphere.json") 
+	' CurDir() as referenced above is set at RUN-TIME
+    ' it represents the directory from which the script is BEING RUN; 
+	' not the COMPILE-TIME directory in which that the script file resides.
+	
+    Set job = parser.getRootobject
+
+    ' jscStart.forPropertyName and jscEnd.forPropertyName are both run before either withCustomConverter is run
+    ' So if we use the same variable, both custom converters write to endTime
+    sessions = helper.ignoreLabel("className")._
+        ignoreLabel("debug-log")._
+        ignoreLabel("backgroundColor")._
+        ignoreLabel("textColor")._
+        ignoreLabel("className")._
+        withCustomConstructor(sessionConstructor.withParam("id","").withParam("title", ""))._
+        withCustomConverter("start", jscStart.forPropertyName("startTime"))._
+        withCustomConverter("end", jscEnd.forPropertyName("endTime"))._
+        jsonArrayToObjects(job, "Session", "CollabSphere_challenge")
+
+    For i = Lbound(sessions) to UBound(sessions)
+        ' use Id Property 
+        If (|DEV113| = Cstr(sessions(i).Id)) Then
+            Set sess = sessions(i)
+            Exit For
+        End If
+    Next
+
+    If (sess is Nothing) Then
+        Print "We could not find the VoltScript Unit Testing"
+    Else
+        Print "Found VoltScript Unit Testing! " & i
+        sess.printSummary
+    End If
+End Sub

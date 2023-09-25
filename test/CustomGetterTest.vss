@@ -1,0 +1,86 @@
+%REM
+	Copyright 2022-2023 HCL America, Inc.
+	Licensed under the Apache License, Version 2.0 (the "License"); 
+	you may not use this file except in compliance with the License. 
+	You may obtain a copy of the License at
+
+	http://www.apache.org/licenses/LICENSE-2.0
+
+	Unless required by applicable law or agreed to in writing, 
+	software distributed under the License is distributed on an "AS IS" BASIS, 
+	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
+	See the License for the specific language governing permissions and limitations under the License	
+%END REM
+
+Option Public
+Option Declare
+Use "../src/VoltScriptJsonConverter"
+Use "../libs/VoltScriptTesting"
+
+Class PersonG
+    Private firstName as String
+    Private lastName as String
+    Private age as Integer
+
+    Sub New(firstName as String, lastName as String, age as Integer)
+        Me.firstName = firstName
+        Me.lastName = lastName
+        Me.age = age
+    End Sub
+    
+    Function getName(firstNameFirst as Boolean) as String
+        If (firstNameFirst) Then
+            getName = Me.firstName & " " & Me.lastName
+        Else
+            getName = Me.lastName & ", " & Me.firstName
+        End If
+    End Function
+End Class
+
+Function runGetterTest() as Boolean
+
+    Dim testRunner as New TestRunner("Person Class with Custom Getter Functions")
+    Dim person as New PersonG("John", "Doe", 42)
+    Dim result as Boolean
+    Call testRunner.setOutputFormat("BOTH")
+
+    result = testSerializeG(true, person, testRunner)
+    result = result And testSerializeG(false, person, testRunner)
+    
+    return result
+End Function
+
+Function testSerializeG(order as Boolean, person as PersonG, testRunner as TestRunner) as Boolean
+
+    Dim helper as New JsonConversionHelper()
+    Dim nameGetter as New JsonGetterConverter
+    Dim jsonObj as JsonObject
+    Dim result as Boolean
+
+    Try
+        Dim serializeSuite as New TestSuite("Test Custom Getter serialization - " & order)
+        Call testRunner.addTestSuite(serializeSuite)
+        Call serializeSuite.describe("Serialization")
+        Set jsonObj = helper._
+            withCustomConverter("name", nameGetter._
+                forGetter("getName")._
+                withLiteralParam(order))._
+            toJson(person)
+        call serializeSuite.addResult(True, "")
+        
+        Dim expected as String
+        If (order) Then
+            expected = "John Doe"
+        Else
+            expected = "Doe, John"
+        End If
+        Call serializeSuite.describe("Check name").assertEqualsString(expected, jsonObj.getChild("name").scalarValue, false)
+    Catch
+        Call serializeSuite.addError("Error serializing JSON: " & Error() & " on line " & Erl, ||)
+        print "Error " & Error() & " on line " & Erl
+    Finally
+        result = serializeSuite.ranSuccessfully()
+    End Try
+
+    return result
+End Function

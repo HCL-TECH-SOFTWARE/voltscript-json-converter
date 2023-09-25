@@ -1,0 +1,102 @@
+%REM
+	Copyright 2022-2023 HCL America, Inc.
+	Licensed under the Apache License, Version 2.0 (the "License"); 
+	you may not use this file except in compliance with the License. 
+	You may obtain a copy of the License at
+
+	http://www.apache.org/licenses/LICENSE-2.0
+
+	Unless required by applicable law or agreed to in writing, 
+	software distributed under the License is distributed on an "AS IS" BASIS, 
+	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
+	See the License for the specific language governing permissions and limitations under the License	
+%END REM
+
+Option Public
+Option Declare
+Use "../src/VoltScriptJsonConverter"
+Use "../libs/VoltScriptTesting"
+
+Class PersonF
+
+    Public firstName as String
+    Public lastName as String
+    Public generatedFromJson as Boolean
+
+    Function fromJson(source as JsonObject)
+        Me.firstName = source.getChild("firstName").scalarValue
+        Me.lastName = source.getChild("lastName").scalarValue
+        Me.generatedFromJson = true
+        Set fromJson = Me
+    End Function
+
+    Function toJson() as JsonObject
+        Dim resp as New JsonObject()
+        Call resp.insertValue("firstName", Me.firstName)
+        Call resp.insertValue("lastName", Me.lastName)
+        Call resp.insertValue("generated", true)
+        Set toJson = resp
+    End Function
+
+End Class
+
+Function runFunctionTest() as Boolean
+
+    Dim testRunner as New TestRunner("Custom Functions")
+    Dim helper as New JsonConversionHelper()
+    Dim person as PersonF
+    Dim json as String
+    dim result as Boolean
+    Call testRunner.setOutputFormat("BOTH")
+
+	json = |{"firstName":"Paul","lastName":"Withers"}|
+
+    Try
+        Dim deserializeSuite as New TestSuite("Test Function deserialization")
+        Call testRunner.addTestSuite(deserializeSuite)
+        Call deserializeSuite.describe("Deserialization")
+        Set person = helper.fromJsonString(json, "PersonF", "../test/CustomFunctionTest")
+        call deserializeSuite.addResult(True, "")
+        Call testDeserializationF(deserializeSuite, person)
+    Catch
+        Call deserializeSuite.addError("Error deserializing JSON: " & Error() & " on line " & Erl, ||)
+        print "Error " & Error() & " on line " & Erl
+    Finally
+        result = deserializeSuite.ranSuccessfully()
+    End Try
+
+    Try
+        Dim jsonObj as JsonObject
+        Dim serializeSuite as New TestSuite("Test Function serialization")
+        Call testRunner.addTestSuite(serializeSuite)
+        Call serializeSuite.describe("Serialization")
+        Set jsonObj = helper.toJson(person)
+        Call serializeSuite.addResult(True, "")
+        Call testSerializationF(serializeSuite, jsonObj)
+    Catch
+        Call serializeSuite.addError("Error serializing JSON: " & Error() & " on line " & Erl, ||)
+        print "Error " & Error() & " on line " & Erl
+    Finally
+        result = result And serializeSuite.ranSuccessfully()
+    end Try
+
+    return result
+End Function
+
+Function testDeserializationF(testSuite as TestSuite, testObj as PersonF)
+
+    Call testSuite.describe("Test person first name").assertEqualsString("Paul", testObj.firstName, false)
+    Call testSuite.describe("Test person last name").assertEqualsString("Withers", testObj.lastName, false)
+    Call testSuite.describe("Test created by custom deserialization").assertTrue(testObj.generatedFromJson)
+
+End Function
+
+Function testSerializationF(testSuite as TestSuite, testObj as JsonObject)
+
+    Call testSuite.describe("Test person first name").assertEqualsString("Paul", testObj.getChild("firstName").scalarValue, false)
+    Call testSuite.describe("Test person last name").assertEqualsString("Withers", testObj.getChild("lastName").scalarValue, false)
+    Dim generated as Boolean
+    generated = testObj.getChild("generated").scalarValue
+    Call testSuite.describe("Test created from custom serialization").assertTrue(generated)
+
+End Function

@@ -1,0 +1,115 @@
+%REM
+	Copyright 2022-2023 HCL America, Inc.
+	Licensed under the Apache License, Version 2.0 (the "License"); 
+	you may not use this file except in compliance with the License. 
+	You may obtain a copy of the License at
+
+	http://www.apache.org/licenses/LICENSE-2.0
+
+	Unless required by applicable law or agreed to in writing, 
+	software distributed under the License is distributed on an "AS IS" BASIS, 
+	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
+	See the License for the specific language governing permissions and limitations under the License	
+%END REM
+
+Option Public
+Option Declare
+Use "../src/VoltScriptJsonConverter"
+Use "../libs/VoltScriptTesting"
+'Runs through addCustomConverter,fromJsonString,asNoArgsObject,createNoArgsObject,resetGlobals,fromJson,
+'getCustomConverter,SamsaraScalarConverter
+
+Class Person
+
+    Public firstName as String
+    Public lastName as String
+    Public age as Integer
+
+    Function fromJson(obj as JsonObject) as Person
+        Me.firstName = obj.getChild("firstName").scalarValue
+        Me.lastName = obj.getChild("lastName").scalarValue
+        ' .scalarValue returns a LONG, need to convert
+        Me.age = CInt(obj.getChild("age").scalarValue)
+        Set fromJson = Me
+    End Function
+
+End Class
+
+Function runFromJsonTest as Boolean
+    Dim testRunner as New TestRunner("FromJson Class Conversion")
+    Dim helper as new JsonConversionHelper()
+    Dim person as Person
+    Dim json as String
+    Dim result as Boolean
+    Call testRunner.setOutputFormat("BOTH")
+    
+	json = |{"firstName":"Ron","lastName":"Burgundy","age": 45}|
+
+    Try
+        Dim deserializeSuite as New TestSuite("Test fromJson Class deserialization")
+        Call testRunner.addTestSuite(deserializeSuite)
+        Call deserializeSuite.describe("Deserialization")
+        Set person = helper.fromJsonString(json, "Person", "../test/BasicFromJsonTest")
+        call deserializeSuite.addResult(True, "")
+        Call testDeserializationFJ(deserializeSuite, person)
+    Catch
+        Call deserializeSuite.addError("Error deserializing JSON: " & Error() & ". Line " & Erl, ||)
+        Print Error() & ". Line " & Erl
+    Finally
+        result = deserializeSuite.ranSuccessfully()
+    End Try
+
+    Try
+        Dim deserializeSuite2 as New TestSuite("Test fromJson into existing object deserialization")
+        Dim parser as New JsonParser
+        Call parser.loadFromJson(json)
+        Call testRunner.addTestSuite(deserializeSuite2)
+        Call deserializeSuite2.describe("Deserialization")
+        Dim existingPerson as New Person
+        Call helper.withObject(existingPerson).fromJson(parser.getRootObject)
+        call deserializeSuite2.addResult(True, "")
+        Call testDeserializationFJ(deserializeSuite2, existingPerson)
+    Catch
+        Call deserializeSuite.addError("Error deserializing JSON: " & Error() & ". Line " & Erl, ||)
+        Print Error() & ". Line " & Erl
+    Finally
+        result = deserializeSuite.ranSuccessfully()
+    End Try
+
+    Try
+        Dim jsonObj as JsonObject
+        Dim serializeSuite as New TestSuite("Test fromJson Class serialization")
+        Call testRunner.addTestSuite(serializeSuite)
+        Call deserializeSuite.describe("Serialization")
+        Call helper.withScalarConverter("firstName").withScalarConverter("lastName").withScalarConverter("age")
+        Set jsonObj = helper.toJson(person)
+        call deserializeSuite.addResult(True, "")
+        Call testSerializationFJ(serializeSuite, jsonObj)
+    Catch
+        Call serializeSuite.addError("Error deserializing JSON: " & Error() & " on line " & Erl, ||)
+        Print Error() & " on line " & Erl
+    Finally
+        result = result And serializeSuite.ranSuccessfully()
+    end Try
+
+    Return result
+End Function
+
+Function testDeserializationFJ(testSuite as TestSuite, testObj as Person)
+
+    Call testSuite.describe("Test person first name").assertEqualsString("Ron", testObj.firstName, false)
+    Call testSuite.describe("Test person last name").assertEqualsString("Burgundy", testObj.lastName, false)
+    Call testSuite.describe("Test age").assertEqualsInteger(45, testObj.age)
+
+End Function
+
+Function testSerializationFJ(testSuite as TestSuite, testObj as JsonObject)
+
+    Call testSuite.describe("Test person first name").assertEqualsString("Ron", testObj.getChild("firstName").scalarValue, false)
+    Call testSuite.describe("Test person last name").assertEqualsString("Burgundy", testObj.getChild("lastName").scalarValue, false)
+    Call testSuite.describe("Test age").assertEqualsNumeric(45, testObj.getChild("age").scalarValue)
+    Dim expected as String
+    expected = |{"age":45,"firstName":"Ron","lastName":"Burgundy"}|
+    Call testSuite.describe("Test JSON").assertEqualsString(expected, testObj.toString(false), false)
+
+End Function

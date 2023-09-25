@@ -1,0 +1,70 @@
+%REM
+	Copyright 2022-2023 HCL America, Inc.
+	Licensed under the Apache License, Version 2.0 (the "License"); 
+	you may not use this file except in compliance with the License. 
+	You may obtain a copy of the License at
+
+	http://www.apache.org/licenses/LICENSE-2.0
+
+	Unless required by applicable law or agreed to in writing, 
+	software distributed under the License is distributed on an "AS IS" BASIS, 
+	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
+	See the License for the specific language governing permissions and limitations under the License	
+%END REM
+
+Option Public
+Option Declare
+Use "../src/VoltScriptJsonConverter"
+UseVSE "*JsonVSE"
+
+Class Element
+
+    Public id as string
+    Public type as String
+    Public name as String
+    Public image as Resource
+    Public thumbnail as Resource
+
+End Class
+
+Class Resource
+
+    Public url as String
+    Public width as Integer
+    Public height as Integer
+
+End Class
+
+Sub Initialize
+
+    Dim json as String
+    json = |
+    {
+	"id": "0001",
+	"type": "donut",
+	"name": "Cake",
+	"image":
+		{
+			"url": "images/0001.jpg",
+			"width": 200,
+			"height": 200
+		},
+	"thumbnail":
+		{
+			"url": "images/thumbnails/0001.jpg",
+			"width": 32,
+			"height": 32
+		}
+}|
+
+    Dim helper as New JsonConversionHelper()
+    Dim donut as Element
+    Dim converter as New JsonBasicObjectConverter("Resource", "../samples/Donut")
+    Set donut = helper.withCustomConverter("image", converter)._
+        withCustomConverter("thumbnail", converter)._
+        fromJsonString(json, "Element", "Donut")
+
+    Print donut.image.url
+    Print donut.thumbnail.url
+
+End Sub

@@ -1,0 +1,138 @@
+%REM
+	Copyright 2022-2023 HCL America, Inc.
+	Licensed under the Apache License, Version 2.0 (the "License"); 
+	you may not use this file except in compliance with the License. 
+	You may obtain a copy of the License at
+
+	http://www.apache.org/licenses/LICENSE-2.0
+
+	Unless required by applicable law or agreed to in writing, 
+	software distributed under the License is distributed on an "AS IS" BASIS, 
+	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
+	See the License for the specific language governing permissions and limitations under the License	
+%END REM
+
+Option Public
+Option Declare
+Use "../src/VoltScriptJsonConverter"
+Use "../libs/VoltScriptTesting"
+'Runs through addCustomConverter,fromJsonString,asNoArgsObject,createNoArgsObject,resetGlobals,fromJson,
+'getCustomConverter,SamsaraScalarConverter
+
+Private Const RELATIVE_PATH_PREFIX = "../test/"
+
+Class PersonB
+
+    Public firstName as String
+    Public lastName as String
+    Public pet as PetB
+
+    Function getName() as String
+        getName = firstName & " " & lastName
+    End Function
+
+End Class
+
+Class PetB
+
+    Public name as String
+    Public type as String
+
+End Class
+
+Class PetConverter as AbstractJsonConverter
+
+    Function fromJson(source as JsonObject) as Variant
+
+        Dim pet as PetB
+        Dim helper as New JsonConversionHelper()
+        Set pet = helper.toObject(source, "PetB", RELATIVE_PATH_PREFIX & "BasicPersonTest").fromJson(source)
+        Set fromJson = pet
+
+    End Function
+
+    Function toJson(source as Variant) as Variant
+        Dim helper as New JsonConversionHelper()
+        Dim jsonObj as JsonObject
+        Set jsonObj = helper.withScalarConverter("name").withScalarConverter("type").toJson(source)
+        DebugPrint_Samsara "Converted pet"
+        Set toJson = jsonObj
+    End Function
+
+End Class
+
+Function runPersonTest as Boolean
+
+    Dim testRunner as New TestRunner("Basic Person Class Conversion")
+    Dim helper as new JsonConversionHelper()
+    Dim petConverter as New PetConverter()
+    Dim person as PersonB
+    Dim json as String
+    Dim result as Boolean
+    Call testRunner.setOutputFormat("BOTH")
+    
+	json = |{"firstName":"Paul","lastName":"Withers","pet": {"name":"Peter","type":"Guinea Pig"}}|
+    'Call helper.enableDebug()
+    
+    Try
+        Dim deserializeSuite as New TestSuite("Test Person Class deserialization")
+        Call testRunner.addTestSuite(deserializeSuite)
+        Call deserializeSuite.describe("Deserialization")
+        Call helper.withCustomConverter("pet", petConverter)
+        Set person = helper.fromJsonString(json, "PersonB", RELATIVE_PATH_PREFIX & "BasicPersonTest")
+        call deserializeSuite.addResult(True, "")
+        Call testDeserializationP(deserializeSuite, person)
+    Catch
+        Call deserializeSuite.addError("Error deserializing JSON: " & Error() & " on line " & Erl, ||)
+        print "Error " & Error() & " on line " & Erl
+    Finally
+        result = deserializeSuite.ranSuccessfully()
+    end Try
+
+    Try
+        Dim jsonObj as JsonObject
+        Dim serializeSuite as New TestSuite("Test Person Class serialization")
+        Call testRunner.addTestSuite(serializeSuite)
+        Call serializeSuite.describe("Serialization")
+        Call helper.withScalarConverter("firstName").withScalarConverter("lastName").withCustomConverter("pet", petConverter)
+        Set jsonObj = helper.toJson(person)
+        Call serializeSuite.addResult(True, "")
+        Call testSerializationP(serializeSuite, jsonObj)
+    Catch
+        Call serializeSuite.addError("Error deserializing JSON: " & Error() & " on line " & Erl, ||)
+        print "Error " & Error() & " on line " & Erl
+    Finally
+        result = result And serializeSuite.ranSuccessfully()
+    end Try
+
+    Return result
+End Function
+
+Function testDeserializationP(testSuite as TestSuite, testObj as PersonB)
+
+    On Error GoTo logErr
+
+    Call testSuite.describe("Test person first name").assertEqualsString("Paul", testObj.firstName, false)
+    Call testSuite.describe("Test person last name").assertEqualsString("Withers", testObj.lastName, false)
+    Call testSuite.describe("Test full name").assertEqualsString("Paul Withers", testObj.getName(), false)
+    Call testSuite.describe("Test pet").assertIs("PETB", testObj.pet)
+    Call testSuite.describe("Test pet name").assertEqualsString("Peter", testObj.pet.name, false)
+    Call testSuite.describe("Test pet type").assertEqualsString("Guinea Pig", testObj.pet.type, false)
+
+getOut:
+    Exit Function
+
+logErr:
+    Call testSuite.addError(|Error | & Error() & |(| & Err() & |) on line | & CStr(Erl), ||)
+	Resume Next
+
+End Function
+
+Function testSerializationP(testSuite as TestSuite, testObj as JsonObject)
+
+    Call testSuite.describe("Test person first name").assertEqualsString("Paul", testObj.getChild("firstName").scalarValue, false)
+    Call testSuite.describe("Test person last name").assertEqualsString("Withers", testObj.getChild("lastName").scalarValue, false)
+    Call testSuite.describe("Test pet name").assertEqualsString("Peter", testObj.getChild("pet").getChild("name").scalarValue, false)
+    Call testSuite.describe("Test pet type").assertEqualsString("Guinea Pig", testObj.getChild("pet").getChild("type").scalarValue, false)
+
+End Function
