@@ -74,7 +74,7 @@ Function testSerializeG(order as Boolean, person as PersonG, testRunner as TestR
         Else
             expected = "Doe, John"
         End If
-        Call serializeSuite.describe("Check name").assertEqualsString(expected, jsonObj.getChild("name").scalarValue, false)
+        Call serializeSuite.describe("Check name").assertEqualsString(expected, CStr(jsonObj.getChild("name").scalarValue), false)
     Catch
         Call serializeSuite.addError("Error serializing JSON: " & Error() & " on line " & Erl, ||)
         print "Error " & Error() & " on line " & Erl

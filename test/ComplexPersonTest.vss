@@ -112,8 +112,8 @@ End Function
 
 Function testSerializationC(testSuite as TestSuite, testObj as JsonObject)
 
-    Call testSuite.describe("Test person first name").assertEqualsString("Paul", testObj.getChild("firstName").scalarValue, false)
-    Call testSuite.describe("Test person last name").assertEqualsString("Withers", testObj.getChild("lastName").scalarValue, false)
+    Call testSuite.describe("Test person first name").assertEqualsString("Paul", CStr(testObj.getChild("firstName").scalarValue), false)
+    Call testSuite.describe("Test person last name").assertEqualsString("Withers", CStr(testObj.getChild("lastName").scalarValue), false)
     Call testSuite.describe("Test pet 1 name").assertEqualsString("Peter", testObj.getChild("pets").getChildren()(0).getChild("name").scalarValue, false)
     Call testSuite.describe("Test pet 1 type").assertEqualsString("Guinea Pig", testObj.getChild("pets").getChildren()(0).getChild("type").scalarValue, false)
     Call testSuite.describe("Test pet 2 name").assertEqualsString("Benjamin", testObj.getChild("pets").getChildren()(1).getChild("name").scalarValue, false)

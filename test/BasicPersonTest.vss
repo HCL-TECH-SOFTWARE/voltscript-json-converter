@@ -130,9 +130,9 @@ End Function
 
 Function testSerializationP(testSuite as TestSuite, testObj as JsonObject)
 
-    Call testSuite.describe("Test person first name").assertEqualsString("Paul", testObj.getChild("firstName").scalarValue, false)
-    Call testSuite.describe("Test person last name").assertEqualsString("Withers", testObj.getChild("lastName").scalarValue, false)
-    Call testSuite.describe("Test pet name").assertEqualsString("Peter", testObj.getChild("pet").getChild("name").scalarValue, false)
-    Call testSuite.describe("Test pet type").assertEqualsString("Guinea Pig", testObj.getChild("pet").getChild("type").scalarValue, false)
+    Call testSuite.describe("Test person first name").assertEqualsString("Paul", CStr(testObj.getChild("firstName").scalarValue), false)
+    Call testSuite.describe("Test person last name").assertEqualsString("Withers", CStr(testObj.getChild("lastName").scalarValue), false)
+    Call testSuite.describe("Test pet name").assertEqualsString("Peter", CStr(testObj.getChild("pet").getChild("name").scalarValue), false)
+    Call testSuite.describe("Test pet type").assertEqualsString("Guinea Pig", CStr(testObj.getChild("pet").getChild("type").scalarValue), false)
 
 End Function

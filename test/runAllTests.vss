@@ -34,66 +34,81 @@ Sub Initialize
     Dim result as Boolean
     Dim lastResult as Boolean
     Dim tot as Long
+    Dim totExp as Long
 
     result = runDataTypeTest()
     If result then tot = 1
+    totExp = 1
 
     lastResult = runFromJsonTest()
     If lastResult then tot += 2
     result = result And lastResult
+    totExp += 2
 
     lastResult = runZuluTest()
     If lastResult then tot += 4
     result = result And lastResult
+    totExp += 4
 
     lastResult = runPersonArrayTest()
     If lastResult then tot += 8
     result = result And lastResult
+    totExp += 8
 
     lastResult = runPersonTest()
     If lastResult then tot += 16
     result = result And lastResult
+    totExp += 16
 
     lastResult = runArrayTest()
     If lastResult then tot += 32
     result = result And lastResult
+    totExp += 32
 
     lastResult = runObjArrayTest()
     If lastResult then tot += 64
     result = result And lastResult
+    totExp += 64
 
     lastResult = runComplexObjTest()
     If lastResult then tot += 128
     result = result And lastResult
+    totExp += 128
 
     lastResult = runPersonConstructorTests()
     If lastResult then tot += 256
     result = result And lastResult
+    totExp += 256
 
     lastResult = runComplexPersonPropertiesTest()
     If lastResult then tot += 512
     result = result And lastResult
+    totExp += 512
 
     lastResult = runComplexPersonTest()
     If lastResult then tot += 1024
     result = result And lastResult
+    totExp += 1024
 
     lastResult = runFunctionTest()
     If lastResult then tot += 2056
     result = result And lastResult
+    totExp += 2056
 
     lastResult = runGetterTest()
     If lastResult then tot += 4112
     result = result And lastResult
+    totExp += 4112
 
     lastResult = runSetterTest()
     If lastResult then tot += 8224
     result = result And lastResult
+    totExp += 8224
 
     If result Then
         Print ""
         Print "All tests ran successfully"
     Else
-        Error 1001, "Tests Failed, tot was " & tot & ". Check results"
+        Error 1001, "Tests Failed, tot was " & tot & ", expected " & totExp & ". Check results"
     End If
 End Sub

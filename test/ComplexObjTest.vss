@@ -119,9 +119,9 @@ Function testSerializationCO(testSuite as TestSuite, testObj as JsonObject)
 
     On Error GoTo logErr
 
-    Call testSuite.describe("Test unid").assertEqualsString("12345678901234567890123456789012", testObj.getChild("jsonUnid").scalarValue, false)
-    Call testSuite.describe("Test action").assertEqualsString("modified", testObj.getChild("jsonAction").scalarValue, false)
-    Call testSuite.describe("Test modified").assertEqualsString("2022-02-02T02:02:22Z", testObj.getChild("jsonModified").scalarValue, true)
+    Call testSuite.describe("Test unid").assertEqualsString("12345678901234567890123456789012", CStr(testObj.getChild("jsonUnid").scalarValue), false)
+    Call testSuite.describe("Test action").assertEqualsString("modified", CStr(testObj.getChild("jsonAction").scalarValue), false)
+    Call testSuite.describe("Test modified").assertEqualsString("2022-02-02T02:02:22Z", CStr(testObj.getChild("jsonModified").scalarValue), true)
 
 getOut:
     Exit Function
