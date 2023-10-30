@@ -313,6 +313,7 @@ If not used, the code will look for a property that matches the label in the JSO
 			Call target.insertValue(Me.labelName, extracted)
 		End If
 	End Sub
+	'}}
 
 End Class 
 
