@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?><testrun name="Person Class with Custom Setter Conversion" tests="16" time="231103T111524" failures="0" errors="0">
+  <testsuite name="Test Person Class with Custom Setter Deserialization" time="0" displayname="Test Person Class with Custom Setter Deserialization" id="[engine:testsuite-voltscript]/[Test Person Class with Custom Setter Deserialization]">
+    <testcase name="Deserialization" classname="Test Person Class with Custom Setter Deserialization" time="0" displayname="Deserialization" id="[engine:testsuite-voltscript]/[Test Person Class with Custom Setter Deserialization]/[Deserialization]">
+    </testcase>
+    <testcase name="Test person first name" classname="Test Person Class with Custom Setter Deserialization" time="0" displayname="Test person first name" id="[engine:testsuite-voltscript]/[Test Person Class with Custom Setter Deserialization]/[Test person first name]">
+    </testcase>
+    <testcase name="Test person last name" classname="Test Person Class with Custom Setter Deserialization" time="0" displayname="Test person last name" id="[engine:testsuite-voltscript]/[Test Person Class with Custom Setter Deserialization]/[Test person last name]">
+    </testcase>
+    <testcase name="Test full name" classname="Test Person Class with Custom Setter Deserialization" time="0" displayname="Test full name" id="[engine:testsuite-voltscript]/[Test Person Class with Custom Setter Deserialization]/[Test full name]">
+    </testcase>
+    <testcase name="Test basic property" classname="Test Person Class with Custom Setter Deserialization" time="0" displayname="Test basic property" id="[engine:testsuite-voltscript]/[Test Person Class with Custom Setter Deserialization]/[Test basic property]">
+    </testcase>
+    <testcase name="Test zzzz" classname="Test Person Class with Custom Setter Deserialization" time="0" displayname="Test zzzz" id="[engine:testsuite-voltscript]/[Test Person Class with Custom Setter Deserialization]/[Test zzzz]">
+    </testcase>
+    <testcase name="Test gender" classname="Test Person Class with Custom Setter Deserialization" time="0" displayname="Test gender" id="[engine:testsuite-voltscript]/[Test Person Class with Custom Setter Deserialization]/[Test gender]">
+    </testcase>
+    <testcase name="Test age" classname="Test Person Class with Custom Setter Deserialization" time="0" displayname="Test age" id="[engine:testsuite-voltscript]/[Test Person Class with Custom Setter Deserialization]/[Test age]">
+    </testcase>
+  </testsuite>
+  <testsuite name="Test Person Class with Custom Setter No Name deserialization" time="0" displayname="Test Person Class with Custom Setter No Name deserialization" id="[engine:testsuite-voltscript]/[Test Person Class with Custom Setter No Name deserialization]">
+    <testcase name="Deserialization" classname="Test Person Class with Custom Setter No Name deserialization" time="0" displayname="Deserialization" id="[engine:testsuite-voltscript]/[Test Person Class with Custom Setter No Name deserialization]/[Deserialization]">
+    </testcase>
+    <testcase name="Test person first name" classname="Test Person Class with Custom Setter No Name deserialization" time="0" displayname="Test person first name" id="[engine:testsuite-voltscript]/[Test Person Class with Custom Setter No Name deserialization]/[Test person first name]">
+    </testcase>
+    <testcase name="Test person last name" classname="Test Person Class with Custom Setter No Name deserialization" time="0" displayname="Test person last name" id="[engine:testsuite-voltscript]/[Test Person Class with Custom Setter No Name deserialization]/[Test person last name]">
+    </testcase>
+    <testcase name="Test full name" classname="Test Person Class with Custom Setter No Name deserialization" time="0" displayname="Test full name" id="[engine:testsuite-voltscript]/[Test Person Class with Custom Setter No Name deserialization]/[Test full name]">
+    </testcase>
+    <testcase name="Test basic property" classname="Test Person Class with Custom Setter No Name deserialization" time="0" displayname="Test basic property" id="[engine:testsuite-voltscript]/[Test Person Class with Custom Setter No Name deserialization]/[Test basic property]">
+    </testcase>
+    <testcase name="Test zzzz" classname="Test Person Class with Custom Setter No Name deserialization" time="0" displayname="Test zzzz" id="[engine:testsuite-voltscript]/[Test Person Class with Custom Setter No Name deserialization]/[Test zzzz]">
+    </testcase>
+    <testcase name="Test gender" classname="Test Person Class with Custom Setter No Name deserialization" time="0" displayname="Test gender" id="[engine:testsuite-voltscript]/[Test Person Class with Custom Setter No Name deserialization]/[Test gender]">
+    </testcase>
+    <testcase name="Test age" classname="Test Person Class with Custom Setter No Name deserialization" time="0" displayname="Test age" id="[engine:testsuite-voltscript]/[Test Person Class with Custom Setter No Name deserialization]/[Test age]">
+    </testcase>
+  </testsuite>
+</testrun>
