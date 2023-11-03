@@ -25,21 +25,22 @@ The global variables exist so Execute statements can be used. Do not set or read
 
 Option Declare
 Option Public
+UseVSE "*JsonVSE"
+
 
 
 '{{SETI_AUTHOR_CODE_VoltScriptJSONConverter_Private_Constants
 '}}
 
-'{{Public Variables
-Public samsaraObj As Variant
+'{{Variables
 Public samsaraVal As Variant
+Public samsaraObj As Variant
 Public samsaraParamVals As Variant
 Public samsaraFunctionsTouched As Variant
 '}}
 
 '{{SETI_AUTHOR_CODE_VoltScriptJSONConverter_Private_Variables
 Private SAMSARA_DEBUG as Boolean
-UseVSE "*JsonVSE"
 '}}
 
 '{{SETI_AUTHOR_CODE_VoltScriptJSONConverter_Private_Types
@@ -48,15 +49,351 @@ UseVSE "*JsonVSE"
 '{{SETI_AUTHOR_CODE_VoltScriptJSONConverter_Private_Properties
 '}}
 
+
+
+%REM
+	Class AbstractJsonConstructor 
+	Abstract class for calling any constructor that takes arguments when creating an object.
+ 
+%END REM
+Public Class AbstractJsonConstructor 
+
+	'{{SETI_AUTHOR_CODE_AbstractJsonConstructor_Private_Variables
+	'}}
+
+	'{{SETI_AUTHOR_CODE_AbstractJsonConstructor_Private_Properties
+	'}}
+
+
+	%REM
+		Sub New 
+
+	%END REM
+	Public Sub New() 
+		'{{SETI_AUTHOR_CODE_New_implementation
+		'}}
+
+	End Sub
+
+
+	%REM
+		Function getMeTypeForDebug 
+		Creates a prefix for debug messages
+	
+		@return	String
+	%END REM
+	Public Function getMeTypeForDebug() As String 
+		'{{SETI_AUTHOR_CODE_getMeTypeForDebug_implementation
+		getMeTypeForDebug = "[" & TypeName(Me) & "] "
+		'}}
+
+	End Function
+
+
+	%REM
+		Function createObject 
+		Function to call relevant "New" method of the class. Must be overridden.
+	
+		@param	className 	Class to create an instance of
+
+		@param	libName 	Script file where the class is defined
+
+		@return	Variant
+		@throws	Not Implemented 	
+	%END REM
+	Public Function createObject(className As String, libName As String) As Variant 
+		'{{SETI_AUTHOR_CODE_createObject_implementation
+		Error 1501, "Not Implemented"
+		'}}
+
+	End Function
+
+	'{{SETI_AUTHOR_CODE_AbstractJsonConstructor_Private_Methods
+	'}} 
+
+End Class 
+
+
+%REM
+	Class JsonCustomConstructor 
+	Base implementation of AbstractJsonConstructor for constructors that take parameters.
+ 
+%END REM
+Public Class JsonCustomConstructor As AbstractJsonConstructor 
+
+	'{{Variables
+	params() As ConverterParam
+	'}}
+
+	'{{SETI_AUTHOR_CODE_JsonCustomConstructor_Private_Variables
+	Private source as JsonObject
+	Private converters List As AbstractJsonConverter
+	'}}
+
+	'{{SETI_AUTHOR_CODE_JsonCustomConstructor_Private_Properties
+	'}}
+
+
+	%REM
+		Sub Delete 
+		Destructor, erases converter list
+	
+	%END REM
+	Public Sub Delete() 
+		'{{SETI_AUTHOR_CODE_Delete_implementation
+		Erase converters
+		'}}
+
+	End Sub
+
+
+	%REM
+		Sub New 
+
+	%END REM
+	Public Sub New() 
+		'{{SETI_AUTHOR_CODE_New_implementation
+		'}}
+
+	End Sub
+
+
+	%REM
+		Sub cleanup 
+		Resets globals
+	
+	%END REM
+	Public Sub cleanup() 
+		'{{SETI_AUTHOR_CODE_cleanup_implementation
+		Call resetGlobals()
+		'}}
+
+	End Sub
+
+
+	%REM
+		Function createObject 
+		Overridden function
+	
+		@param	className 	Class to create an instance of
+
+		@param	libName 	Script file where the class is defined
+
+		@return	Variant
+	%END REM
+	Public Function createObject(className As String, libName As String) As Variant 
+		'{{SETI_AUTHOR_CODE_createObject_implementation
+		Call samsaraTouchFunction(getMeTypeForDebug & "createObject")
+
+		Dim execString as String
+		Dim i as Integer
+		DebugPrint_Samsara getMeTypeForDebug & "Trying to create new " & libName & ":" & className
+
+		Try
+			DebugPrint_Samsara getMeTypeForDebug & "Using custom params constructor"
+			DebugPrint_Samsara getMeTypeForDebug & "Extracting parameter values from source"
+			Call loadParamValuesFromJsonObject(source, converters)
+
+			DebugPrint_Samsara getMeTypeForDebug & "Building execute statement"
+			execString = _
+				|Use "| & libName$ & |"
+				Set samsaraObj = New | & className & "("
+			execString = execString & addParamsToExecString() & ")"
+			DebugPrint_Samsara "Executing " & execString
+			Execute(execString)
+			DebugPrint_Samsara "Executed " & execString
+			Set createObject = samsaraObj
+			DebugPrint_Samsara getMeTypeForDebug & "Created " & className & " with custom args constructor"
+		Catch
+			Error 1400, getMeTypeForDebug & "Unable to create " & className & " using constructor " & execString & ": " & SamsaraErrorMsg()
+		Finally
+			Call Me.cleanup()
+		End Try
+		'}}
+
+	End Function
+
+
+	%REM
+		Function withLiteralParam 
+		Fluent method to pass a literal value as a parameter for the constructor
+	
+		@param	paramVal 	Literal value to pass to the constructor as nth parameter
+
+		@return	JsonCustomConstructor
+	%END REM
+	Public Function withLiteralParam(paramVal As Variant) As JsonCustomConstructor 
+		'{{SETI_AUTHOR_CODE_withLiteralParam_implementation
+		Call redimParams()
+		Set Me.params(UBound(params)) = new ConverterParam("Literal", "", paramVal)
+		Set withLiteralParam = Me
+		'}}
+
+	End Function
+
+
+	%REM
+		Function withParam 
+		Fluent method to retrieve a parameter value for the constructor from the JSON object or a default value to use if the label is not in the JSON object.
+	
+		@param	labelName 	Label to find in the JSON object
+
+		@param	defaultValue 	Default to use, if the label is not in the JSON
+
+		@return	JsonCustomConstructor
+	%END REM
+	Public Function withParam(labelName As String, defaultValue As Variant) As JsonCustomConstructor 
+		'{{SETI_AUTHOR_CODE_withParam_implementation
+		Call redimParams()
+		Set Me.params(UBound(params)) = new ConverterParam("JSON", labelName, defaultValue)
+		Set withParam = Me
+		'}}
+
+	End Function
+
+
+	%REM
+		Function withContext 
+		Passes a JSON object from which to extract parameter values
+	
+		@param	source 	JsonObject from which to extract parameters for constructor
+
+		@param	converters[List] 	List of AbstractJsonConverters with which to convert the parameters
+
+		@return	JsonCustomConstructor
+	%END REM
+	Public Function withContext(source As JsonObject, converters List As AbstractJsonConverter) As JsonCustomConstructor 
+		'{{SETI_AUTHOR_CODE_withContext_implementation
+		Set Me.source = source
+		ForAll elem in converters
+			Set Me.converters(ListTag(elem)) = elem
+		End ForAll
+		Set withContext = Me
+		'}}
+
+	End Function
+
+	'{{SETI_AUTHOR_CODE_JsonCustomConstructor_Private_Methods
+
+	%REM
+		or each parameter in params passed, it deserializes the corresponding element from the 
+		JSON object and writes it to the SamsaraParamVals global
+		@param source JSON object to deserialize
+		@param converters List of AbstractJsonConverters to potentially use when deserializing values
+		@param params array of labels to look for in the JSON object
+	%END REM
+	Private Sub loadParamValuesFromJsonObject(source as JsonObject, converters List as AbstractJsonConverter)
+		Dim currParam as ConverterParam
+		Dim i as Integer
+
+		DebugPrint_Samsara " Processing " & source.shortValue
+		Try
+			Redim SamsaraParamVals(UBound(Me.params))
+			For i = 0 to UBound(Me.params)
+				Set currParam = Me.params(i)
+				Select Case currParam.paramType
+				Case "Literal":
+					SamsaraParamVals(i) = currParam.value
+				Case "JSON":
+					Call extractParam(source, i, currParam, converters)
+					Call source.removeChild(currParam.label)
+				End Select
+
+			Next
+		Catch
+			Error 1501, SamsaraErrorMsg()
+		End Try
+	End Sub
+
+	%REM
+		Try/Catch to redim ConverterParam array
+	%END REM
+	Private Function redimParams()
+		Try
+			Redim Preserve Me.params(UBound(params) + 1)
+		Catch
+			Redim Me.params(0)
+		End Try
+	End Function
+	'}} 
+
+End Class 
+
+
+%REM
+	Class JsonNoArgsConstructor 
+	Base implementation of AbstractJsonConstructor for empty constructors
+ 
+%END REM
+Public Class JsonNoArgsConstructor As JsonCustomConstructor 
+
+	'{{SETI_AUTHOR_CODE_JsonNoArgsConstructor_Private_Variables
+	'}}
+
+	'{{SETI_AUTHOR_CODE_JsonNoArgsConstructor_Private_Properties
+	'}}
+
+
+	%REM
+		Sub New 
+
+	%END REM
+	Public Sub New() 
+		'{{SETI_AUTHOR_CODE_New_implementation
+		'}}
+
+	End Sub
+
+
+	%REM
+		Function createObject 
+		Overridden function
+	
+		@param	className 	Class to create an instance of
+
+		@param	libName 	Script file where the class is defined
+
+		@return	Variant
+	%END REM
+	Public Function createObject(className As String, libName As String) As Variant 
+		'{{SETI_AUTHOR_CODE_createObject_implementation
+		Call samsaraTouchFunction("createNoArgsObject")
+
+		Dim execString as String
+		DebugPrint_Samsara "Trying to create new " & libName & ":" & className
+
+		Try
+			DebugPrint_Samsara "Using no args constructor"
+			execString = _
+				|Use "| & libName$ & |"
+				Set samsaraObj = New | & className & |()|
+			Execute(execString)
+			Set createObject = samsaraObj
+			DebugPrint_Samsara "Created " & className & " with no args constructor"
+		Catch
+			Error 1400, "Unable to create " & className & " using constructor " & execString
+		Finally
+			Call Me.cleanup()
+		End Try
+		'}}
+
+	End Function
+
+	'{{SETI_AUTHOR_CODE_JsonNoArgsConstructor_Private_Methods
+	'}} 
+
+End Class 
+
+
 %REM
 	Class AbstractJsonConverter 
 	Base Converter to convert JSON to VoltScript datatype or object and vice versa.
 This is an abstract class only, a derived class must be used.
  
 %END REM
-Class AbstractJsonConverter 
+Public Class AbstractJsonConverter 
 
-	'{{Public Variables
+	'{{Variables
 	Public prefix As String
 	Public labelName As String
 	'}}
@@ -74,7 +411,7 @@ Class AbstractJsonConverter
 		Constructor
 	
 	%END REM
-	Sub New() 
+	Public Sub New() 
 		'{{SETI_AUTHOR_CODE_New_implementation
 		'}}
 
@@ -91,7 +428,7 @@ Class AbstractJsonConverter
 
 		@throws	Not Implemented 	
 	%END REM
-	Sub serialize(source As Variant, target As JsonObject) 
+	Public Sub serialize(source As Variant, target As JsonObject) 
 		'{{SETI_AUTHOR_CODE_serialize_implementation
 		DebugPrint_Samsara getMeTypeForDebug & "Starting serialize"
 		Dim serialized as Variant
@@ -131,6 +468,19 @@ Class AbstractJsonConverter
 
 
 	%REM
+		Sub cleanup 
+		Resets globals
+	
+	%END REM
+	Public Sub cleanup() 
+		'{{SETI_AUTHOR_CODE_cleanup_implementation
+		Call resetGlobals()
+		'}}
+
+	End Sub
+
+
+	%REM
 		Sub deserialize 
 		Deserializes a JSON object into a property in a holder object
 	
@@ -140,7 +490,7 @@ Class AbstractJsonConverter
 
 		@throws	Not Implemented 	
 	%END REM
-	Sub deserialize(holder As JsonConversionHolder, source As JsonObject) 
+	Public Sub deserialize(holder As JsonConversionHolder, source As JsonObject) 
 		'{{SETI_AUTHOR_CODE_deserialize_implementation
 		If (Me.customPropertyName <> "") Then
 			DebugPrint_Samsara getMeTypeForDebug() & "Converting " & source.label & ": " & source.shortValue &_
@@ -156,36 +506,6 @@ Class AbstractJsonConverter
 
 
 	%REM
-		Sub cleanup 
-		Resets globals
-	
-	%END REM
-	Sub cleanup() 
-		'{{SETI_AUTHOR_CODE_cleanup_implementation
-		Call resetGlobals()
-		'}}
-
-	End Sub
-
-
-	%REM
-		Function fromJson 
-		Main function to convert JSON value to VltScript value. Needs to be overridden in derived class.
-	
-		@param	source 	JSON object to deserialize from
-
-		@return	Variant
-		@throws	Not Implemented 	
-	%END REM
-	Function fromJson(source As JsonObject) As Variant 
-		'{{SETI_AUTHOR_CODE_fromJson_implementation
-		Error 1501, |Not implemented|
-		'}}
-
-	End Function
-
-
-	%REM
 		Function toJson 
 		Main function to convert VoltScript value to JSON value. Needs to be overridden in derived class.
 	
@@ -194,7 +514,7 @@ Class AbstractJsonConverter
 		@return	Variant
 		@throws	Not Implemented 	
 	%END REM
-	Function toJson(source As Variant) As Variant 
+	Public Function toJson(source As Variant) As Variant 
 		'{{SETI_AUTHOR_CODE_toJson_implementation
 		Error 1501, |Not implemented|
 		'}}
@@ -208,9 +528,26 @@ Class AbstractJsonConverter
 	
 		@return	String
 	%END REM
-	Function getMeTypeForDebug() As String 
+	Public Function getMeTypeForDebug() As String 
 		'{{SETI_AUTHOR_CODE_getMeTypeForDebug_implementation
 		getMeTypeForDebug = "[" & TypeName(Me) & "] "
+		'}}
+
+	End Function
+
+
+	%REM
+		Function fromJson 
+		Main function to convert JSON value to VltScript value. Needs to be overridden in derived class.
+	
+		@param	source 	JSON object to deserialize from
+
+		@return	Variant
+		@throws	Not Implemented 	
+	%END REM
+	Public Function fromJson(source As JsonObject) As Variant 
+		'{{SETI_AUTHOR_CODE_fromJson_implementation
+		Error 1501, |Not implemented|
 		'}}
 
 	End Function
@@ -224,7 +561,7 @@ Default version of the function returns True.
 	
 		@return	Boolean
 	%END REM
-	Function isReturnObj() As Boolean 
+	Public Function isReturnObj() As Boolean 
 		'{{SETI_AUTHOR_CODE_isReturnObj_implementation
 		isReturnObj = True
 		'}}
@@ -241,7 +578,7 @@ If not used, the code will look for a property that matches the label in the JSO
 
 		@return	AbstractJsonConverter
 	%END REM
-	Function forPropertyName(propertyName As String) As AbstractJsonConverter 
+	Public Function forPropertyName(propertyName As String) As AbstractJsonConverter 
 		'{{SETI_AUTHOR_CODE_forPropertyName_implementation
 		Me.customPropertyName = propertyName
 		Set forPropertyName = Me
@@ -319,398 +656,14 @@ End Class
 
 
 %REM
-	Class ConverterParam 
-	Class to hold details from which to extract a parameter for a setter or constructor.
- 
-%END REM
-Class ConverterParam 
-
-	'{{Public Variables
-	Public value As Variant
-	'}}
-
-	'{{SETI_AUTHOR_CODE_ConverterParam_Private_Variables
-	Private type_ as String		' ScalarValue, JSON, Parent, Literal
-	Private label_ as String
-	'}}
-
-
-	%REM
-		Property label 
-		Label in the relevant JSON object from which to extract the value.
-	
-		@return	String
-	%END REM
-	Property Get label As String 
-		'{{SETI_AUTHOR_CODE_Get.label_implementation
-		label = label_
-		'}}
-
-	End Property
-
-
-	%REM
-		Property paramType 
-		Parameter type, "ScalarValue", "JSON", "Parent", or "Literal"
-	
-		@return	String
-	%END REM
-	Property Get paramType As String 
-		'{{SETI_AUTHOR_CODE_Get.paramType_implementation
-		paramType = Me.type_
-		'}}
-
-	End Property
-
-	'{{SETI_AUTHOR_CODE_ConverterParam_Private_Properties
-	'}}
-
-
-	%REM
-		Sub New 
-		Constructor
-	
-		@param	paramType 	"ScalarValue" (only relevant to setters), "JSON" (only relevant to constructors), "Parent" (only relevant to setters, used to get siblings), "Literal"
-
-		@param	label 	Label in the relevant JSON object from which to extract a value
-
-		@param	defaultValue 	Default to use if label is not found
-
-	%END REM
-	Sub New(paramType As String, label As String, defaultValue As Variant) 
-		'{{SETI_AUTHOR_CODE_New_implementation
-		Select Case paramType 
-		Case "ScalarValue", "JSON", "Parent", "Literal": 
-			' do nothing
-		Case Else: 
-			Error 1400, "ConverterParam source must be Scalar, JSON, Parent or Literal"
-		End Select
-		Me.type_ = paramType
-		Me.label_ = label
-		Me.value = defaultValue
-		'}}
-
-	End Sub
-
-	'{{SETI_AUTHOR_CODE_ConverterParam_Private_Methods
-	'}} 
-
-End Class 
-
-
-%REM
-	Class JsonConversionHolder 
-	Holder object for temporary output of serialization / deserialization
- 
-%END REM
-Class JsonConversionHolder 
-
-	'{{Public Variables
-	Public contents As Variant
-	Public isObject As Boolean
-	'}}
-
-	'{{SETI_AUTHOR_CODE_JsonConversionHolder_Private_Variables
-	'}}
-
-	'{{SETI_AUTHOR_CODE_JsonConversionHolder_Private_Properties
-	'}}
-
-
-	%REM
-		Sub New 
-
-	%END REM
-	Sub New() 
-		'{{SETI_AUTHOR_CODE_New_implementation
-		'}}
-
-	End Sub
-
-	'{{SETI_AUTHOR_CODE_JsonConversionHolder_Private_Methods
-	'}} 
-
-End Class 
-
-
-%REM
-	Class AbstractJsonConstructor 
-	Abstract class for calling any constructor that takes arguments when creating an object.
- 
-%END REM
-Class AbstractJsonConstructor 
-
-	'{{SETI_AUTHOR_CODE_AbstractJsonConstructor_Private_Variables
-	'}}
-
-	'{{SETI_AUTHOR_CODE_AbstractJsonConstructor_Private_Properties
-	'}}
-
-
-	%REM
-		Sub New 
-
-	%END REM
-	Sub New() 
-		'{{SETI_AUTHOR_CODE_New_implementation
-		'}}
-
-	End Sub
-
-
-	%REM
-		Function getMeTypeForDebug 
-		Creates a prefix for debug messages
-	
-		@return	String
-	%END REM
-	Function getMeTypeForDebug() As String 
-		'{{SETI_AUTHOR_CODE_getMeTypeForDebug_implementation
-		getMeTypeForDebug = "[" & TypeName(Me) & "] "
-		'}}
-
-	End Function
-
-
-	%REM
-		Function createObject 
-		Function to call relevant "New" method of the class. Must be overridden.
-	
-		@param	className 	Class to create an instance of
-
-		@param	libName 	Script file where the class is defined
-
-		@return	Variant
-		@throws	Not Implemented 	
-	%END REM
-	Function createObject(className As String, libName As String) As Variant 
-		'{{SETI_AUTHOR_CODE_createObject_implementation
-		Error 1501, "Not Implemented"
-		'}}
-
-	End Function
-
-	'{{SETI_AUTHOR_CODE_AbstractJsonConstructor_Private_Methods
-	'}} 
-
-End Class 
-
-
-%REM
-	Class JsonCustomConstructor 
-	Base implementation of AbstractJsonConstructor for constructors that take parameters.
- 
-%END REM
-Class JsonCustomConstructor as AbstractJsonConstructor
-
-	'{{Public Variables
-	Public params() As ConverterParam
-	'}}
-
-	'{{SETI_AUTHOR_CODE_JsonCustomConstructor_Private_Variables
-	Private source as JsonObject
-	Private converters List As AbstractJsonConverter
-	'}}
-
-	'{{SETI_AUTHOR_CODE_JsonCustomConstructor_Private_Properties
-	'}}
-
-
-	%REM
-		Sub Delete 
-		Destructor, erases converter list
-	
-	%END REM
-	Sub Delete() 
-		'{{SETI_AUTHOR_CODE_Delete_implementation
-		Erase converters
-		'}}
-
-	End Sub
-
-
-	%REM
-		Sub cleanup 
-		Resets globals
-	
-	%END REM
-	Sub cleanup() 
-		'{{SETI_AUTHOR_CODE_cleanup_implementation
-		Call resetGlobals()
-		'}}
-
-	End Sub
-
-
-	%REM
-		Sub New 
-
-	%END REM
-	Sub New() 
-		'{{SETI_AUTHOR_CODE_New_implementation
-		'}}
-
-	End Sub
-
-
-	%REM
-		Function createObject 
-		Overridden function
-	
-		@param	className 	Class to create an instance of
-
-		@param	libName 	Script file where the class is defined
-
-		@return	Variant
-	%END REM
-	Function createObject(className As String, libName As String) As Variant 
-		'{{SETI_AUTHOR_CODE_createObject_implementation
-		Call samsaraTouchFunction(getMeTypeForDebug & "createObject")
-
-		Dim execString as String
-		Dim i as Integer
-		DebugPrint_Samsara getMeTypeForDebug & "Trying to create new " & libName & ":" & className
-
-		Try
-			DebugPrint_Samsara getMeTypeForDebug & "Using custom params constructor"
-			DebugPrint_Samsara getMeTypeForDebug & "Extracting parameter values from source"
-			Call loadParamValuesFromJsonObject(source, converters)
-
-			DebugPrint_Samsara getMeTypeForDebug & "Building execute statement"
-			execString = _
-				|Use "| & libName$ & |"
-				Set samsaraObj = New | & className & "("
-			execString = execString & addParamsToExecString() & ")"
-			DebugPrint_Samsara "Executing " & execString
-			Execute(execString)
-			DebugPrint_Samsara "Executed " & execString
-			Set createObject = samsaraObj
-			DebugPrint_Samsara getMeTypeForDebug & "Created " & className & " with custom args constructor"
-		Catch
-			Error 1400, getMeTypeForDebug & "Unable to create " & className & " using constructor " & execString & ": " & SamsaraErrorMsg()
-		Finally
-			Call Me.cleanup()
-		End Try
-		'}}
-
-	End Function
-
-
-	%REM
-		Function withLiteralParam 
-		Fluent method to pass a literal value as a parameter for the constructor
-	
-		@param	paramVal 	Literal value to pass to the constructor as nth parameter
-
-		@return	JsonCustomConstructor
-	%END REM
-	Function withLiteralParam(paramVal As Variant) As JsonCustomConstructor 
-		'{{SETI_AUTHOR_CODE_withLiteralParam_implementation
-		Call redimParams()
-		Set Me.params(UBound(params)) = new ConverterParam("Literal", "", paramVal)
-		Set withLiteralParam = Me
-		'}}
-
-	End Function
-
-
-	%REM
-		Function withContext 
-		Passes a JSON object from which to extract parameter values
-	
-		@param	source 	JsonObject from which to extract parameters for constructor
-
-		@param	converters[List] 	List of AbstractJsonConverters with which to convert the parameters
-
-		@return	JsonCustomConstructor
-	%END REM
-	Function withContext(source As JsonObject, converters List As AbstractJsonConverter) As JsonCustomConstructor 
-		'{{SETI_AUTHOR_CODE_withContext_implementation
-		Set Me.source = source
-		ForAll elem in converters
-			Set Me.converters(ListTag(elem)) = elem
-		End ForAll
-		Set withContext = Me
-		'}}
-
-	End Function
-
-
-	%REM
-		Function withParam 
-		Fluent method to retrieve a parameter value for the constructor from the JSON object or a default value to use if the label is not in the JSON object.
-	
-		@param	labelName 	Label to find in the JSON object
-
-		@param	defaultValue 	Default to use, if the label is not in the JSON
-
-		@return	JsonCustomConstructor
-	%END REM
-	Function withParam(labelName As String, defaultValue As Variant) As JsonCustomConstructor 
-		'{{SETI_AUTHOR_CODE_withParam_implementation
-		Call redimParams()
-		Set Me.params(UBound(params)) = new ConverterParam("JSON", labelName, defaultValue)
-		Set withParam = Me
-		'}}
-
-	End Function
-
-	'{{SETI_AUTHOR_CODE_JsonCustomConstructor_Private_Methods
-
-	%REM
-		or each parameter in params passed, it deserializes the corresponding element from the 
-		JSON object and writes it to the SamsaraParamVals global
-		@param source JSON object to deserialize
-		@param converters List of AbstractJsonConverters to potentially use when deserializing values
-		@param params array of labels to look for in the JSON object
-	%END REM
-	Private Sub loadParamValuesFromJsonObject(source as JsonObject, converters List as AbstractJsonConverter)
-		Dim currParam as ConverterParam
-		Dim i as Integer
-
-		DebugPrint_Samsara " Processing " & source.shortValue
-		Try
-			Redim SamsaraParamVals(UBound(Me.params))
-			For i = 0 to UBound(Me.params)
-				Set currParam = Me.params(i)
-				Select Case currParam.paramType
-				Case "Literal":
-					SamsaraParamVals(i) = currParam.value
-				Case "JSON":
-					Call extractParam(source, i, currParam, converters)
-					Call source.removeChild(currParam.label)
-				End Select
-		
-			Next
-		Catch
-			Error 1501, SamsaraErrorMsg()
-		End Try
-	End Sub
-
-	%REM
-		Try/Catch to redim ConverterParam array
-	%END REM
-	Private Function redimParams()
-		Try
-			Redim Preserve Me.params(UBound(params) + 1)
-		Catch
-			Redim Me.params(0)
-		End Try
-	End Function
-	'}} 
-
-End Class 
-
-
-%REM
 	Class AbstractJsonFunctionConverter 
 	Custom Converter to convert between a JSON value or values and VoltScript datatype or objects, using a specific sub or function in the underlying class. Used as the abstract class for JsonGetterConverter and JsonSetterConverter.
  
 %END REM
-Class AbstractJsonFunctionConverter as AbstractJsonConverter
+Public Class AbstractJsonFunctionConverter As AbstractJsonConverter 
 
-	'{{Public Variables
-	Public params() As ConverterParam
+	'{{Variables
+	params() As ConverterParam
 	'}}
 
 	'{{SETI_AUTHOR_CODE_AbstractJsonFunctionConverter_Private_Variables
@@ -726,7 +679,7 @@ Class AbstractJsonFunctionConverter as AbstractJsonConverter
 		Destructor, erases converters List
 	
 	%END REM
-	Sub Delete() 
+	Public Sub Delete() 
 		'{{SETI_AUTHOR_CODE_Delete_implementation
 		Erase converters
 		'}}
@@ -738,7 +691,7 @@ Class AbstractJsonFunctionConverter as AbstractJsonConverter
 		Sub New 
 
 	%END REM
-	Sub New() 
+	Public Sub New() 
 		'{{SETI_AUTHOR_CODE_New_implementation
 		'}}
 
@@ -755,7 +708,7 @@ Class AbstractJsonFunctionConverter as AbstractJsonConverter
 
 		@throws	Not Implemented 	
 	%END REM
-	Sub serialize(source As Variant, target As JsonObject) 
+	Public Sub serialize(source As Variant, target As JsonObject) 
 		'{{SETI_AUTHOR_CODE_serialize_implementation
 		Error 1501, "Not implemented"
 		'}}
@@ -773,31 +726,12 @@ Class AbstractJsonFunctionConverter as AbstractJsonConverter
 
 		@throws	Not Implemented 	
 	%END REM
-	Sub deserialize(holder As JsonConversionHolder, source As JsonObject) 
+	Public Sub deserialize(holder As JsonConversionHolder, source As JsonObject) 
 		'{{SETI_AUTHOR_CODE_deserialize_implementation
 		Error 1501, "Not implemented"
 		'}}
 
 	End Sub
-
-
-	%REM
-		Function withLiteralParam 
-		Fluent method to pass a literal value as a parameter for the converter
-	
-		@param	paramVal 	Literal value to pass to the relevant setter as nth parameter
-
-		@return	AbstractJsonFunctionConverter
-	%END REM
-	Function withLiteralParam(paramVal As Variant) As AbstractJsonFunctionConverter 
-		'{{SETI_AUTHOR_CODE_withLiteralParam_implementation
-		Call redimParams()
-		DebugPrint_Samsara "Loading literal param with " & paramVal
-		Set Me.params(UBound(params)) = new ConverterParam("Literal", "", paramVal)
-		Set withLiteralParam = Me
-		'}}
-
-	End Function
 
 
 	%REM
@@ -810,11 +744,30 @@ Class AbstractJsonFunctionConverter as AbstractJsonConverter
 
 		@return	Variant
 	%END REM
-	Function withCustomConverter(labelName As String, converter As AbstractJsonConverter) As Variant 
+	Public Function withCustomConverter(labelName As String, converter As AbstractJsonConverter) As Variant 
 		'{{SETI_AUTHOR_CODE_withCustomConverter_implementation
 		Call samsaraTouchFunction("addCustomConverter")
 		Set converters(labelName) = converter
 		Set withCustomConverter = Me
+		'}}
+
+	End Function
+
+
+	%REM
+		Function withLiteralParam 
+		Fluent method to pass a literal value as a parameter for the converter
+	
+		@param	paramVal 	Literal value to pass to the relevant setter as nth parameter
+
+		@return	AbstractJsonFunctionConverter
+	%END REM
+	Public Function withLiteralParam(paramVal As Variant) As AbstractJsonFunctionConverter 
+		'{{SETI_AUTHOR_CODE_withLiteralParam_implementation
+		Call redimParams()
+		DebugPrint_Samsara "Loading literal param with " & paramVal
+		Set Me.params(UBound(params)) = new ConverterParam("Literal", "", paramVal)
+		Set withLiteralParam = Me
 		'}}
 
 	End Function
@@ -833,11 +786,340 @@ End Class
 
 
 %REM
+	Class JsonGetterConverter 
+	Custom getter converter
+ 
+%END REM
+Public Class JsonGetterConverter As AbstractJsonFunctionConverter 
+
+	'{{SETI_AUTHOR_CODE_JsonGetterConverter_Private_Variables
+	Private getterName as String
+	'}}
+
+	'{{SETI_AUTHOR_CODE_JsonGetterConverter_Private_Properties
+	'}}
+
+
+	%REM
+		Sub New 
+
+	%END REM
+	Public Sub New() 
+		'{{SETI_AUTHOR_CODE_New_implementation
+		'}}
+
+	End Sub
+
+
+	%REM
+		Sub deserialize 
+		Overridden function, throws error for that class - getters are only for serialization.
+	
+		@param	holder 	Object to deserialize to
+
+		@param	source 	JSON object to deserialize from
+
+		@throws	JsonGetterConverters can only be used for serialization 	
+	%END REM
+	Public Sub deserialize(holder As JsonConversionHolder, source As JsonObject) 
+		'{{SETI_AUTHOR_CODE_deserialize_implementation
+		Error 1400, "JsonGetterConverters can only be used for serialization"
+		'}}
+
+	End Sub
+
+
+	%REM
+		Sub serialize 
+		Overridden function
+	
+		@param	source 	VoltScript object from which to serialize
+
+		@param	target 	JsonObject to write to
+
+	%END REM
+	Public Sub serialize(source As Variant, target As JsonObject) 
+		'{{SETI_AUTHOR_CODE_serialize_implementation
+		Call samsaraTouchFunction(getMeTypeForDebug & "deserialize")
+		Dim execString as String
+
+		If (Me.getterName = "") Then
+			Error 1400, "A valid getter must be passed to custom getter for " & Me.labelName
+		End If
+
+		Try
+			'Extract property values from JSON
+			Call loadParamValuesFromJsonObject(source)
+
+			' Build execution string
+			Set samsaraObj = source
+			execString = |samsaraVal = samsaraObj.| & Me.getterName & |(|
+			DebugPrint_Samsara getMeTypeForDebug() & "Building executing string, " & execString
+			execString = execString & addParamsToExecString() & ")"
+			DebugPrint_Samsara getMeTypeForDebug() & "Executing " & execString
+			Execute execString
+			DebugPrint_Samsara getMeTypeForDebug() & "Executed " & execString
+			Call target.insertValue(labelName, samsaraVal)
+		Catch
+			DebugPrint_Samsara GetThreadInfo(12)
+			Dim msg as String
+			msg = Chr(10) & Chr(9) & getMeTypeForDebug() & "Cannot call getter " & Me.getterName & ": " & Error() & " on line " & Erl
+			Error 1500, msg
+		Finally
+			Call Me.cleanup()
+		End Try
+
+		'}}
+
+	End Sub
+
+
+	%REM
+		Function forGetter 
+		Passes the getter name to look for in the relevant class
+	
+		@param	getterName 	Function in the target class
+
+		@return	JsonGetterConverter
+	%END REM
+	Public Function forGetter(getterName As String) As JsonGetterConverter 
+		'{{SETI_AUTHOR_CODE_forGetter_implementation
+		Me.getterName = getterName
+		Set forGetter = Me
+		'}}
+
+	End Function
+
+	'{{SETI_AUTHOR_CODE_JsonGetterConverter_Private_Methods
+
+	%REM
+		For each parameter in params passed, it deserializes the corresponding element from the 
+		JSON object and writes it to the SamsaraParamVals global
+		@param source			JSON object to deserialize
+		@param converters		List of AbstractJsonConverters to potentially use when deserializing values
+	%END REM
+	Private Sub loadParamValuesFromJsonObject(source as Variant)
+		Dim currParam as ConverterParam
+		Dim i as Integer
+
+		DebugPrint_Samsara " Processing getter"
+		Try
+			Set currParam = Me.params(0)
+		Catch
+			'No params, exit
+			Exit Sub
+		End Try
+		Try
+			Redim SamsaraParamVals(UBound(Me.params))
+			For i = 0 to UBound(Me.params)
+				Set currParam = Me.params(i)
+				Select Case currParam.paramType
+				Case "Literal":
+					DebugPrint_Samsara "Adding literal as param - " & TypeName(currParam.value)
+					SamsaraParamVals(i) = currParam.value
+				Case Else:
+					Error 1400, "Unexpected param type = " & currParam.paramType
+				End Select
+
+			Next
+		Catch
+			Error 1501, SamsaraErrorMsg()
+		End Try
+	End Sub
+
+	'}} 
+
+End Class 
+
+
+%REM
+	Class JsonSetterConverter 
+	Custom Converter to convert between a JSON value or values and VoltScript datatype or objects, using a specific sub or function in the underlying class. During deserialization, the relevant JSON objects will then be removed from the parent JSON object, to ensure they are not re-processed.
+ 
+%END REM
+Public Class JsonSetterConverter As AbstractJsonFunctionConverter 
+
+	'{{SETI_AUTHOR_CODE_JsonSetterConverter_Private_Variables
+	Private setterName as String
+	'}}
+
+	'{{SETI_AUTHOR_CODE_JsonSetterConverter_Private_Properties
+	'}}
+
+
+	%REM
+		Sub New 
+
+	%END REM
+	Public Sub New() 
+		'{{SETI_AUTHOR_CODE_New_implementation
+		'}}
+
+	End Sub
+
+
+	%REM
+		Sub serialize 
+		Overridden function, throws error
+	
+		@param	source 	VoltScript object from which to serialize
+
+		@param	target 	JsonObject to write value to
+
+		@throws	JsonSettersConverters can only be used for deserialization 	
+	%END REM
+	Public Sub serialize(source As Variant, target As JsonObject) 
+		'{{SETI_AUTHOR_CODE_serialize_implementation
+		Error 1400, "JsonSetterConverters can only be used for deserialization"
+		'}}
+
+	End Sub
+
+
+	%REM
+		Sub deserialize 
+		Overridden function.
+	
+		@param	holder 	Object to deserialize to
+
+		@param	source 	JSON object to deserialize from
+
+	%END REM
+	Public Sub deserialize(holder As JsonConversionHolder, source As JsonObject) 
+		'{{SETI_AUTHOR_CODE_deserialize_implementation
+		Call samsaraTouchFunction(getMeTypeForDebug & "deserialize")
+		DebugPrint_Samsara getMeTypeForDebug() & "deserializing " & source.toString(false)
+		Dim execString as String
+
+		If (Me.setterName = "") Then
+			Error 1400, "A valid setter must be passed to custom setter for " & source.Label
+		End If
+
+		Try
+			Set samsaraObj = holder.contents
+			'Extract property values from JSON
+			Call loadParamValuesFromJsonObject(source, converters)
+
+			' Build execution string
+			execString = |Call samsaraObj.| & Me.setterName & |(|
+			DebugPrint_Samsara getMeTypeForDebug() & "Building executing string, " & execString
+			execString = execString & addParamsToExecString() & ")"
+			DebugPrint_Samsara getMeTypeForDebug() & "Executing " & execString
+			Execute execString
+			DebugPrint_Samsara getMeTypeForDebug() & "Executed " & execString
+		Catch
+			DebugPrint_Samsara GetThreadInfo(12)
+			Dim msg as String
+			msg = Chr(10) & Chr(9) & getMeTypeForDebug() & "Cannot call setter " & Me.setterName & ": " & Error() & " on line " & Erl
+			Error 1500, msg
+		Finally
+			Call Me.cleanup()
+		End Try
+		'}}
+
+	End Sub
+
+
+	%REM
+		Function forSetter 
+		Passes the setter name to look for in the relevant class
+	
+		@param	setterName 	Sub or function in the target class
+
+		@return	JsonSetterConverter
+	%END REM
+	Public Function forSetter(setterName As String) As JsonSetterConverter 
+		'{{SETI_AUTHOR_CODE_forSetter_implementation
+		Me.setterName = setterName
+		Set forSetter = Me
+		'}}
+
+	End Function
+
+
+	%REM
+		Function withValueParam 
+		Uses the scalar value of the JSON element the converter is associated with.
+The value will be added to the end of the params array, as the nth parameter to pass to the relevant setter.
+	
+		@return	JsonSetterConverter
+	%END REM
+	Public Function withValueParam() As JsonSetterConverter 
+		'{{SETI_AUTHOR_CODE_withValueParam_implementation
+		Call redimParams()
+		Set Me.params(UBound(params)) = new ConverterParam("ScalarValue", "", "")
+		Set withValueParam = Me
+		'}}
+
+	End Function
+
+
+	%REM
+		Function withSiblingParam 
+		Fluent method to retrieve a parameter value fr the setter from the JSON object, or a default value to use if the label is not in the JSON object. The relevant value is passed as the nth parameter to pass to the relevant setter.
+	
+		@param	labelName 	Label to search for at the same level as the JSON object being parsed
+
+		@param	defaultValue 	Default to use if the label is not found in the JSON
+
+		@return	JsonSetterConverter
+	%END REM
+	Public Function withSiblingParam(labelName As String, defaultValue As Variant) As JsonSetterConverter 
+		'{{SETI_AUTHOR_CODE_withSiblingParam_implementation
+		Call redimParams()
+		Set Me.params(UBound(params)) = new ConverterParam("Parent", labelName, defaultValue)
+		Set withSiblingParam = Me
+		'}}
+
+	End Function
+
+	'{{SETI_AUTHOR_CODE_JsonSetterConverter_Private_Methods
+
+	%REM
+		For each parameter in params passed, it deserializes the corresponding element from the 
+		JSON object and writes it to the SamsaraParamVals global
+		@param source 			JSON object to deserialize
+		@param converters 		List of AbstractJsonConverters to potentially use when deserializing values
+	%END REM
+	Private Sub loadParamValuesFromJsonObject(source as JsonObject, converters List as AbstractJsonConverter)
+		Dim currParam as ConverterParam
+		Dim i as Integer
+
+		DebugPrint_Samsara " Processing " & source.shortValue
+		Try
+			Redim SamsaraParamVals(UBound(Me.params))
+			For i = 0 to UBound(Me.params)
+				Set currParam = Me.params(i)
+				Select Case currParam.paramType
+				Case "Literal":
+					DebugPrint_Samsara "Adding literal as param - " & currParam.value
+					SamsaraParamVals(i) = currParam.value
+				Case "ScalarValue":
+					DebugPrint_Samsara "Adding scalar as param - " & Me.labelName
+					SamsaraParamVals(i) = source.getChild(Me.labelName).scalarValue
+				Case "Parent":
+					DebugPrint_Samsara "Adding param from parent - " & currParam.label
+					Call extractParam(source, i, currParam, converters)
+				Case Else:
+					Error 1400, "Unexpected param type = " & currParam.paramType
+				End Select
+
+			Next
+		Catch
+			Error 1501, SamsaraErrorMsg()
+		End Try
+	End Sub
+	'}} 
+
+End Class 
+
+
+%REM
 	Class JsonArrayConverter 
 	Custom converter to convert a JSON value to VoltScript array
  
 %END REM
-Class JsonArrayConverter as AbstractJsonConverter
+Public Class JsonArrayConverter As AbstractJsonConverter 
 
 	'{{SETI_AUTHOR_CODE_JsonArrayConverter_Private_Variables
 	Private customConverter as AbstractJsonConverter
@@ -851,7 +1133,7 @@ Class JsonArrayConverter as AbstractJsonConverter
 		Sub New 
 
 	%END REM
-	Sub New() 
+	Public Sub New() 
 		'{{SETI_AUTHOR_CODE_New_implementation
 		'}}
 
@@ -866,7 +1148,7 @@ Class JsonArrayConverter as AbstractJsonConverter
 
 		@return	Variant
 	%END REM
-	Function fromJson(source As JsonObject) As Variant 
+	Public Function fromJson(source As JsonObject) As Variant 
 		'{{SETI_AUTHOR_CODE_fromJson_implementation
 		Call samsaraTouchFunction("JsonArrayConverter")
 		Dim arrayName as String
@@ -920,7 +1202,7 @@ Class JsonArrayConverter as AbstractJsonConverter
 
 		@return	Variant
 	%END REM
-	Function toJson(source As Variant) As Variant 
+	Public Function toJson(source As Variant) As Variant 
 		'{{SETI_AUTHOR_CODE_toJson_implementation
 		Dim returnObj as New JsonObject
 		Dim scalarConverter as New JsonScalarConverter()	' Cannot pass e.g. LONG
@@ -957,7 +1239,7 @@ Class JsonArrayConverter as AbstractJsonConverter
 
 		@return	JsonArrayConverter
 	%END REM
-	Function withCustomConverter(converter As AbstractJsonConverter) As JsonArrayConverter 
+	Public Function withCustomConverter(converter As AbstractJsonConverter) As JsonArrayConverter 
 		'{{SETI_AUTHOR_CODE_withCustomConverter_implementation
 		Set customConverter = converter
 		Set withCustomConverter = Me
@@ -972,115 +1254,11 @@ End Class
 
 
 %REM
-	Class JsonBasicObjectConverter 
-	Custom converter to convert a JSON value to a VoltScript object, potentially using a passed JsonConversionHelper
- 
-%END REM
-Class JsonBasicObjectConverter as AbstractJsonConverter
-
-	'{{SETI_AUTHOR_CODE_JsonBasicObjectConverter_Private_Variables
-	Private className as String
-	Private libName as String
-	Private helper as JsonConversionHelper
-	'}}
-
-	'{{SETI_AUTHOR_CODE_JsonBasicObjectConverter_Private_Properties
-	'}}
-
-
-	%REM
-		Sub New 
-		Constructor
-	
-		@param	className 	Class to create an instance of
-
-		@param	libName 	Script file where the class is defined
-
-	%END REM
-	Sub New(className As String, libName As String) 
-		'{{SETI_AUTHOR_CODE_New_implementation
-		Me.className = className
-		Me.libName = libName
-		'}}
-
-	End Sub
-
-
-	%REM
-		Function fromJson 
-		Overridden function. The fromJson method is called from AbstractJsonConverter's deserialize method.
-	
-		@param	source 	JSON object to deserialize from
-
-		@return	Variant
-	%END REM
-	Function fromJson(source As JsonObject) As Variant 
-		'{{SETI_AUTHOR_CODE_fromJson_implementation
-        Dim result as Variant
-		Dim tempHelper as JsonConversionHelper
-		If (Me.helper Is Nothing) Then
-			Set tempHelper = New JsonConversionHelper()
-		Else
-			Set tempHelper = Me.helper
-		End If
-        Set result = tempHelper.toObject(source, Me.className, Me.libName).fromJson(source)
-        Set fromJson = result
-		'}}
-
-	End Function
-
-
-	%REM
-		Function withHelper 
-		Passes a JsonConversionHelper with which to convert the object
-	
-		@param	helper 	JsonConversionHelper with settings to use during conversion
-
-		@return	JsonBasicObjectConverter
-	%END REM
-	Function withHelper(helper As JsonConversionHelper) As JsonBasicObjectConverter 
-		'{{SETI_AUTHOR_CODE_withHelper_implementation
-		Set Me.helper = helper
-		Set withHelper = Me
-		'}}
-
-	End Function
-
-
-	%REM
-		Function toJson 
-		Overridden function. The toJson method is called from AbstractJsonConverter's serialize method.
-	
-		@param	source 	Variant containing the property to be serialized
-
-		@return	Variant
-	%END REM
-	Function toJson(source As Variant) As Variant 
-		'{{SETI_AUTHOR_CODE_toJson_implementation
-		Dim helper as New JsonConversionHelper()
-		Dim jsonObj as JsonObject
-		DebugPrint_Samsara getMeTypeForDebug & "Running toJson"
-		If (Me.helper Is Nothing) Then
-			Error 1400, "Cannot serialize properties without a helper with converters"
-		End If
-		Set jsonObj = Me.helper.toJson(source)
-		Set toJson = jsonObj
-		'}}
-
-	End Function
-
-	'{{SETI_AUTHOR_CODE_JsonBasicObjectConverter_Private_Methods
-	'}} 
-
-End Class 
-
-
-%REM
 	Class JsonBasicObjectArrayConverter 
 	Custom converter to convert a JSON value to an array of VoltScript objects, potentially using passed JsonConversionHelper.
  
 %END REM
-Class JsonBasicObjectArrayConverter as AbstractJsonConverter
+Public Class JsonBasicObjectArrayConverter As AbstractJsonConverter 
 
 	'{{SETI_AUTHOR_CODE_JsonBasicObjectArrayConverter_Private_Variables
 	Private className as String
@@ -1101,7 +1279,7 @@ Class JsonBasicObjectArrayConverter as AbstractJsonConverter
 		@param	libName 	Script file where the class is defined
 
 	%END REM
-	Sub New(className As String, libName As String) 
+	Public Sub New(className As String, libName As String) 
 		'{{SETI_AUTHOR_CODE_New_implementation
 		Me.className = className
 		Me.libName = libName
@@ -1118,7 +1296,7 @@ Class JsonBasicObjectArrayConverter as AbstractJsonConverter
 
 		@return	Variant
 	%END REM
-	Function fromJson(source As JsonObject) As Variant 
+	Public Function fromJson(source As JsonObject) As Variant 
 		'{{SETI_AUTHOR_CODE_fromJson_implementation
         Dim result as Variant
 		Dim tempHelper as JsonConversionHelper
@@ -1142,7 +1320,7 @@ Class JsonBasicObjectArrayConverter as AbstractJsonConverter
 
 		@return	Variant
 	%END REM
-	Function toJson(source As Variant) As Variant 
+	Public Function toJson(source As Variant) As Variant 
 		'{{SETI_AUTHOR_CODE_toJson_implementation
 		Dim helper as New JsonConversionHelper()
 		Dim jsonObj as JsonObject
@@ -1164,7 +1342,7 @@ Class JsonBasicObjectArrayConverter as AbstractJsonConverter
 
 		@return	JsonBasicObjectArrayConverter
 	%END REM
-	Function withHelper(helper As JsonConversionHelper) As JsonBasicObjectArrayConverter 
+	Public Function withHelper(helper As JsonConversionHelper) As JsonBasicObjectArrayConverter 
 		'{{SETI_AUTHOR_CODE_withHelper_implementation
 		Set Me.helper = helper
 		Set withHelper = Me
@@ -1179,11 +1357,273 @@ End Class
 
 
 %REM
+	Class JsonBasicObjectConverter 
+	Custom converter to convert a JSON value to a VoltScript object, potentially using a passed JsonConversionHelper
+ 
+%END REM
+Public Class JsonBasicObjectConverter As AbstractJsonConverter 
+
+	'{{SETI_AUTHOR_CODE_JsonBasicObjectConverter_Private_Variables
+	Private className as String
+	Private libName as String
+	Private helper as JsonConversionHelper
+	'}}
+
+	'{{SETI_AUTHOR_CODE_JsonBasicObjectConverter_Private_Properties
+	'}}
+
+
+	%REM
+		Sub New 
+		Constructor
+	
+		@param	className 	Class to create an instance of
+
+		@param	libName 	Script file where the class is defined
+
+	%END REM
+	Public Sub New(className As String, libName As String) 
+		'{{SETI_AUTHOR_CODE_New_implementation
+		Me.className = className
+		Me.libName = libName
+		'}}
+
+	End Sub
+
+
+	%REM
+		Function fromJson 
+		Overridden function. The fromJson method is called from AbstractJsonConverter's deserialize method.
+	
+		@param	source 	JSON object to deserialize from
+
+		@return	Variant
+	%END REM
+	Public Function fromJson(source As JsonObject) As Variant 
+		'{{SETI_AUTHOR_CODE_fromJson_implementation
+        Dim result as Variant
+		Dim tempHelper as JsonConversionHelper
+		If (Me.helper Is Nothing) Then
+			Set tempHelper = New JsonConversionHelper()
+		Else
+			Set tempHelper = Me.helper
+		End If
+        Set result = tempHelper.toObject(source, Me.className, Me.libName).fromJson(source)
+        Set fromJson = result
+		'}}
+
+	End Function
+
+
+	%REM
+		Function withHelper 
+		Passes a JsonConversionHelper with which to convert the object
+	
+		@param	helper 	JsonConversionHelper with settings to use during conversion
+
+		@return	JsonBasicObjectConverter
+	%END REM
+	Public Function withHelper(helper As JsonConversionHelper) As JsonBasicObjectConverter 
+		'{{SETI_AUTHOR_CODE_withHelper_implementation
+		Set Me.helper = helper
+		Set withHelper = Me
+		'}}
+
+	End Function
+
+
+	%REM
+		Function toJson 
+		Overridden function. The toJson method is called from AbstractJsonConverter's serialize method.
+	
+		@param	source 	Variant containing the property to be serialized
+
+		@return	Variant
+	%END REM
+	Public Function toJson(source As Variant) As Variant 
+		'{{SETI_AUTHOR_CODE_toJson_implementation
+		Dim helper as New JsonConversionHelper()
+		Dim jsonObj as JsonObject
+		DebugPrint_Samsara getMeTypeForDebug & "Running toJson"
+		If (Me.helper Is Nothing) Then
+			Error 1400, "Cannot serialize properties without a helper with converters"
+		End If
+		Set jsonObj = Me.helper.toJson(source)
+		Set toJson = jsonObj
+		'}}
+
+	End Function
+
+	'{{SETI_AUTHOR_CODE_JsonBasicObjectConverter_Private_Methods
+	'}} 
+
+End Class 
+
+
+%REM
+	Class JsonScalarConverter 
+	Cusom Converter to convert a JSON value to VoltScript scalar. This is used as the default for any conversion.
+ 
+%END REM
+Public Class JsonScalarConverter As AbstractJsonConverter 
+
+	'{{SETI_AUTHOR_CODE_JsonScalarConverter_Private_Variables
+	'}}
+
+	'{{SETI_AUTHOR_CODE_JsonScalarConverter_Private_Properties
+	'}}
+
+
+	%REM
+		Sub New 
+
+	%END REM
+	Public Sub New() 
+		'{{SETI_AUTHOR_CODE_New_implementation
+		'}}
+
+	End Sub
+
+
+	%REM
+		Function isReturnObj 
+		Overridden function, always returning False for this Class
+	
+		@return	Boolean
+	%END REM
+	Public Function isReturnObj() As Boolean 
+		'{{SETI_AUTHOR_CODE_isReturnObj_implementation
+		isReturnObj = False
+		'}}
+
+	End Function
+
+
+	%REM
+		Function fromJson 
+		Overridden function, uses scalar value from JSON object. The fromJson method is called from AbstractJsonConverter's deserialize method.
+	
+		@param	source 	JSON object to deserialize from
+
+		@return	Variant
+	%END REM
+	Public Function fromJson(source As JsonObject) As Variant 
+		'{{SETI_AUTHOR_CODE_fromJson_implementation
+		Call samsaraTouchFunction("JsonScalarConverter")
+		fromJson = source.scalarValue
+		'}}
+
+	End Function
+
+
+	%REM
+		Function toJson 
+		Overridden function. The toJson method is called from AbstractJsonConverter's serialize method.
+	
+		@param	source 	Variant containing the property to be serialized
+
+		@return	Variant
+	%END REM
+	Public Function toJson(source As Variant) As Variant 
+		'{{SETI_AUTHOR_CODE_toJson_implementation
+		DebugPrint_Samsara "Serializing scalar of type " & TypeName(source)
+		toJson = source
+		'}}
+
+	End Function
+
+	'{{SETI_AUTHOR_CODE_JsonScalarConverter_Private_Methods
+	'}} 
+
+End Class 
+
+
+%REM
+	Class ConverterParam 
+	Class to hold details from which to extract a parameter for a setter or constructor.
+ 
+%END REM
+Public Class ConverterParam 
+
+	'{{Variables
+	Public value As Variant
+	'}}
+
+	'{{SETI_AUTHOR_CODE_ConverterParam_Private_Variables
+	Private type_ as String		' ScalarValue, JSON, Parent, Literal
+	Private label_ as String
+	'}}
+
+
+	%REM
+		Property label 
+		Label in the relevant JSON object from which to extract the value.
+	
+		@return	String
+	%END REM
+	Public Property Get label As String 
+		'{{SETI_AUTHOR_CODE_Get.label_implementation
+		label = label_
+		'}}
+
+	End Property
+
+
+	%REM
+		Property paramType 
+		Parameter type, "ScalarValue", "JSON", "Parent", or "Literal"
+	
+		@return	String
+	%END REM
+	Public Property Get paramType As String 
+		'{{SETI_AUTHOR_CODE_Get.paramType_implementation
+		paramType = Me.type_
+		'}}
+
+	End Property
+
+	'{{SETI_AUTHOR_CODE_ConverterParam_Private_Properties
+	'}}
+
+
+	%REM
+		Sub New 
+		Constructor
+	
+		@param	paramType 	"ScalarValue" (only relevant to setters), "JSON" (only relevant to constructors), "Parent" (only relevant to setters, used to get siblings), "Literal"
+
+		@param	label 	Label in the relevant JSON object from which to extract a value
+
+		@param	defaultValue 	Default to use if label is not found
+
+	%END REM
+	Public Sub New(paramType As String, label As String, defaultValue As Variant) 
+		'{{SETI_AUTHOR_CODE_New_implementation
+		Select Case paramType 
+		Case "ScalarValue", "JSON", "Parent", "Literal": 
+			' do nothing
+		Case Else: 
+			Error 1400, "ConverterParam source must be Scalar, JSON, Parent or Literal"
+		End Select
+		Me.type_ = paramType
+		Me.label_ = label
+		Me.value = defaultValue
+		'}}
+
+	End Sub
+
+	'{{SETI_AUTHOR_CODE_ConverterParam_Private_Methods
+	'}} 
+
+End Class 
+
+
+%REM
 	Class JsonConversionHelper 
 	Helper class for performing the serialization / deserialization
  
 %END REM
-Class JsonConversionHelper 
+Public Class JsonConversionHelper 
 
 	'{{SETI_AUTHOR_CODE_JsonConversionHelper_Private_Variables
 	Private converters List As AbstractJsonConverter
@@ -1198,11 +1638,25 @@ Class JsonConversionHelper
 
 
 	%REM
+		Sub New 
+		Constructor
+	
+	%END REM
+	Public Sub New() 
+		'{{SETI_AUTHOR_CODE_New_implementation
+		Set mainHolder = New JsonConversionHolder()
+		THROW_ERRORS = true
+		'}}
+
+	End Sub
+
+
+	%REM
 		Sub Delete 
 		Destructor, outputs (if in debug) which functions have been logged as encountered and erases converters List.
 	
 	%END REM
-	Sub Delete() 
+	Public Sub Delete() 
 		'{{SETI_AUTHOR_CODE_Delete_implementation
 		If (SAMSARA_DEBUG And Not isEmpty(SamsaraFunctionsTouched)) Then
 			Call DebugPrint_Samsara(Join(ArrayUnique(SamsaraFunctionsTouched), ","))
@@ -1214,25 +1668,11 @@ Class JsonConversionHelper
 
 
 	%REM
-		Sub New 
-		Constructor
-	
-	%END REM
-	Sub New() 
-		'{{SETI_AUTHOR_CODE_New_implementation
-		Set mainHolder = New JsonConversionHolder()
-		THROW_ERRORS = true
-		'}}
-
-	End Sub
-
-
-	%REM
 		Sub enableDebug 
 		Enables debug printing, switched off by default.
 	
 	%END REM
-	Sub enableDebug() 
+	Public Sub enableDebug() 
 		'{{SETI_AUTHOR_CODE_enableDebug_implementation
 		SAMSARA_DEBUG = True
 		'}}
@@ -1245,7 +1685,7 @@ Class JsonConversionHelper
 		Disables debug printing, switched off by default.
 	
 	%END REM
-	Sub disableDebug() 
+	Public Sub disableDebug() 
 		'{{SETI_AUTHOR_CODE_disableDebug_implementation
 		SAMSARA_DEBUG = False
 		'}}
@@ -1258,7 +1698,7 @@ Class JsonConversionHelper
 		Prevents throwing errors if deserialization / serialization fails, instead just aborts settings the properties.
 	
 	%END REM
-	Sub failSilently() 
+	Public Sub failSilently() 
 		'{{SETI_AUTHOR_CODE_failSilently_implementation
 		THROW_ERRORS = False
 		'}}
@@ -1274,17 +1714,17 @@ Class JsonConversionHelper
 
 		@return	Variant
 	%END REM
-	Function fromJson(obj As JsonObject) As Variant 
+	Public Function fromJson(obj As JsonObject) As Variant 
 		'{{SETI_AUTHOR_CODE_fromJson_implementation
 		Call samsaraTouchFunction("fromJson")
-	
+
 		Dim converter as AbstractJsonConverter
 		Dim arrayConverter as JsonArrayConverter
 		Dim children As Variant
 		Dim child As JsonObject
 		Dim elemName As String
 		Dim i As Integer
-		
+
 		DebugPrint_Samsara "Processing " & obj.label & " as object"
 
 		If (obj.childCount > 0) Then
@@ -1361,7 +1801,7 @@ Class JsonConversionHelper
 
 		@return	JsonConversionHelper
 	%END REM
-	Function ignoreLabel(labelToIgnore As String) As JsonConversionHelper 
+	Public Function ignoreLabel(labelToIgnore As String) As JsonConversionHelper 
 		'{{SETI_AUTHOR_CODE_ignoreLabel_implementation
 		Try
 			Redim Preserve labelsToIgnore(UBound(labelsToIgnore) + 1)
@@ -1383,7 +1823,7 @@ Class JsonConversionHelper
 
 		@return	JsonConversionHelper
 	%END REM
-	Function withObject(object As Variant) As JsonConversionHelper 
+	Public Function withObject(object As Variant) As JsonConversionHelper 
 		'{{SETI_AUTHOR_CODE_withObject_implementation
 		mainHolder.isObject = True
 		Set mainHolder.contents = object
@@ -1401,14 +1841,14 @@ Class JsonConversionHelper
 
 		@return	JsonObject
 	%END REM
-	Function toJson(obj As Variant) As JsonObject 
+	Public Function toJson(obj As Variant) As JsonObject 
 		'{{SETI_AUTHOR_CODE_toJson_implementation
 		Dim i as Integer
     	Dim returnObj as New JsonObject()
-		
+
 		If (isArray(obj)) Then
 			DebugPrint_Samsara "Converting array to JSON"
-			
+
 			' Need to pass to internal variable, to pass by value rather than by reference
 			Dim tmpHolder as Variant
 			tmpHolder = obj
@@ -1439,7 +1879,7 @@ Class JsonConversionHelper
 
 		@return	Boolean
 	%END REM
-	Function shouldIgnoreLabel(labelName As String) As Boolean 
+	Public Function shouldIgnoreLabel(labelName As String) As Boolean 
 		'{{SETI_AUTHOR_CODE_shouldIgnoreLabel_implementation
 		Try
 			DebugPrint_Samsara "Checking whether to ignore " & labelName
@@ -1461,7 +1901,7 @@ Class JsonConversionHelper
 	
 		@return	JsonConversionHelper
 	%END REM
-	Function reset() As JsonConversionHelper 
+	Public Function reset() As JsonConversionHelper 
 		'{{SETI_AUTHOR_CODE_reset_implementation
 		Call samsaraTouchFunction("reset")
 		Set mainHolder = new JsonConversionHolder()
@@ -1480,7 +1920,7 @@ Class JsonConversionHelper
 
 		@return	String
 	%END REM
-	Function toJsonString(obj As Variant, prettify As Boolean) As String 
+	Public Function toJsonString(obj As Variant, prettify As Boolean) As String 
 		'{{SETI_AUTHOR_CODE_toJsonString_implementation
 		toJsonString = toJson(obj).toString(prettify)
 		'}}
@@ -1496,7 +1936,7 @@ Class JsonConversionHelper
 
 		@return	JsonConversionHelper
 	%END REM
-	Function withScalarConverter(labelName As String) As JsonConversionHelper 
+	Public Function withScalarConverter(labelName As String) As JsonConversionHelper 
 		'{{SETI_AUTHOR_CODE_withScalarConverter_implementation
 		Call samsaraTouchFunction("withScalarConverter")
 		Dim converter as New JsonScalarConverter()
@@ -1516,7 +1956,7 @@ Class JsonConversionHelper
 
 		@return	AbstractJsonConverter
 	%END REM
-	Function getCustomConverter(labelName As String) As AbstractJsonConverter 
+	Public Function getCustomConverter(labelName As String) As AbstractJsonConverter 
 		'{{SETI_AUTHOR_CODE_getCustomConverter_implementation
 		Call samsaraTouchFunction("getCustomConverter")
 		If (isElement(converters(labelName))) Then
@@ -1539,15 +1979,15 @@ Class JsonConversionHelper
 
 		@return	Variant
 	%END REM
-	Function fromJsonString(source As String, className As String, libName As String) As Variant 
+	Public Function fromJsonString(source As String, className As String, libName As String) As Variant 
 		'{{SETI_AUTHOR_CODE_fromJsonString_implementation
 		Call samsaraTouchFunction("fromJsonString")
-		
+
 		' Converter variables
 		Dim result As Variant
 		Dim parser As New Jsonparser
 		Dim root As Jsonobject
-		
+
 		' Can we parse the JSON
 		Try
 			DebugPrint_Samsara "Converting source JSON string " & source & " to " & libName & ":" & className
@@ -1557,7 +1997,7 @@ Class JsonConversionHelper
 			Error 1400, "Unable to parse JSON: " & SamsaraErrorMsg()
 			Exit Function
 		End Try
-		
+
 		Set root = parser.getRootobject()
 		If (root.IsArray()) Then
 			DebugPrint_Samsara "Processing root as array"
@@ -1566,24 +2006,6 @@ Class JsonConversionHelper
 			DebugPrint_Samsara "Processing root as object"
 			Set fromJsonString = toObject(root, className, libName).fromJson(root)
 		End If
-		'}}
-
-	End Function
-
-
-	%REM
-		Function withCustomConstructor 
-		Passes a custom constructor to use to create the object during deserialization
-	
-		@param	constructor 	Custom constructor to use for creating the object
-
-		@return	JsonConversionHelper
-	%END REM
-	Function withCustomConstructor(constructor As JsonCustomConstructor) As JsonConversionHelper 
-		'{{SETI_AUTHOR_CODE_withCustomConstructor_implementation
-		Call samsaraTouchFunction("withCustomConstructor")
-		Set Me.constructor = constructor
-		Set withCustomConstructor = Me
 		'}}
 
 	End Function
@@ -1601,7 +2023,7 @@ Class JsonConversionHelper
 
 		@return	JsonConversionHelper
 	%END REM
-	Function toObject(source As JsonObject, className As String, libName As String) As JsonConversionHelper 
+	Public Function toObject(source As JsonObject, className As String, libName As String) As JsonConversionHelper 
 		'{{SETI_AUTHOR_CODE_toObject_implementation
 		Call samsaraTouchFunction("asNoArgsObject")
 		mainHolder.isObject = True
@@ -1622,26 +2044,6 @@ Class JsonConversionHelper
 
 
 	%REM
-		Function withArrayConverter 
-		Adds an array converter to this object
-	
-		@param	labelName 	Label to look for in the JSON object (for deserialization) or VoltScript object (for serialization)
-
-		@return	JsonConversionHelper
-	%END REM
-	Function withArrayConverter(labelName As String) As JsonConversionHelper 
-		'{{SETI_AUTHOR_CODE_withArrayConverter_implementation
-		Call samsaraTouchFunction("withArrayConverter")
-		Dim converter as new JsonArrayConverter()
-		converter.labelName = labelName
-		Set converters(labelName) = converter
-		Set withArrayConverter = Me
-		'}}
-
-	End Function
-
-
-	%REM
 		Function jsonArrayToObjects 
 		Converts an array to objects create with a constructor that takes no parameters.
 	
@@ -1653,7 +2055,7 @@ Class JsonConversionHelper
 
 		@return	Variant
 	%END REM
-	Function jsonArrayToObjects(array As JsonObject, className As String, libName As String) As Variant 
+	Public Function jsonArrayToObjects(array As JsonObject, className As String, libName As String) As Variant 
 		'{{SETI_AUTHOR_CODE_jsonArrayToObjects_implementation
 		Call samsaraTouchFunction("jsonArrayObjects")
 
@@ -1681,7 +2083,7 @@ Class JsonConversionHelper
 				End If
 nextElem:
 			Next
-		
+
 			jsonArrayToObjects = tmpArray
 		Catch
 			DebugPrint_Samsara GetThreadInfo(12)
@@ -1702,12 +2104,50 @@ nextElem:
 
 		@return	JsonConversionHelper
 	%END REM
-	Function withCustomConverter(labelName As String, converter As AbstractJsonConverter) As JsonConversionHelper 
+	Public Function withCustomConverter(labelName As String, converter As AbstractJsonConverter) As JsonConversionHelper 
 		'{{SETI_AUTHOR_CODE_withCustomConverter_implementation
 		Call samsaraTouchFunction("withCustomConverter")
 		converter.labelName = labelName
 		Set converters(labelName) = converter
 		Set withCustomConverter = Me
+		'}}
+
+	End Function
+
+
+	%REM
+		Function withCustomConstructor 
+		Passes a custom constructor to use to create the object during deserialization
+	
+		@param	constructor 	Custom constructor to use for creating the object
+
+		@return	JsonConversionHelper
+	%END REM
+	Public Function withCustomConstructor(constructor As JsonCustomConstructor) As JsonConversionHelper 
+		'{{SETI_AUTHOR_CODE_withCustomConstructor_implementation
+		Call samsaraTouchFunction("withCustomConstructor")
+		Set Me.constructor = constructor
+		Set withCustomConstructor = Me
+		'}}
+
+	End Function
+
+
+	%REM
+		Function withArrayConverter 
+		Adds an array converter to this object
+	
+		@param	labelName 	Label to look for in the JSON object (for deserialization) or VoltScript object (for serialization)
+
+		@return	JsonConversionHelper
+	%END REM
+	Public Function withArrayConverter(labelName As String) As JsonConversionHelper 
+		'{{SETI_AUTHOR_CODE_withArrayConverter_implementation
+		Call samsaraTouchFunction("withArrayConverter")
+		Dim converter as new JsonArrayConverter()
+		converter.labelName = labelName
+		Set converters(labelName) = converter
+		Set withArrayConverter = Me
 		'}}
 
 	End Function
@@ -1724,7 +2164,7 @@ nextElem:
 		' Need to pass to internal variable, to pass by value rather than by reference
 		Dim tmpHolder as Variant
 		Set tmpHolder = obj
-		
+
 		Try
 			Set samsaraObj = obj
 			Execute(|Set samsaraVal = samsaraObj.toJson()|)
@@ -1757,16 +2197,21 @@ End Class
 
 
 %REM
-	Class JsonScalarConverter 
-	Cusom Converter to convert a JSON value to VoltScript scalar. This is used as the default for any conversion.
+	Class JsonConversionHolder 
+	Holder object for temporary output of serialization / deserialization
  
 %END REM
-Class JsonScalarConverter as AbstractJsonConverter
+Public Class JsonConversionHolder 
 
-	'{{SETI_AUTHOR_CODE_JsonScalarConverter_Private_Variables
+	'{{Variables
+	Public isObject As Boolean
+	Public contents As Variant
 	'}}
 
-	'{{SETI_AUTHOR_CODE_JsonScalarConverter_Private_Properties
+	'{{SETI_AUTHOR_CODE_JsonConversionHolder_Private_Variables
+	'}}
+
+	'{{SETI_AUTHOR_CODE_JsonConversionHolder_Private_Properties
 	'}}
 
 
@@ -1774,455 +2219,13 @@ Class JsonScalarConverter as AbstractJsonConverter
 		Sub New 
 
 	%END REM
-	Sub New() 
+	Public Sub New() 
 		'{{SETI_AUTHOR_CODE_New_implementation
 		'}}
 
 	End Sub
 
-
-	%REM
-		Function isReturnObj 
-		Overridden function, always returning False for this Class
-	
-		@return	Boolean
-	%END REM
-	Function isReturnObj() As Boolean 
-		'{{SETI_AUTHOR_CODE_isReturnObj_implementation
-		isReturnObj = False
-		'}}
-
-	End Function
-
-
-	%REM
-		Function fromJson 
-		Overridden function, uses scalar value from JSON object. The fromJson method is called from AbstractJsonConverter's deserialize method.
-	
-		@param	source 	JSON object to deserialize from
-
-		@return	Variant
-	%END REM
-	Function fromJson(source As JsonObject) As Variant 
-		'{{SETI_AUTHOR_CODE_fromJson_implementation
-		Call samsaraTouchFunction("JsonScalarConverter")
-		fromJson = source.scalarValue
-		'}}
-
-	End Function
-
-
-	%REM
-		Function toJson 
-		Overridden function. The toJson method is called from AbstractJsonConverter's serialize method.
-	
-		@param	source 	Variant containing the property to be serialized
-
-		@return	Variant
-	%END REM
-	Function toJson(source As Variant) As Variant 
-		'{{SETI_AUTHOR_CODE_toJson_implementation
-		DebugPrint_Samsara "Serializing scalar of type " & TypeName(source)
-		toJson = source
-		'}}
-
-	End Function
-
-	'{{SETI_AUTHOR_CODE_JsonScalarConverter_Private_Methods
-	'}} 
-
-End Class 
-
-
-%REM
-	Class JsonSetterConverter 
-	Custom Converter to convert between a JSON value or values and VoltScript datatype or objects, using a specific sub or function in the underlying class. During deserialization, the relevant JSON objects will then be removed from the parent JSON object, to ensure they are not re-processed.
- 
-%END REM
-Class JsonSetterConverter as AbstractJsonFunctionConverter
-
-	'{{SETI_AUTHOR_CODE_JsonSetterConverter_Private_Variables
-	Private setterName as String
-	'}}
-
-	'{{SETI_AUTHOR_CODE_JsonSetterConverter_Private_Properties
-	'}}
-
-
-	%REM
-		Sub New 
-
-	%END REM
-	Sub New() 
-		'{{SETI_AUTHOR_CODE_New_implementation
-		'}}
-
-	End Sub
-
-
-	%REM
-		Sub serialize 
-		Overridden function, throws error
-	
-		@param	source 	VoltScript object from which to serialize
-
-		@param	target 	JsonObject to write value to
-
-		@throws	JsonSettersConverters can only be used for deserialization 	
-	%END REM
-	Sub serialize(source As Variant, target As JsonObject) 
-		'{{SETI_AUTHOR_CODE_serialize_implementation
-		Error 1400, "JsonSetterConverters can only be used for deserialization"
-		'}}
-
-	End Sub
-
-
-	%REM
-		Sub deserialize 
-		Overridden function.
-	
-		@param	holder 	Object to deserialize to
-
-		@param	source 	JSON object to deserialize from
-
-	%END REM
-	Sub deserialize(holder As JsonConversionHolder, source As JsonObject) 
-		'{{SETI_AUTHOR_CODE_deserialize_implementation
-		Call samsaraTouchFunction(getMeTypeForDebug & "deserialize")
-		DebugPrint_Samsara getMeTypeForDebug() & "deserializing " & source.toString(false)
-		Dim execString as String
-
-		If (Me.setterName = "") Then
-			Error 1400, "A valid setter must be passed to custom setter for " & source.Label
-		End If
-
-		Try
-			Set samsaraObj = holder.contents
-			'Extract property values from JSON
-			Call loadParamValuesFromJsonObject(source, converters)
-
-			' Build execution string
-			execString = |Call samsaraObj.| & Me.setterName & |(|
-			DebugPrint_Samsara getMeTypeForDebug() & "Building executing string, " & execString
-			execString = execString & addParamsToExecString() & ")"
-			DebugPrint_Samsara getMeTypeForDebug() & "Executing " & execString
-			Execute execString
-			DebugPrint_Samsara getMeTypeForDebug() & "Executed " & execString
-		Catch
-			DebugPrint_Samsara GetThreadInfo(12)
-			Dim msg as String
-			msg = Chr(10) & Chr(9) & getMeTypeForDebug() & "Cannot call setter " & Me.setterName & ": " & Error() & " on line " & Erl
-			Error 1500, msg
-		Finally
-			Call Me.cleanup()
-		End Try
-		'}}
-
-	End Sub
-
-
-	%REM
-		Function forSetter 
-		Passes the setter name to look for in the relevant class
-	
-		@param	setterName 	Sub or function in the target class
-
-		@return	JsonSetterConverter
-	%END REM
-	Function forSetter(setterName As String) As JsonSetterConverter 
-		'{{SETI_AUTHOR_CODE_forSetter_implementation
-		Me.setterName = setterName
-		Set forSetter = Me
-		'}}
-
-	End Function
-
-
-	%REM
-		Function withValueParam 
-		Uses the scalar value of the JSON element the converter is associated with.
-The value will be added to the end of the params array, as the nth parameter to pass to the relevant setter.
-	
-		@return	JsonSetterConverter
-	%END REM
-	Function withValueParam() As JsonSetterConverter 
-		'{{SETI_AUTHOR_CODE_withValueParam_implementation
-		Call redimParams()
-		Set Me.params(UBound(params)) = new ConverterParam("ScalarValue", "", "")
-		Set withValueParam = Me
-		'}}
-
-	End Function
-
-
-	%REM
-		Function withSiblingParam 
-		Fluent method to retrieve a parameter value fr the setter from the JSON object, or a default value to use if the label is not in the JSON object. The relevant value is passed as the nth parameter to pass to the relevant setter.
-	
-		@param	labelName 	Label to search for at the same level as the JSON object being parsed
-
-		@param	defaultValue 	Default to use if the label is not found in the JSON
-
-		@return	JsonSetterConverter
-	%END REM
-	Function withSiblingParam(labelName As String, defaultValue As Variant) As JsonSetterConverter 
-		'{{SETI_AUTHOR_CODE_withSiblingParam_implementation
-		Call redimParams()
-		Set Me.params(UBound(params)) = new ConverterParam("Parent", labelName, defaultValue)
-		Set withSiblingParam = Me
-		'}}
-
-	End Function
-
-	'{{SETI_AUTHOR_CODE_JsonSetterConverter_Private_Methods
-
-	%REM
-		For each parameter in params passed, it deserializes the corresponding element from the 
-		JSON object and writes it to the SamsaraParamVals global
-		@param source 			JSON object to deserialize
-		@param converters 		List of AbstractJsonConverters to potentially use when deserializing values
-	%END REM
-	Private Sub loadParamValuesFromJsonObject(source as JsonObject, converters List as AbstractJsonConverter)
-		Dim currParam as ConverterParam
-		Dim i as Integer
-
-		DebugPrint_Samsara " Processing " & source.shortValue
-		Try
-			Redim SamsaraParamVals(UBound(Me.params))
-			For i = 0 to UBound(Me.params)
-				Set currParam = Me.params(i)
-				Select Case currParam.paramType
-				Case "Literal":
-					DebugPrint_Samsara "Adding literal as param - " & currParam.value
-					SamsaraParamVals(i) = currParam.value
-				Case "ScalarValue":
-					DebugPrint_Samsara "Adding scalar as param - " & Me.labelName
-					SamsaraParamVals(i) = source.getChild(Me.labelName).scalarValue
-				Case "Parent":
-					DebugPrint_Samsara "Adding param from parent - " & currParam.label
-					Call extractParam(source, i, currParam, converters)
-				Case Else:
-					Error 1400, "Unexpected param type = " & currParam.paramType
-				End Select
-		
-			Next
-		Catch
-			Error 1501, SamsaraErrorMsg()
-		End Try
-	End Sub
-	'}} 
-
-End Class 
-
-
-%REM
-	Class JsonGetterConverter 
-	Custom getter converter
- 
-%END REM
-Class JsonGetterConverter as AbstractJsonFunctionConverter
-
-	'{{SETI_AUTHOR_CODE_JsonGetterConverter_Private_Variables
-	Private getterName as String
-	'}}
-
-	'{{SETI_AUTHOR_CODE_JsonGetterConverter_Private_Properties
-	'}}
-
-
-	%REM
-		Sub New 
-
-	%END REM
-	Sub New() 
-		'{{SETI_AUTHOR_CODE_New_implementation
-		'}}
-
-	End Sub
-
-
-	%REM
-		Sub deserialize 
-		Overridden function, throws error for that class - getters are only for serialization.
-	
-		@param	holder 	Object to deserialize to
-
-		@param	source 	JSON object to deserialize from
-
-		@throws	JsonGetterConverters can only be used for serialization 	
-	%END REM
-	Sub deserialize(holder As JsonConversionHolder, source As JsonObject) 
-		'{{SETI_AUTHOR_CODE_deserialize_implementation
-		Error 1400, "JsonGetterConverters can only be used for serialization"
-		'}}
-
-	End Sub
-
-
-	%REM
-		Sub serialize 
-		Overridden function
-	
-		@param	source 	VoltScript object from which to serialize
-
-		@param	target 	JsonObject to write to
-
-	%END REM
-	Sub serialize(source As Variant, target As JsonObject) 
-		'{{SETI_AUTHOR_CODE_serialize_implementation
-		Call samsaraTouchFunction(getMeTypeForDebug & "deserialize")
-		Dim execString as String
-		
-		If (Me.getterName = "") Then
-			Error 1400, "A valid getter must be passed to custom getter for " & Me.labelName
-		End If
-
-		Try
-			'Extract property values from JSON
-			Call loadParamValuesFromJsonObject(source)
-
-			' Build execution string
-			Set samsaraObj = source
-			execString = |samsaraVal = samsaraObj.| & Me.getterName & |(|
-			DebugPrint_Samsara getMeTypeForDebug() & "Building executing string, " & execString
-			execString = execString & addParamsToExecString() & ")"
-			DebugPrint_Samsara getMeTypeForDebug() & "Executing " & execString
-			Execute execString
-			DebugPrint_Samsara getMeTypeForDebug() & "Executed " & execString
-			Call target.insertValue(labelName, samsaraVal)
-		Catch
-			DebugPrint_Samsara GetThreadInfo(12)
-			Dim msg as String
-			msg = Chr(10) & Chr(9) & getMeTypeForDebug() & "Cannot call getter " & Me.getterName & ": " & Error() & " on line " & Erl
-			Error 1500, msg
-		Finally
-			Call Me.cleanup()
-		End Try
-
-		'}}
-
-	End Sub
-
-
-	%REM
-		Function forGetter 
-		Passes the getter name to look for in the relevant class
-	
-		@param	getterName 	Function in the target class
-
-		@return	JsonGetterConverter
-	%END REM
-	Function forGetter(getterName As String) As JsonGetterConverter 
-		'{{SETI_AUTHOR_CODE_forGetter_implementation
-		Me.getterName = getterName
-		Set forGetter = Me
-		'}}
-
-	End Function
-
-	'{{SETI_AUTHOR_CODE_JsonGetterConverter_Private_Methods
-
-	%REM
-		For each parameter in params passed, it deserializes the corresponding element from the 
-		JSON object and writes it to the SamsaraParamVals global
-		@param source			JSON object to deserialize
-		@param converters		List of AbstractJsonConverters to potentially use when deserializing values
-	%END REM
-	Private Sub loadParamValuesFromJsonObject(source as Variant)
-		Dim currParam as ConverterParam
-		Dim i as Integer
-
-		DebugPrint_Samsara " Processing getter"
-		Try
-			Set currParam = Me.params(0)
-		Catch
-			'No params, exit
-			Exit Sub
-		End Try
-		Try
-			Redim SamsaraParamVals(UBound(Me.params))
-			For i = 0 to UBound(Me.params)
-				Set currParam = Me.params(i)
-				Select Case currParam.paramType
-				Case "Literal":
-					DebugPrint_Samsara "Adding literal as param - " & TypeName(currParam.value)
-					SamsaraParamVals(i) = currParam.value
-				Case Else:
-					Error 1400, "Unexpected param type = " & currParam.paramType
-				End Select
-		
-			Next
-		Catch
-			Error 1501, SamsaraErrorMsg()
-		End Try
-	End Sub
-
-	'}} 
-
-End Class 
-
-
-%REM
-	Class JsonNoArgsConstructor 
-	Base implementation of AbstractJsonConstructor for empty constructors
- 
-%END REM
-Class JsonNoArgsConstructor as JsonCustomConstructor
-
-	'{{SETI_AUTHOR_CODE_JsonNoArgsConstructor_Private_Variables
-	'}}
-
-	'{{SETI_AUTHOR_CODE_JsonNoArgsConstructor_Private_Properties
-	'}}
-
-
-	%REM
-		Sub New 
-
-	%END REM
-	Sub New() 
-		'{{SETI_AUTHOR_CODE_New_implementation
-		'}}
-
-	End Sub
-
-
-	%REM
-		Function createObject 
-		Overridden function
-	
-		@param	className 	Class to create an instance of
-
-		@param	libName 	Script file where the class is defined
-
-		@return	Variant
-	%END REM
-	Function createObject(className As String, libName As String) As Variant 
-		'{{SETI_AUTHOR_CODE_createObject_implementation
-		Call samsaraTouchFunction("createNoArgsObject")
-
-		Dim execString as String
-		DebugPrint_Samsara "Trying to create new " & libName & ":" & className
-
-		Try
-			DebugPrint_Samsara "Using no args constructor"
-			execString = _
-				|Use "| & libName$ & |"
-				Set samsaraObj = New | & className & |()|
-			Execute(execString)
-			Set createObject = samsaraObj
-			DebugPrint_Samsara "Created " & className & " with no args constructor"
-		Catch
-			Error 1400, "Unable to create " & className & " using constructor " & execString
-		Finally
-			Call Me.cleanup()
-		End Try
-		'}}
-
-	End Function
-
-	'{{SETI_AUTHOR_CODE_JsonNoArgsConstructor_Private_Methods
+	'{{SETI_AUTHOR_CODE_JsonConversionHolder_Private_Methods
 	'}} 
 
 End Class 
@@ -2237,7 +2240,7 @@ End Class
 	@param	functionName 	Function being touched
 
 %END REM
-Sub samsaraTouchFunction(functionName As String) 
+Public Sub samsaraTouchFunction(functionName As String) 
 	'{{SETI_AUTHOR_CODE_samsaraTouchFunction_implementation
 	If Not SAMSARA_DEBUG Then Exit Sub
 	If (isEmpty(SamsaraFunctionsTouched)) Then
@@ -2258,7 +2261,7 @@ End Sub
 	@param	msg 	String to print
 
 %END REM
-Sub DebugPrint_Samsara(msg As String) 
+Public Sub DebugPrint_Samsara(msg As String) 
 	'{{SETI_AUTHOR_CODE_DebugPrintSamsara_implementation
 	If SAMSARA_DEBUG Then Print msg
 	'}}
@@ -2279,7 +2282,7 @@ End Sub
 	@param	converters[List] 	List of AbstractSamsaraConverters to use to convert the value
 
 %END REM
-Sub extractParam(source As JsonObject, idex As Integer, currParam As ConverterParam, converters List As AbstractJsonConverter) 
+Public Sub extractParam(source As JsonObject, idex As Integer, currParam As ConverterParam, converters List As AbstractJsonConverter) 
 	'{{SETI_AUTHOR_CODE_extractParam_implementation
 	Dim converter as AbstractJsonConverter
 	Dim arrayConverter as JsonArrayConverter
