@@ -91,8 +91,8 @@ End Function
 
 Function testSerialization(testSuite as TestSuite, testObj as JsonObject)
 
-    Call testSuite.describe("Test String").assertEqualsString("paul", testObj.getChild("name").scalarValue, false)
-    Call testSuite.describe("Test type").assertEqualsString("person", testObj.getChild("type").scalarValue, false)
+    Call testSuite.describe("Test String").assertEqualsString("paul", CStr(testObj.getChild("name").scalarValue), false)
+    Call testSuite.describe("Test type").assertEqualsString("person", CSTr(testObj.getChild("type").scalarValue), false)
     Call testSuite.describe("Test number").assertEqualsNumeric(32767, testObj.getChild("myInt").scalarValue)
     Print testObj.getChild("myBool").scalarValue
     Call testSuite.describe("Test boolean").assertTrue(CBool(testObj.getChild("myBool").scalarValue))

@@ -95,9 +95,9 @@ Function testSerializationZ(testSuite as TestSuite, jsonObj as JsonObject)
     Dim returnJson as String
     returnJson = |{"action":"modified","modified":"2022-02-02T02:02:22Z","unid":"12345678901234567890123456789012"}|
 
-    Call testSuite.describe("Test unid").assertEqualsString("12345678901234567890123456789012", jsonObj.getChild("unid").scalarValue, false)
-    Call testSuite.describe("Test action").assertEqualsString("modified", jsonObj.getChild("action").scalarValue, false)
-    Call testSuite.describe("Test modified").assertEqualsString("2022-02-02T02:02:22Z", jsonObj.getChild("modified").scalarValue, true)
+    Call testSuite.describe("Test unid").assertEqualsString("12345678901234567890123456789012", CStr(jsonObj.getChild("unid").scalarValue), false)
+    Call testSuite.describe("Test action").assertEqualsString("modified", CStr(jsonObj.getChild("action").scalarValue), false)
+    Call testSuite.describe("Test modified").assertEqualsString("2022-02-02T02:02:22Z", CStr(jsonObj.getChild("modified").scalarValue), true)
     Call testSuite.describe("Test string").assertEqualsString(returnJson, jsonObj.toString(false), false)
 
 End Function

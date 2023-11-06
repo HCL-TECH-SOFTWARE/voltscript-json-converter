@@ -105,8 +105,8 @@ End Function
 
 Function testSerializationFJ(testSuite as TestSuite, testObj as JsonObject)
 
-    Call testSuite.describe("Test person first name").assertEqualsString("Ron", testObj.getChild("firstName").scalarValue, false)
-    Call testSuite.describe("Test person last name").assertEqualsString("Burgundy", testObj.getChild("lastName").scalarValue, false)
+    Call testSuite.describe("Test person first name").assertEqualsString("Ron", CStr(testObj.getChild("firstName").scalarValue), false)
+    Call testSuite.describe("Test person last name").assertEqualsString("Burgundy", CStr(testObj.getChild("lastName").scalarValue), false)
     Call testSuite.describe("Test age").assertEqualsNumeric(45, testObj.getChild("age").scalarValue)
     Dim expected as String
     expected = |{"age":45,"firstName":"Ron","lastName":"Burgundy"}|

@@ -93,8 +93,8 @@ End Function
 
 Function testSerializationF(testSuite as TestSuite, testObj as JsonObject)
 
-    Call testSuite.describe("Test person first name").assertEqualsString("Paul", testObj.getChild("firstName").scalarValue, false)
-    Call testSuite.describe("Test person last name").assertEqualsString("Withers", testObj.getChild("lastName").scalarValue, false)
+    Call testSuite.describe("Test person first name").assertEqualsString("Paul", CStr(testObj.getChild("firstName").scalarValue), false)
+    Call testSuite.describe("Test person last name").assertEqualsString("Withers", CStr(testObj.getChild("lastName").scalarValue), false)
     Dim generated as Boolean
     generated = testObj.getChild("generated").scalarValue
     Call testSuite.describe("Test created from custom serialization").assertTrue(generated)

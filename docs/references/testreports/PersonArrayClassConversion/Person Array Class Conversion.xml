@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?><testrun name="Person Array Class Conversion" tests="25" time="231103T111523" failures="0" errors="0">
+  <testsuite name="Test Person Class Array deserialization" time="0" displayname="Test Person Class Array deserialization" id="[engine:testsuite-voltscript]/[Test Person Class Array deserialization]">
+    <testcase name="Deserialization" classname="Test Person Class Array deserialization" time="0" displayname="Deserialization" id="[engine:testsuite-voltscript]/[Test Person Class Array deserialization]/[Deserialization]">
+    </testcase>
+    <testcase name="Test people is an array" classname="Test Person Class Array deserialization" time="0" displayname="Test people is an array" id="[engine:testsuite-voltscript]/[Test Person Class Array deserialization]/[Test people is an array]">
+    </testcase>
+    <testcase name="Test two people extracted" classname="Test Person Class Array deserialization" time="0" displayname="Test two people extracted" id="[engine:testsuite-voltscript]/[Test Person Class Array deserialization]/[Test two people extracted]">
+    </testcase>
+    <testcase name="Test person first name" classname="Test Person Class Array deserialization" time="0" displayname="Test person first name" id="[engine:testsuite-voltscript]/[Test Person Class Array deserialization]/[Test person first name]">
+    </testcase>
+    <testcase name="Test person last name" classname="Test Person Class Array deserialization" time="0" displayname="Test person last name" id="[engine:testsuite-voltscript]/[Test Person Class Array deserialization]/[Test person last name]">
+    </testcase>
+    <testcase name="Test full name" classname="Test Person Class Array deserialization" time="0" displayname="Test full name" id="[engine:testsuite-voltscript]/[Test Person Class Array deserialization]/[Test full name]">
+    </testcase>
+    <testcase name="Test pet" classname="Test Person Class Array deserialization" time="0" displayname="Test pet" id="[engine:testsuite-voltscript]/[Test Person Class Array deserialization]/[Test pet]">
+    </testcase>
+    <testcase name="Test pet name" classname="Test Person Class Array deserialization" time="0" displayname="Test pet name" id="[engine:testsuite-voltscript]/[Test Person Class Array deserialization]/[Test pet name]">
+    </testcase>
+    <testcase name="Test pet type" classname="Test Person Class Array deserialization" time="0" displayname="Test pet type" id="[engine:testsuite-voltscript]/[Test Person Class Array deserialization]/[Test pet type]">
+    </testcase>
+    <testcase name="Test second person first name" classname="Test Person Class Array deserialization" time="0" displayname="Test second person first name" id="[engine:testsuite-voltscript]/[Test Person Class Array deserialization]/[Test second person first name]">
+    </testcase>
+    <testcase name="Test second person last name" classname="Test Person Class Array deserialization" time="0" displayname="Test second person last name" id="[engine:testsuite-voltscript]/[Test Person Class Array deserialization]/[Test second person last name]">
+    </testcase>
+    <testcase name="Test second full name" classname="Test Person Class Array deserialization" time="0" displayname="Test second full name" id="[engine:testsuite-voltscript]/[Test Person Class Array deserialization]/[Test second full name]">
+    </testcase>
+    <testcase name="Test second pet" classname="Test Person Class Array deserialization" time="0" displayname="Test second pet" id="[engine:testsuite-voltscript]/[Test Person Class Array deserialization]/[Test second pet]">
+    </testcase>
+    <testcase name="Test second pet name" classname="Test Person Class Array deserialization" time="0" displayname="Test second pet name" id="[engine:testsuite-voltscript]/[Test Person Class Array deserialization]/[Test second pet name]">
+    </testcase>
+    <testcase name="Test second pet type" classname="Test Person Class Array deserialization" time="0" displayname="Test second pet type" id="[engine:testsuite-voltscript]/[Test Person Class Array deserialization]/[Test second pet type]">
+    </testcase>
+  </testsuite>
+  <testsuite name="Test Person Class Array serialization" time="0" displayname="Test Person Class Array serialization" id="[engine:testsuite-voltscript]/[Test Person Class Array serialization]">
+    <testcase name="Test 1" classname="Test Person Class Array serialization" time="0" displayname="Test 1" id="[engine:testsuite-voltscript]/[Test Person Class Array serialization]/[Test 1]">
+    </testcase>
+    <testcase name="Test JSON" classname="Test Person Class Array serialization" time="0" displayname="Test JSON" id="[engine:testsuite-voltscript]/[Test Person Class Array serialization]/[Test JSON]">
+    </testcase>
+    <testcase name="Test person first name" classname="Test Person Class Array serialization" time="0" displayname="Test person first name" id="[engine:testsuite-voltscript]/[Test Person Class Array serialization]/[Test person first name]">
+    </testcase>
+    <testcase name="Test person last name" classname="Test Person Class Array serialization" time="0" displayname="Test person last name" id="[engine:testsuite-voltscript]/[Test Person Class Array serialization]/[Test person last name]">
+    </testcase>
+    <testcase name="Test pet name" classname="Test Person Class Array serialization" time="0" displayname="Test pet name" id="[engine:testsuite-voltscript]/[Test Person Class Array serialization]/[Test pet name]">
+    </testcase>
+    <testcase name="Test pet type" classname="Test Person Class Array serialization" time="0" displayname="Test pet type" id="[engine:testsuite-voltscript]/[Test Person Class Array serialization]/[Test pet type]">
+    </testcase>
+    <testcase name="Test second person first name" classname="Test Person Class Array serialization" time="0" displayname="Test second person first name" id="[engine:testsuite-voltscript]/[Test Person Class Array serialization]/[Test second person first name]">
+    </testcase>
+    <testcase name="Test second person last name" classname="Test Person Class Array serialization" time="0" displayname="Test second person last name" id="[engine:testsuite-voltscript]/[Test Person Class Array serialization]/[Test second person last name]">
+    </testcase>
+    <testcase name="Test second pet name" classname="Test Person Class Array serialization" time="0" displayname="Test second pet name" id="[engine:testsuite-voltscript]/[Test Person Class Array serialization]/[Test second pet name]">
+    </testcase>
+    <testcase name="Test second pet type" classname="Test Person Class Array serialization" time="0" displayname="Test second pet type" id="[engine:testsuite-voltscript]/[Test Person Class Array serialization]/[Test second pet type]">
+    </testcase>
+  </testsuite>
+</testrun>
