@@ -1,7 +1,7 @@
 {
     "name": "VoltScriptJsonConverter",
     "library": "VoltScript-Json-Converter",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "displayName": "VoltScript JSON Converter",
     "description": "JSON serialization and deserialization classes for VoltScript",
     "authors": [
