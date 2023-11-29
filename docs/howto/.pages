@@ -3,3 +3,4 @@ nav:
     - Deserialization: deserialization
     - Serialization: serialization
     - troubleshooting.md
+    - archipelago.md

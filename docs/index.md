@@ -14,7 +14,7 @@ For the latest release information about VoltScript JSON Converter, see [What's 
 ---
 ## Using via dependency management
 
-For using with dependency management, see [Using dependency management](howto/archipelago.md)
+For using with dependency management, see [Use dependency management](howto/archipelago.md).
 
 ---
 ## How the documentation is organized
