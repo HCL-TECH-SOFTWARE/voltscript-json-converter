@@ -95,7 +95,7 @@ edit_uri: ""
 
 # Customization
 extra_css:
-  - ../assets/css/style.css
+  - assets/css/style.css
 
 plugins:
   - awesome-pages

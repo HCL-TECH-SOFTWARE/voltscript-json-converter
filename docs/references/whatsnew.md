@@ -6,8 +6,8 @@ The section provides information on the latest features, improvements, and resol
 !!! note "Important"
     - Items marked in <span style="color:red">**red**</span> are API changes that may impact your applications and should be reviewed before upgrading.
 
-???+ info "v1.1.0 - What's new or changed"
-    ## v1.1.0
+???+ info "v1.0.2 - What's new or changed"
+    ## v1.0.2
 
     **Resolved Issues**
 
