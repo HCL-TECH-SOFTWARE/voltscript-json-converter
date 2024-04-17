@@ -35,7 +35,7 @@ You'll need to add the following relevant dependency to your **dependencies** or
 ```json
         {
             "library": "voltscript-json-converter",
-            "version": "1.0.1",
+            "version": "1.0.2",
             "module": "VoltScriptJsonConverter.vss",
             "repository": "hcl-github"
         }

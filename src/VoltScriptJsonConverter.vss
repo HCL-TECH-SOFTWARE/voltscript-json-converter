@@ -1204,8 +1204,9 @@ Public Class JsonArrayConverter As AbstractJsonConverter
 	%END REM
 	Public Function toJson(source As Variant) As Variant 
 		'{{SETI_AUTHOR_CODE_toJson_implementation
-		Dim returnObj as New JsonObject
+		Dim returnObj as New JsonObject()
 		Dim scalarConverter as New JsonScalarConverter()	' Cannot pass e.g. LONG
+		If (IsEmpty(source)) Then Return New JsonObject(True)
 		If (IsArray(source)) Then
 			DebugPrint_Samsara getMeTypeForDebug & "converting array from " & TypeName(source)
 			Dim i as Integer
@@ -1327,6 +1328,7 @@ Public Class JsonBasicObjectArrayConverter As AbstractJsonConverter
 		If (Me.helper Is Nothing) Then
 			Error 1400, "Cannot serialize properties without a helper with converters"
 		End If
+		If IsEmpty(source) Then Return New JsonObject(True)
 		Set jsonObj = Me.helper.toJson(source)
 		Set toJson = jsonObj
 		'}}

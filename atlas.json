@@ -1,7 +1,7 @@
 {
     "name": "VoltScriptJsonConverter",
     "library": "VoltScript-Json-Converter",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "displayName": "VoltScript JSON Converter",
     "description": "JSON serialization and deserialization classes for VoltScript",
     "authors": [
@@ -49,7 +49,7 @@
             "url": "https://community.demo-hclvoltmx.com/marketplace/asset"
         }
     ],
-    "dependencies": [
+    "testDependencies": [
         {
             "library": "voltscript-testing",
             "version": "latest",
@@ -60,9 +60,9 @@
     "vseDependencies": {
         "JsonVSE": {
             "library": "25265",
-            "version": "1.0.0",
-            "module": "25264/19416",
-            "repository":"volt-mx-marketplace"
+            "version": "1.0.1",
+            "module": "25877/20841",
+            "repository": "volt-mx-marketplace"
         }
     }
 }

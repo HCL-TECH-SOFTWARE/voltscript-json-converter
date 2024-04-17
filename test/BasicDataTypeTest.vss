@@ -39,10 +39,11 @@ Function runDataTypeTest as Boolean
     Dim helper as new JsonConversionHelper
     Dim testObj as BasicClass
     Dim json as String
+    Dim expected as String
     Dim result as Boolean
     Call testRunner.setOutputFormat("BOTH")
 
-	json = |{"name":"paul","type":"person","myInt":32767,"myLong":2147483647,"myDbl":2147483650,"myCurr":12.05,"mySing":2147483650,"myBool":true,"myArr":[1,2,3]}|
+	json = |{"name":"paul","type":"person","myInt":32767,"myLong":2147483647,"myDbl":2147483650,"myCurr":12.05,"mySing":2147843,"myBool":true,"myArr":[1,2,3]}|
     
     Try
         Dim deserializeSuite as New TestSuite("Test Basic Class deserialization")
@@ -79,6 +80,14 @@ Function runDataTypeTest as Boolean
         Set jsonObj = helper.toJson(testObj)
         call serializeSuite.addResult(True, "")
         Call testSerialization(serializeSuite, jsonObj)
+        Call serializeSuite.describe("Serialization Empty Arr")
+        Dim temp as Variant
+        testObj.myArr = temp
+        Set jsonObj = helper.toJson(testObj)
+        call serializeSuite.addResult(True, "")
+        Call serializeSuite.describe("Test empty arr").assertTrue(jsonObj.getChild("myArr").isArray())
+        expected = |{"myArr":[],"myBool":true,"myCurr":12.05,"myDbl":2147483650.0,"myInt":32767,"myLong":2147483647,"mySing":2147843.0,"name":"paul","type":"person"}|
+        Call serializeSuite.describe("Test JSON output").assertEqualsString(expected, jsonObj.toString(false), false)
     Catch
         Call serializeSuite.addError("Error serializing JSON: " & Error() & " on line " & Erl, ||)
         print "Error " & Error() & " on line " & Erl
@@ -94,11 +103,10 @@ Function testSerialization(testSuite as TestSuite, testObj as JsonObject)
     Call testSuite.describe("Test String").assertEqualsString("paul", CStr(testObj.getChild("name").scalarValue), false)
     Call testSuite.describe("Test type").assertEqualsString("person", CSTr(testObj.getChild("type").scalarValue), false)
     Call testSuite.describe("Test number").assertEqualsNumeric(32767, testObj.getChild("myInt").scalarValue)
-    Print testObj.getChild("myBool").scalarValue
     Call testSuite.describe("Test boolean").assertTrue(CBool(testObj.getChild("myBool").scalarValue))
     Call testSuite.describe("Test Array").assertEqualsInteger(3, testObj.getChild("myArr").childCount)
     Call testSuite.describe("Test currency").assertEqualsNumeric(12.05, testObj.getChild("myCurr").scalarValue)
-    Call testSuite.describe("Test Array contents").assertEqualsString("[1,2,3]", testObj.getchild("myArr").toString(false), false)
+    Call testSuite.describe("Test Array contents").assertEqualsString("[1.0,2.0,3.0]", testObj.getchild("myArr").toString(false), false)
 
 End Function
 

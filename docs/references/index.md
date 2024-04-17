@@ -55,7 +55,11 @@ List of [frequently asked questions](faqs.md) related to VoltScript JSON Convert
     - [Source code](https://github.com/HCL-TECH-SOFTWARE/voltscript-collections){: target="_new" rel="noopener noreferrer"}
 - VoltScript Console Colors
     - [Source code](https://github.com/HCL-TECH-SOFTWARE/voltscript-console-colors){: target="_new" rel="noopener noreferrer"}
-    
+- VoltScript Interface Designer
+    - [Documentation](https://opensource.hcltechsw.com/voltscript-interface-designer){: target="_blank" rel="noopener noreferrer"}
+- VoltScript Volt MX Middleware
+    - [Documentation](https://opensource.hcltechsw.com/voltscript-voltmx-middleware){: target="_blank" rel="noopener noreferrer"}
+
 ## Support
 
 To share information, ask questions, and learn about VoltScript JSON Converter, go to the [Community](https://support.hcltechsw.com/community?id=community_forum&sys_id=999cdacbdb82ed9055f38d6d13961961){: target="_blank"}.
