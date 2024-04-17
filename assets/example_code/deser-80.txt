@@ -1,0 +1,72 @@
+%REM
+	Copyright 2022-2023 HCL America, Inc.
+	Licensed under the Apache License, Version 2.0 (the "License"); 
+	you may not use this file except in compliance with the License. 
+	You may obtain a copy of the License at
+
+	http://www.apache.org/licenses/LICENSE-2.0
+
+	Unless required by applicable law or agreed to in writing, 
+	software distributed under the License is distributed on an "AS IS" BASIS, 
+	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
+	See the License for the specific language governing permissions and limitations under the License	
+%END REM
+
+Option Public
+Option Declare
+
+' Modify use statement as appropriate for your environent to point to relative path
+Use "../../../src/VoltScriptJsonConverter" 
+
+Class Person
+
+    Public firstName as String
+    Public lastName as String
+    Public pet as Pet
+
+End Class
+
+Class Pet
+
+    Public name as String
+    Public type as String
+
+    Sub New(petName as String, petType as String)
+        Me.name = petName
+        Me.type = petType
+    End Sub
+
+End Class
+
+Class PetConverter as AbstractJsonConverter
+
+    Function fromJson(source as JsonObject) as Variant
+
+        Dim pet as Pet
+        Dim helper as New JsonConversionHelper()
+        Dim petConstructor as New JsonCustomConstructor()
+        Call petConstructor.withParam("name", "").withParam("type", "")
+        Set pet = helper.withCustomConstructor(petConstructor)._
+            toObject(source, "Pet", "deser-80")._
+            fromJson(source)
+        Set fromJson = pet
+
+    End Function
+
+End Class
+
+Sub Initialize
+    Call sample1()
+End Sub
+
+Sub sample1()
+    Dim helper as new JsonConversionHelper()
+    Dim petConverter as New PetConverter()
+    Dim person as Person
+    Dim json as String
+    
+    json = |{"firstName":"Ron","lastName":"Burgundy","pet": {"name":"Baxter","type":"Dog"}}|
+    Call helper.withCustomConverter("pet", petConverter)
+    Set person = helper.fromJsonString(json, "Person", "../example_code/deser-80")
+    Print person.firstName & " " & person.lastName & " has a pet called " & person.pet.name
+End Sub
