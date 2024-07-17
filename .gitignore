@@ -1,11 +1,3 @@
-# Bali
-*.bso
-*.vso
-*.so
-
-/unit-test-reports/*/
-test/unit-test-reports/
-bin/
 
 /site/*
 
@@ -17,6 +9,9 @@ bin/
 core
 vses
 libs/VoltScriptTesting.vss
+*_UNMERGED.vss
+/unit-test-reports/*/
+test/unit-test-reports/
 
 # effective-atlas.json
 effective-atlas.json 

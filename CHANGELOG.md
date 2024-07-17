@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## [1.0.3] - 2024-06-15
+
+- MXOP-13771: Repointing atlas.json for VSEs and adding VSID database
+
 ## [1.0.2] - 2024-04-17
 
 - MXOP-8160: Fixed JsonArrayConverter to return JSON array instead of JSON object for empty Variants

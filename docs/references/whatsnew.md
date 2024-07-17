@@ -6,6 +6,13 @@ The section provides information on the latest features, improvements, and resol
 !!! note "Important"
     - Items marked in <span style="color:red">**red**</span> are API changes that may impact your applications and should be reviewed before upgrading.
 
+???+ info "v1.0.3 - What's new or changed"
+    ## v1.0.3
+    **Improvements**
+
+    - Added VSID database to repo
+    - <span style="color:red">Repointing atlas.json from demo marketplace. atlas-settings marketplace url will need updating to "https://accounts.auth.hclvoltmx.net/login"</span>
+
 ???+ info "v1.0.2 - What's new or changed"
     ## v1.0.2
 

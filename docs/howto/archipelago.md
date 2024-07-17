@@ -13,6 +13,12 @@ You'll need a [Personal Access Token](https://help.hcltechsw.com/docs/voltscript
     "hcl-github": {
         "type": "github",
         "token": "${env.TOKEN}"
+    },
+    "volt-mx-marketplace": {
+        "type": "marketplace",
+        "username": "YOUR_USERNAME",
+        "password": "YOUR_PASSWORD",
+        "authUrl": "https://accounts.auth.hclvoltmx.net/login"
     }
 ```
 
@@ -35,7 +41,7 @@ You'll need to add the following relevant dependency to your **dependencies** or
 ```json
         {
             "library": "voltscript-json-converter",
-            "version": "1.0.2",
+            "version": "1.0.3",
             "module": "VoltScriptJsonConverter.vss",
             "repository": "hcl-github"
         }
