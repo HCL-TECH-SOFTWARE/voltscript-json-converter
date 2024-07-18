@@ -1,0 +1,121 @@
+%REM
+	Copyright 2022-2023 HCL America, Inc.
+	Licensed under the Apache License, Version 2.0 (the "License"); 
+	you may not use this file except in compliance with the License. 
+	You may obtain a copy of the License at
+
+	http://www.apache.org/licenses/LICENSE-2.0
+
+	Unless required by applicable law or agreed to in writing, 
+	software distributed under the License is distributed on an "AS IS" BASIS, 
+	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
+	See the License for the specific language governing permissions and limitations under the License	
+%END REM
+
+Option Public
+Option Declare
+
+' Modify use statement as appropriate for your environent to point to relative path
+Use "../../../src/VoltScriptJsonConverter"
+
+Class ObjectSummary
+
+    Public unid as String
+    Public modifiedDate as Variant
+    Public action as String
+
+End Class
+
+Class DateTimeSerializer as AbstractJsonConverter
+
+    Function fromJson(source as JsonObject) as Variant
+        Dim dt as String
+        Dim dateVal as String
+        Dim timeVal as String
+        Dim dateElems as Variant
+        Dim timeElems as Variant
+
+        dt = source.scalarValue
+        dateVal = StrLeft(dt, "T")
+        dateElems = Split(dateVal, "-")
+        timeVal = Left$(StrRight(dt, "T"), 8)
+        timeElems = Split(timeVal, ":")
+        Return DateNumber(dateElems(0), dateElems(1), dateElems(2)) + TimeNumber(timeElems(0), timeElems(1), timeElems(2))
+    End Function
+
+End Class
+
+
+Sub Initialize()
+    Print "Running Sample1"
+    Call sample1()
+    Print "Running Sample2"
+    Call sample2()
+End Sub
+
+Sub sample1()
+    Dim helper as New JsonConversionHelper
+    
+    Dim obj as ObjectSummary
+    Dim json as String
+	json = |{"unid":"12345678901234567890123456789012","modified":"2022-02-02T02:02:22Z","action":"modified"}|
+    Dim dateConverter as New DateTimeSerializer()
+    Call dateConverter.forPropertyName("modifiedDate")
+    Call helper.withCustomConverter("modified", dateConverter)
+    Set obj = helper.fromJsonString(json, "ObjectSummary", "deser-50")
+    print obj.modifiedDate
+End Sub
+
+Class Session
+
+    Public id as String
+    Public title as String
+    Public startDate as Variant
+    Public startTime as Variant
+
+End Class
+
+Class ComplexDateTimeSerializer as AbstractJsonConverter
+    Sub deserialize(holder as JsonConversionHolder, source as JsonObject)
+        Dim dt as String
+        Dim dateVal as String
+        Dim timeVal as String
+        Dim dateElems as Variant
+        Dim execString as String
+
+        Set samsaraObj = holder.contents
+
+        dt = source.scalarValue
+        dateVal = StrLeft(dt, "T")
+        dateElems = Split(dateVal, "-")
+        timeVal = Left$(StrRight(dt, "T"), 8)
+
+        ' Build execution string
+        execString = |samsaraObj.startDate = DateNumber(| & dateElems(0) & |,| & dateElems(1) & |,| & dateElems(2) & |)|
+        execString = execString & Chr(10) & |samsaraObj.startTime = CDat("| & timeVal & |")|
+        Try
+            DebugPrint_Samsara getMeTypeForDebug() & "Executing " & execString
+            Execute execString
+            DebugPrint_Samsara getMeTypeForDebug() & "Executed " & execString
+        Catch
+            DebugPrint_Samsara GetThreadInfo(12)
+            Dim msg as String
+            msg = Chr(10) & Chr(9) & getMeTypeForDebug() & "Cannot deserialize: " & Error() & " on line " &Erl
+            Error 1500, msg
+        Finally
+            Call Me.cleanup()
+        End Try
+    End Sub
+End Class
+
+Sub sample2()
+    Dim helper as New JsonConversionHelper
+    Dim dateConverter as New ComplexDateTimeSerializer()
+    Call helper.withCustomConverter("startTime", dateConverter)
+
+    Dim obj as Session
+    Dim json as String
+	json = |{"id": "Ad01","title": "Domino HA","startTime": "2022-05-25T16:00:00"}|
+    Set obj = helper.fromJsonString(json, "Session", "deser-50")
+    print Format(obj.startDate, "yyyy-mm-dd") & " " & Format(obj.startTime, "hh:mm")
+End Sub
