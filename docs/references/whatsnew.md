@@ -6,6 +6,13 @@ The section provides information on the latest features, improvements, and resol
 !!! note "Important"
     - Items marked in <span style="color:red">**red**</span> are API changes that may impact your applications and should be reviewed before upgrading.
 
+???+ info "v1.0.4 - What's new or changed"
+
+    ## v1.0.4
+    **Improvements**
+
+    - <span style="color:red">Repointing atlas.json to use VSE title and filename as library and module.</span>
+
 ???+ info "v1.0.3 - What's new or changed"
     ## v1.0.3
     **Improvements**

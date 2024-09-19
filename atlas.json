@@ -1,7 +1,7 @@
 {
     "name": "VoltScriptJsonConverter",
     "library": "VoltScript-Json-Converter",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "displayName": "VoltScript JSON Converter",
     "description": "JSON serialization and deserialization classes for VoltScript",
     "authors": [
@@ -59,9 +59,9 @@
     ],
     "vseDependencies": {
         "JsonVSE": {
-            "library": "25265",
+            "library": "JsonVSE VoltScript Extension",
             "version": "1.0.1",
-            "module": "25877/20841",
+            "module": "JsonVSE",
             "repository": "volt-mx-marketplace"
         }
     }
