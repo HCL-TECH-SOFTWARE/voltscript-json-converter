@@ -60,7 +60,7 @@ You'll need the relevant dependency to add to your **dependencies** or **testDep
 ```json
         {
             "library": "voltscript-json-converter",
-            "version": "1.0.2",
+            "version": "1.0.4",
             "module": "VoltScriptJsonConverter.vss",
             "repository": "hcl-github"
         }
