@@ -46,7 +46,7 @@
         {
             "id": "volt-mx-marketplace",
             "type": "marketplace",
-            "url": "https://community.hclvoltmx.com/marketplace/asset"
+            "url": "https://community.hclvoltmx.com/marketplace"
         }
     ],
     "testDependencies": [
@@ -60,7 +60,7 @@
     "vseDependencies": {
         "JsonVSE": {
             "library": "JsonVSE VoltScript Extension",
-            "version": "1.0.1",
+            "version": "1.0.2",
             "module": "JsonVSE",
             "repository": "volt-mx-marketplace"
         }
