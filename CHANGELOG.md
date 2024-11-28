@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## [1.0.5] - Unreleased
+
+- MXOP-22009: Add function to load LogWriters from JSON file
+
 ## [1.0.4] - 2024-09-23
 
 - MXOP-15323: Repointing atlas.json to VSE dependencies using title and filename

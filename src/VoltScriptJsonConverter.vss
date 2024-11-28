@@ -25,6 +25,9 @@ The global variables exist so Execute statements can be used. Do not set or read
 
 Option Declare
 Option Public
+Use "../libs/VoltScriptLogging"
+Use "../libs/VoltScriptTesting"
+
 UseVSE "*JsonVSE"
 
 
@@ -192,6 +195,7 @@ Public Class JsonCustomConstructor As AbstractJsonConstructor
 		Try
 			DebugPrint_Samsara getMeTypeForDebug & "Using custom params constructor"
 			DebugPrint_Samsara getMeTypeForDebug & "Extracting parameter values from source"
+			If source is Nothing Then Set source = New JsonObject(False)
 			Call loadParamValuesFromJsonObject(source, converters)
 
 			DebugPrint_Samsara getMeTypeForDebug & "Building execute statement"
@@ -2333,6 +2337,88 @@ Public Sub extractParam(source As JsonObject, idex As Integer, currParam As Conv
 
 End Sub
 
+
+%REM
+	Function loadLogWritersFromJson 
+
+	@param	context 	String of JSON or path to file
+
+	@return	Variant
+	@throws	Invalid JSON string or file 	
+%END REM
+Public Function loadLogWritersFromJson(context As String) As Variant 
+	'{{SETI_AUTHOR_CODE_loadLogWritersFromJson_implementation
+	Dim parser As New JsonParser
+	Dim root As JsonObject
+	Dim childObj as JsonObject
+	Dim writers As Variant
+	Dim logWriter as BaseLogWriter
+	Dim constructor as JsonCustomConstructor
+	Dim contructorArgs as JsonObject
+	Dim argKey as String
+	Dim argVal as Variant
+	Dim logWriterClassName as String
+	Dim logWriterFilePath as String
+
+	Try
+		If (parser.isValidJSON(context)) Then
+			Call parser.loadFromJson(context)
+		Else
+			Call parser.loadFromFile(context)
+		End If
+	Catch
+		Error 1502, "Invalid JSON string or file"
+	End Try
+
+	Set root = parser.getRootObject()
+	If (Not root.isArray()) Then
+		Error 1503, "JSON string or file must be an array"
+	End If
+
+	ForAll child in root.getChildren()
+		Set childObj = child
+		Call validateWriterJson(childObj)
+
+		logWriterClassName = childObj.getChild("writerClass").scalarValue
+		logWriterFilePath = childObj.getChild("writerFilePath").scalarValue
+		
+
+		Set contructorArgs = childObj.getChild("constructorArgs")
+        If (contructorArgs.childCount = 0) Then
+            Set constructor = New JsonNoArgsConstructor()
+        Else
+            Set constructor = New JsonCustomConstructor()
+            ForAll arg in childObj.getChild("constructorOrder").getChildren()
+                argKey = arg.scalarValue
+                If contructorArgs.isChild(argKey) Then
+                    argVal = contructorArgs.getChild(argKey).scalarValue
+                    If (CStr(argVal) Like "{{LEVEL_*") Then
+                        Call constructor.withLiteralParam(parseLogLevel(CStr(argVal)))
+                    ElseIf (CStr(argVal) = "{{NO_LOGGING}}") Then
+                        Call constructor.withLiteralParam(0)
+                    Else
+                        Call constructor.withLiteralParam(argVal)
+                    End If
+                Else
+                    Error 1505, "Missing constructor argument: " & CStr(arg.scalarValue)
+                End If
+            End ForAll
+        End If
+        Set logWriter = constructor.createObject(logWriterClassName, logWriterFilePath)
+		
+        If (IsEmpty(writers)) Then
+            Redim writers(0)
+        Else
+    		Redim Preserve writers(UBound(writers) + 1)
+        End If
+		Set writers(UBound(writers)) = logWriter
+	End ForAll
+
+	Return writers
+	'}}
+
+End Function
+
 '{{SETI_AUTHOR_CODE_VoltScriptJSONConverter_Private_Methods
 
 	%REM
@@ -2377,5 +2463,55 @@ End Sub
 	%END REM
 	Private Function SamsaraErrorMsg() as String
 		SamsaraErrorMsg = Error() & " on line " & Erl()
+	End Function
+
+	Private function validateWriterJson(jsonObj as JsonObject)
+		Dim testSuite as New TestSuite("")
+		Dim i as Integer
+		Dim errString as String
+
+		testSuite.suppressReport = True
+		Call testSuite.describe("LogWriter JSON should be object").assertTrue(jsonObj.isObject())
+		Call testSuite.describe("LogWriter has writerClass").assertTrue(jsonObj.isChild("writerClass"))
+		If (jsonObj.isChild("writerClass")) Then
+			Call testSuite.describe("LogWriter has writerClass as string").assertIs("STRING", jsonObj.getChild("writerClass").scalarValue)
+		End If
+		Call testSuite.describe("LogWriter has writerFilePath").assertTrue(jsonObj.isChild("writerFilePath"))
+		if (jsonObj.isChild("writerFilePath")) Then
+			Call testSuite.describe("LogWriter has writerFilePath as string").assertIs("STRING", jsonObj.getChild("writerFilePath").scalarValue)
+		End If
+		Call testSuite.describe("LogWriter has constructorOrder").assertTrue(jsonObj.isChild("constructorOrder"))
+		Call testSuite.describe("LogWriter's constructorOrder should be an array").assertTrue(jsonObj.getChild("constructorOrder").isArray())
+		Call testSuite.describe("LogWriter has constructorArgs").assertTrue(jsonObj.isChild("constructorArgs"))
+		if (jsonObj.isChild("constructorArgs")) Then
+			Call testSuite.describe("LogWriter's constructorArgs should be an object").assertTrue(jsonObj.getChild("constructorArgs").isObject())
+			If (jsonObj.getChild("constructorArgs").childCount > 0) Then
+                ForAll child in jsonObj.getChild("constructorArgs").getChildren()
+                    Call testSuite.describe("LogWriter's constructorArgs " & ++i & " should be a scalar").assertTrue(child.isScalar())
+                End ForAll
+            End If
+		End If
+
+		If Not testSuite.ranSuccessfully() Then
+			errString = "Invalid LogWriter JSON: " & jsonObj.toString(False)
+			ForAll test in testSuite.results
+				If Not test.outcome = "Passed" Then
+					errString = errString & Chr(13) & test.description
+				End If
+			End ForAll
+			Error 1504, errString
+		End If
+	End Function
+
+	Function parseLogLevel(level As String) As Integer
+		Select Case level
+			Case "{{LEVEL_TRACE}}": Return 1
+			Case "{{LEVEL_DEBUG}}": Return 2
+			Case "{{LEVEL_INFO}}": Return 4
+			Case "{{LEVEL_WARN}}": Return 8
+			Case "{{LEVEL_ERROR}}": Return 16
+			Case "{{LEVEL_FATAL}}": Return 32
+			Case Else: Error 1503, "Invalid log level: " & level
+		End Select
 	End Function
 	'}} 
