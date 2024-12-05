@@ -5,6 +5,9 @@
 .devcontainer/
 .devcontainer.json
 
+# VS Code
+.vscode/
+
 # VoltScript
 core
 vses
