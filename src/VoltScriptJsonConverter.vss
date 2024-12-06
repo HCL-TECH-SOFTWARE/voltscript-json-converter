@@ -39,6 +39,7 @@ UseVSE "*JsonVSE"
 Public samsaraObj As Variant
 Public samsaraVal As Variant
 Public samsaraParamVals As Variant
+Public samsaraFunctionsTouched As Variant
 '}}
 
 '{{SETI_AUTHOR_CODE_VoltScriptJSONConverter_Private_Variables
@@ -1630,10 +1631,35 @@ Public Class JsonConversionHelper
 	'{{SETI_AUTHOR_CODE_JsonConversionHelper_Private_Variables
 	Private converters List As AbstractJsonConverter
 	Private constructor as JsonCustomConstructor
-	Private THROW_ERRORS as Boolean
+	Private m_suppressErrors as Boolean
 	Private mainHolder as JsonConversionHolder
 	Private labelsToIgnore() as String
 	'}}
+
+
+	%REM
+		Property suppressErrors 
+
+		@return	Boolean
+	%END REM
+	Public Property Get suppressErrors As Boolean 
+		'{{SETI_AUTHOR_CODE_Get.suppressErrors_implementation
+		Return m_suppressErrors
+		'}}
+
+	End Property
+
+
+	%REM
+		Property suppressErrors 
+
+	%END REM
+	Public Property Set suppressErrors As Boolean 
+		'{{SETI_AUTHOR_CODE_Set.suppressErrors_implementation
+		m_suppressErrors = suppressErrors
+		'}}
+
+	End Property
 
 	'{{SETI_AUTHOR_CODE_JsonConversionHelper_Private_Properties
 	'}}
@@ -1647,7 +1673,6 @@ Public Class JsonConversionHelper
 	Public Sub New() 
 		'{{SETI_AUTHOR_CODE_New_implementation
 		Set mainHolder = New JsonConversionHolder()
-		THROW_ERRORS = true
 		'}}
 
 	End Sub
@@ -1687,19 +1712,6 @@ Public Class JsonConversionHelper
 	Public Sub disableDebug() 
 		'{{SETI_AUTHOR_CODE_disableDebug_implementation
 		SAMSARA_DEBUG = False
-		'}}
-
-	End Sub
-
-
-	%REM
-		Sub failSilently 
-		Prevents throwing errors if deserialization / serialization fails, instead just aborts settings the properties.
-	
-	%END REM
-	Public Sub failSilently() 
-		'{{SETI_AUTHOR_CODE_failSilently_implementation
-		THROW_ERRORS = False
 		'}}
 
 	End Sub
@@ -1777,7 +1789,7 @@ Public Class JsonConversionHelper
 							End If
 						End If
 					Catch
-						If (THROW_ERRORS) Then
+						If (Not Me.suppressErrors) Then
 							Error 1400, "Error processing " & elemName & ": " & elemValue & " - " & Error()
 						Else
 							Call DebugPrint_Samsara(Error$)
@@ -2361,7 +2373,7 @@ Public Function loadLogWritersFromJson(context As String) As Variant
 	Catch
 		Error 1502, "Invalid JSON string or file"
 	End Try
-	
+
 	Set root = parser.getRootObject()
 	If (Not root.isArray()) Then
 		Error 1503, "JSON string or file must be an array"
@@ -2373,7 +2385,7 @@ Public Function loadLogWritersFromJson(context As String) As Variant
 
 		logWriterClassName = childObj.getChild("writerClass").scalarValue
 		logWriterFilePath = childObj.getChild("writerFilePath").scalarValue
-		
+
 
 		Set constructorArgs = childObj.getChild("constructorArgs")
         If (constructorArgs.childCount = 0) Then
@@ -2397,7 +2409,7 @@ Public Function loadLogWritersFromJson(context As String) As Variant
             End ForAll
         End If
         Set logWriter = constructor.createObject(logWriterClassName, logWriterFilePath)
-		
+
         If (IsEmpty(writers)) Then
             Redim writers(0)
         Else
