@@ -2361,7 +2361,7 @@ Public Function loadLogWritersFromJson(context As String) As Variant
 	Catch
 		Error 1502, "Invalid JSON string or file"
 	End Try
-
+	
 	Set root = parser.getRootObject()
 	If (Not root.isArray()) Then
 		Error 1503, "JSON string or file must be an array"
@@ -2491,12 +2491,13 @@ End Function
 
 	Function parseLogLevel(level As String) As Integer
 		Select Case level
-			Case "{{LEVEL_TRACE}}": Return 1
-			Case "{{LEVEL_DEBUG}}": Return 2
-			Case "{{LEVEL_INFO}}": Return 4
-			Case "{{LEVEL_WARN}}": Return 8
-			Case "{{LEVEL_ERROR}}": Return 16
-			Case "{{LEVEL_FATAL}}": Return 32
+			Case "{{NO_LOGGING}}": Return NO_LOGGING
+			Case "{{LEVEL_TRACE}}": Return LOG_TRACE
+			Case "{{LEVEL_DEBUG}}": Return LOG_DEBUG
+			Case "{{LEVEL_INFO}}": Return LOG_INFO
+			Case "{{LEVEL_WARN}}": Return LOG_WARN
+			Case "{{LEVEL_ERROR}}": Return LOG_ERROR
+			Case "{{LEVEL_FATAL}}": Return LOG_FATAL
 			Case Else: Error 1503, "Invalid log level: " & level
 		End Select
 	End Function
