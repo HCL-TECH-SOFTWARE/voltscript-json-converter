@@ -28,7 +28,7 @@ Class Laureate
 End Class
 
 Sub Initialize
-    Call sample1()
+        Call sample1()
 End Sub
 
 Sub sample1()
@@ -42,7 +42,7 @@ Sub sample1()
 
     Dim helper as new JsonConversionHelper()
     Call helper.withCustomConverter("firstname", setterConverter)
-    Call helper.failSilently()
+    helper.suppressErrors = True
 
     Dim laureates as Variant
     laureates = helper.fromJsonString(json, "Laureate", "deser-30")

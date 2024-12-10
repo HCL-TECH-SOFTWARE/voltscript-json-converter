@@ -30,6 +30,7 @@ Use "../test/CustomFunctionTest"
 Use "../test/CustomGetterTest"
 Use "../test/CustomSetterTest"
 Use "../test/LogWritersTest"
+Use "../test/ErrorTests"
 
 Sub Initialize
     Dim result as Boolean
@@ -110,6 +111,11 @@ Sub Initialize
     If lastResult then tot+= 16448
     result = result And lastResult
     totExp += 16448
+
+    lastResult = runErrorTests()
+    If lastResult then tot+= 32896
+    result = result And lastResult
+    totExp += 32896
 
     If result Then
         Print ""

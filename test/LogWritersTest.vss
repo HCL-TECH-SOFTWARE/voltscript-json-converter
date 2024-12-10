@@ -112,6 +112,8 @@ Function testJsonLoading(testRunner as TestRunner) as Boolean
         End If
     End Try
 
+    Call globalLogSession.reset()
+
     jsonStr = |[{"writerClass":"BaseLogWriter","writerFilePath":"../libs/VoltScriptLogging","constructorOrder":["label","minLevel","maxLevel","formatter"],"constructorArgs":{"label":"base writer","minLevel":1,"maxLevel":32,"formatter":"{{MESSAGE}}"}}]|
     Call testSuite.describe("Test loading valid JSON")
     Try
@@ -125,6 +127,8 @@ Function testJsonLoading(testRunner as TestRunner) as Boolean
         Call testSuite.addResult(False, "Unexpected error: " & Error())
     End Try
 
+    Call globalLogSession.reset()
+
     jsonStr = |[{"writerClass":"BaseLogWriter","writerFilePath":"../libs/VoltScriptLogging","constructorOrder":["label","minLevel","maxLevel","formatter"],"constructorArgs":{"label":"base writer","minLevel":"{{LEVEL_TRACE}}","maxLevel":"{{LEVEL_FATAL}}","formatter":"{{MESSAGE}}"}}]|
     Call testSuite.describe("Test loading valid JSON with level enum")
     Try
@@ -136,6 +140,8 @@ Function testJsonLoading(testRunner as TestRunner) as Boolean
         Call testSuite.addResult(False, "Unexpected error: " & Error())
     End Try
 
+    Call globalLogSession.reset()
+
     jsonStr = |[{"writerClass":"SimpleLogWriter","writerFilePath":"../test/LogWritersTest","constructorOrder":[],"constructorArgs":{}}]|
     Call testSuite.describe("Test loading valid JSON with no constructor args")
     Try
@@ -145,6 +151,8 @@ Function testJsonLoading(testRunner as TestRunner) as Boolean
     Catch
         Call testSuite.addResult(False, "Unexpected error: " & Error())
     End Try
+
+    Call globalLogSession.reset()
 
     Return testSuite.ranSuccessfully()
 End Function
