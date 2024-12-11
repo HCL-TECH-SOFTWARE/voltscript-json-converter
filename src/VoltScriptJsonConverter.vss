@@ -304,7 +304,6 @@ Public Class JsonCustomConstructor As AbstractJsonConstructor
 					Call extractParam(source, i, currParam, converters)
 					Call source.removeChild(currParam.label)
 				End Select
-
 			Next
 		Catch
 			Call getErrorSession().createErrorEntry(LOG_ERROR)
