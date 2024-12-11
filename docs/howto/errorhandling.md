@@ -24,7 +24,7 @@ The intention when adding error handling to VoltScript JSON Converter has been t
 
 But remember that first point, to process as much of the JSON as possible. That changes how an error thrown from invalid constructor code should be handled when converting JSON objects to VoltScript objects.
 
-```mermaid
+``` mermaid
 flowchart TD
 A([Start]) --> B(Process JSON array)
 B --> C(Process JSON Object)
@@ -32,13 +32,13 @@ C --> D(Create VoltScript object)
 D --> E{Error encountered}
 E -- No --> F(Deserialize properties)
 F --> G{More objects?}
-G -- Yes --> B
+G -- Yes --> C
 E -- Yes --> H(Throw error)
 H --> J(Create custom ErrorEntry<BR/>logging array index)
 J --> K(Set Variant index to Nothing)
 K --> G
-G -- No -> L{Is suppressErrors False}
-L -- No -> M([Return Variant array])
+G -- No --> L{Is suppressErrors False}
+L -- No --> M([Return Variant array])
 L -- Yes --> N{Were there errors?}
 N -- No --> M
 N -- Yes --> O([Throw error])
