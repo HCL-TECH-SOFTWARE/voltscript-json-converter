@@ -49,11 +49,17 @@
             "url": "https://community.hclvoltmx.com/marketplace"
         }
     ],
-    "testDependencies": [
+    "dependencies": [
         {
             "library": "voltscript-testing",
             "version": "latest",
             "module": "VoltScriptTesting.vss",
+            "repository": "hcl-github"
+        },
+        {
+            "library": "voltscript-logging",
+            "version": "latest",
+            "module": "VoltScriptLogging.vss",
             "repository": "hcl-github"
         }
     ],

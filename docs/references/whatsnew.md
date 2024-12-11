@@ -6,6 +6,14 @@ The section provides information on the latest features, improvements, and resol
 !!! note "Important"
     - Items marked in <span style="color:red">**red**</span> are API changes that may impact your applications and should be reviewed before upgrading.
 
+???+ info "v1.0.5 - What's new or changed"
+
+    ## v 1.0.5
+    **Improvements**
+
+    - Add function to load LogWriters from a file.
+    - Add VoltScriptLogging to VoltScript JSON Converter.
+
 ???+ info "v1.0.4 - What's new or changed"
 
     ## v1.0.4

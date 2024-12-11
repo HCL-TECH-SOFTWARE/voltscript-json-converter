@@ -71,7 +71,7 @@ Function runComplexPersonTest() as Boolean
         Dim serializeSuite as New TestSuite("Test Person Class serialization")
         Call testRunner.addTestSuite(serializeSuite)
         Call serializeSuite.describe("Serialization")
-        'Call helper.enableDebug()
+        ' Call helper.enableDebug()
         Call helper.withScalarConverter("firstName").withScalarConverter("lastName")
         Dim petHelper as New JsonConversionHelper()
         Call petConverter.withHelper(petHelper.withScalarConverter("name").withScalarConverter("type"))
@@ -99,7 +99,7 @@ Function testDeserializationC(testSuite as TestSuite, testObj as PersonC)
     Call testSuite.describe("Test first pet type").assertIs("PetC", testObj.pets(0))
     Call testSuite.describe("Test first pet name").assertEqualsString("Peter", testObj.pets(0).name, false)
     Call testSuite.describe("Test second pet name").assertEqualsString("Benjamin", testObj.pets(1).name, false)
-    Call testSuite.describe("Test first pet type").assertEqualsString("Guinea Pig", testObj.pets(0).type, false)
+    Call testSuite.describe("Test second pet type").assertEqualsString("Guinea Pig", testObj.pets(0).type, false)
 
 getOut:
     Exit Function

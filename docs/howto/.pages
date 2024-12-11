@@ -4,3 +4,4 @@ nav:
     - Serialization: serialization
     - troubleshooting.md
     - archipelago.md
+    - errorhandling.md

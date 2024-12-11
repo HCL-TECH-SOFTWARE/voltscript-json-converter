@@ -24,7 +24,7 @@ Call setterConverter.forSetter("setName")._
     withSiblingParam("surname", "")
 ```
 
-First, you instantiate the JsonSetterConverter. On the next line, you map it to the `setName()` function. Then you need to tell it how to find the parameters. The first parameter is the "firstname" element in the JSON. You will bind the JsonSetterConverter to this JSON element, so you need to pass the element's value with `withValueParam()`. The second parameter is the "surname" element adjacent to `firstname`, so you use `withSiblingParam()` to pull in that element's value, with a default value of `""`. 
+First, you instantiate the JsonSetterConverter. On the next line, you map it to the `setName()` function. Then you need to tell it how to find the parameters. The first parameter is the "firstname" element in the JSON. You will bind the JsonSetterConverter to this JSON element, so you need to pass the element's value with `withValueParam()`. The second parameter is the "surname" element adjacent to `firstname`, so you use `withSiblingParam()` to pull in that element's value, with a default value of `""`.
 
 You then need to pass the converter to the helper.
 
@@ -33,7 +33,7 @@ Dim helper as new JsonConversionHelper()
 Call helper.withCustomConverter("firstname", setterConverter)
 ```
 
-You also need to ignore the "surname" label, because you are handling it in the jsonSetterConverter. This can be done in two ways, calling `helper.ignoreLabel("surname")` or suppressing errors with `helper.failSilently()`.
+You also need to ignore the "surname" label, because you are handling it in the jsonSetterConverter. This can be done in two ways, calling `helper.ignoreLabel("surname")` or suppressing errors with `helper.suppressErrors = True`.
 
 Finally, run the conversion.
 

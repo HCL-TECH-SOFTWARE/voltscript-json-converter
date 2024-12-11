@@ -15,7 +15,7 @@
 Option Public
 Option Declare
 
-' Modify use statement as appropriate for your environent to point to relative path
+' Modify use statement as appropriate for your environment to point to relative path
 Use "../../../src/VoltScriptJsonConverter" 
 
 Class Person

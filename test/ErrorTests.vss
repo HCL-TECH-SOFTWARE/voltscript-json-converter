@@ -1,0 +1,268 @@
+%REM
+	Copyright 2022-2024 HCL America, Inc.
+	Licensed under the Apache License, Version 2.0 (the "License"); 
+	you may not use this file except in compliance with the License. 
+	You may obtain a copy of the License at
+
+	http://www.apache.org/licenses/LICENSE-2.0
+
+	Unless required by applicable law or agreed to in writing, 
+	software distributed under the License is distributed on an "AS IS" BASIS, 
+	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
+	See the License for the specific language governing permissions and limitations under the License	
+%END REM
+
+Option Public
+Option Declare
+Use "../src/VoltScriptJsonConverter"
+Use "../libs/VoltScriptTesting"
+
+Private Const RELATIVE_PATH_PREFIX = "../test/"
+
+Class BasicErrorClass
+
+	Public firstName as String
+	Public lastName as String
+	Public age as Integer
+
+End Class
+
+Class FullConstructorClass
+
+	Private firstName as String
+	Private lastName as String
+	Private age as Integer
+
+	Sub New(fName as String, lName as String, a as Integer)
+		Me.firstName = fName
+		Me.lastName = lName
+		Me.age = a
+	End Sub
+
+End Class
+
+Class LogValidator as BaseLogWriter
+
+	Public expected as Variant
+
+	Sub New(), BaseLogWriter("LogValidator", LOG_DEBUG, LOG_ERROR, "{{MESSAGE}}")
+	End Sub
+
+	Sub outputMessage(msg as String)
+		
+	End Sub
+
+	Function getUnexpectedMessage() as String
+		Dim elem as Integer
+		Dim temp as variant
+		Dim logEntry as LogEntry
+		temp = globalLogSession.entryIDs	' Need to cast before doing ForAll
+		If Isempty(temp) Then
+			Return "No messages logged"
+		End If
+		ForAll msg in temp
+			Set logEntry = globalLogSession.getLogEntryByID(CStr(msg))
+			If logEntry.message Like expected(elem) & "*" Then
+				elem++
+			Else
+				Return logEntry.message
+			End If
+		End ForAll
+		Return ""
+	End Function
+
+End Class
+
+%REM
+	The intention of logging is:
+	## When parsing a single object
+		- Errors in constructor always throw an error
+		- Errors in parsing properties throw errors unless suppressErrors is set
+	## When parsing an array
+		- Errors are thrown at the end of the array, if suppressErrors is not set
+		- Is suppressErrors is set, errors in constructor add error to ErrorSession, add an empty object to the array, 
+			and continue
+%END REM
+
+Function runErrorTests() as Boolean
+
+	Dim result as Boolean
+	Dim testRunner as New TestRunner("Error Tests")
+	
+    Call testRunner.setOutputFormat("BOTH")
+	Call getErrorSession().reset()
+	Call globalLogSession.reset()
+
+	result = testNoArgsConstructor(testRunner)
+
+	Call getErrorSession().reset()
+	Call globalLogSession.reset()
+	result = result And testArgsConstructor(testRunner)
+
+    Return result
+End Function
+
+Function testNoArgsConstructor(testRunner as TestRunner) as Boolean
+
+	Dim testSuite as New TestSuite("Test Basic Class Errors")
+	Call testRunner.addTestSuite(testSuite)
+	
+	Dim helper as new JsonConversionHelper
+	Dim json as String
+
+	' Test building with a bad property throws an error
+	json = |{"firstName":"John","lastName":"Doe","age":"test"}|
+	Call testSuite.describe("Test no args constructor bad JSON")
+	Try
+		Dim testObj as BasicErrorClass
+		Set testObj = helper.fromJsonString(json, "BasicErrorClass", RELATIVE_PATH_PREFIX & "ErrorTests")
+		Call testSuite.addResult(False, "Building with a bad property worked")
+	Catch
+		Call testSuite.addResult(True, "")
+		Call testSuite.describe("verify error message").assertEqualsString("Errors occurred during deserialization, see log for more details", Error(), True)
+	End Try
+
+	' Check no object returned and age is failure
+	Dim logValidator as New LogValidator()
+	Call testSuite.describe("Check testObj is Nothing").assertTrue(testObj is Nothing)
+	Call testSuite.describe("Check errors").assertEqualsInteger(1, getErrorSession().errorCount)
+	ReDim logValidator.expected(0)
+	logValidator.expected(0) = "Error 1500, Cannot set age to extracted value: test"
+	Call testSuite.describe("Check for unexpected bad messages").assertEqualsString("", logValidator.getUnexpectedMessage(), False)
+
+	Call getErrorSession().reset()
+	Call globalLogSession.reset()
+
+	' Test building with a bad property and suppress errors completes
+	Call testSuite.describe("Test no args constructor with suppressErrors")
+	helper.suppressErrors = True
+	Try
+		Set testObj = helper.fromJsonString(json, "BasicErrorClass", RELATIVE_PATH_PREFIX & "ErrorTests")
+		Call testSuite.addResult(True, "")
+	Catch
+		Call testSuite.addResult(False, "Failed with " & Error() & ":" & Erl())
+	End Try
+
+	' Verify testObj created with correct values and default age, no errors
+	Call testSuite.describe("Check testObj created").assertTrue(Not testObj is Nothing)
+	Call testSuite.describe("Check no errors").assertEqualsInteger(0, getErrorSession().errorCount)
+	Call testSuite.describe("Check firstName").assertEqualsString("John", testObj.firstName, True)
+	Call testSuite.describe("Check lastName").assertEqualsString("Doe", testObj.lastName, True)
+	Call testSuite.describe("Check age").assertEqualsInteger(0, testObj.age)
+
+	helper.suppressErrors = False
+	json = |[{"firstName":"John","lastName":"Doe","age":"test"},{"firstName":"Jane","lastName":"Doe","age": 40}]|
+	Call testSuite.describe("Test no args constructor bad JSON element in array")
+	Dim objects as Variant
+	Try
+		objects = helper.fromJsonString(json, "BasicErrorClass", RELATIVE_PATH_PREFIX & "ErrorTests")
+		Call testSuite.addResult(False, "Building with a bad constructor worked")
+	Catch
+		Call testSuite.addResult(True, "")
+		Call testSuite.describe("Check error is for array").assertEqualsString("Errors occurred during deserialization of array, see log for more details", Error(), True)
+	End Try
+
+	Call testSuite.describe("Check objects is empty array").assertTrue(IsEmpty(objects))
+	Call testSuite.describe("Check two errors").assertEqualsInteger(2, getErrorSession().errorCount)
+	ReDim logValidator.expected(1)
+	logValidator.expected(0) = "Error 1500, Cannot set age to extracted value: test"
+	logValidator.expected(1) = |Error 1400, Error processing (0): {"age":"test","f - Errors occurred during deserialization, see log for more details|
+	Call testSuite.describe("Check for unexpected bad messages").assertEqualsString("", logValidator.getUnexpectedMessage(), False)
+
+	Call getErrorSession().reset()
+	Call globalLogSession.reset()
+
+	helper.suppressErrors = True
+	Call testSuite.describe("Test no args constructor bad JSON element in array with suppressErrors")
+	Try
+		objects = helper.fromJsonString(json, "BasicErrorClass", RELATIVE_PATH_PREFIX & "ErrorTests")
+		Call testSuite.addResult(True, "")
+	Catch
+		Call testSuite.addResult(False, "Suppress errors still threw error: " & Error() & ":" & Erl())
+	End Try
+
+	Call testSuite.describe("Check UBound of array is 1").assertEqualsInteger(1, UBound(objects))
+	Call testSuite.describe("Check element 1 is BasicErrorClass").assertIs("BasicErrorClass", objects(0))
+	Call testSuite.describe("Check element 2 is a BasicErrorClass").assertIs("BasicErrorClass", objects(1))
+	Call testSuite.describe("Check element 1 age is 0").assertEqualsInteger(0, objects(0).age)
+	Call testSuite.describe("Check element 2 age is 40").assertEqualsInteger(40, objects(1).age)
+
+	Return testSuite.ranSuccessfully()
+End Function
+
+Function testArgsConstructor(testRunner as TestRunner)
+
+	Dim testSuite as New TestSuite("Test Simple Args Class Error")
+	Call testRunner.addTestSuite(testSuite)
+
+	Dim personConstructor as New JsonCustomConstructor()
+	Call personConstructor.withParam("firstName", "").withParam("lastName", "").withParam("age", 0)
+	
+	Dim helper as new JsonConversionHelper
+	Dim json as String
+
+	' Test building with a bad constructor throws an error
+	json = |{"firstName":"John","lastName":"Doe","age":"test"}|
+	Call testSuite.describe("Test no args constructor bad JSON")
+	Try
+		Dim testObj as BasicErrorClass
+		Set testObj = helper.withCustomConstructor(personConstructor).fromJsonString(json, "FullConstructorClass", RELATIVE_PATH_PREFIX & "ErrorTests")
+		Call testSuite.addResult(False, "Building with a bad constructor worked")
+	Catch
+		Call testSuite.addResult(True, "")
+		Call testSuite.describe("Check error is on constructing").assertTrue(Error() Like "Unable to create FullConstructorClass using custom constructor*")
+	End Try
+
+	' Test building with a bad constructor and suppress errors still throws error
+	Call testSuite.describe("Test args constructor with suppressErrors")
+	helper.suppressErrors = True
+	Try
+		Set testObj = helper.withCustomConstructor(personConstructor).fromJsonString(json, "FullConstructorClass", RELATIVE_PATH_PREFIX & "ErrorTests")
+		Call testSuite.addResult(False, "Building with a bad constructor worked")
+	Catch
+		Call testSuite.addResult(True, "")
+		Call testSuite.describe("Check error is on constructing with suppressErrors").assertTrue(Error() Like "Unable to create FullConstructorClass using custom constructor*")
+	End Try
+	
+	Call getErrorSession().reset()
+	Call globalLogSession.reset()
+
+	helper.suppressErrors = False
+	json = |[{"firstName":"John","lastName":"Doe","age":"test"},{"firstName":"Jane","lastName":"Doe","age": 40}]|
+	Call testSuite.describe("Test no args constructor bad JSON element in array")
+	Dim objects as Variant
+	Try
+		objects = helper.withCustomConstructor(personConstructor).fromJsonString(json, "FullConstructorClass", RELATIVE_PATH_PREFIX & "ErrorTests")
+		Call testSuite.addResult(False, "Building with a bad constructor worked")
+	Catch
+		Call testSuite.addResult(True, "")
+		Call testSuite.describe("Check error is for array").assertEqualsString("Errors occurred during deserialization of array, see log for more details", Error(), True)
+	End Try
+
+	Call testSuite.describe("Check objects is empty array").assertTrue(IsEmpty(objects))
+	Call testSuite.describe("Check one error").assertEqualsInteger(1, getErrorSession().errorCount)
+	Dim logValidator as New LogValidator()
+	ReDim logValidator.expected(1)
+	logValidator.expected(0) = "Error 1400, Error processing (0): {} - Unable to create FullConstructorClass using custom constructor"
+	Call testSuite.describe("Check for unexpected bad messages").assertEqualsString("", logValidator.getUnexpectedMessage(), False)
+
+	Call getErrorSession().reset()
+	Call globalLogSession.reset()
+
+	helper.suppressErrors = True
+	Call testSuite.describe("Test args constructor bad JSON element in array")
+	Try
+		objects = helper.withCustomConstructor(personConstructor).fromJsonString(json, "FullConstructorClass", RELATIVE_PATH_PREFIX & "ErrorTests")
+		Call testSuite.addResult(True, "")
+	Catch
+		Call testSuite.addResult(False, "Suppress errors still threw error: " & Error() & ":" & Erl())
+	End Try
+
+	Call testSuite.describe("Check UBound of array is 1").assertEqualsInteger(1, UBound(objects))
+	Call testSuite.describe("Check element 1 is Empty").assertTrue(objects(0) is Nothing)
+	Call testSuite.describe("Check element 2 is a FullConstructorClass").assertIs("FULLCONSTRUCTORCLASS", objects(1))
+	Call testSuite.describe("Check errors logged is 1").assertEqualsInteger(1, getErrorSession().errorCount)
+	Call testSuite.describe("Check for unexpected bad messages when suppressErrors").assertEqualsString("", logValidator.getUnexpectedMessage(), False)
+	
+	Return testSuite.ranSuccessfully()
+End Function

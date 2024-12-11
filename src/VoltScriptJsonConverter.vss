@@ -25,6 +25,9 @@ The global variables exist so Execute statements can be used. Do not set or read
 
 Option Declare
 Option Public
+Use "../libs/VoltScriptLogging"
+Use "../libs/VoltScriptTesting"
+
 UseVSE "*JsonVSE"
 
 
@@ -186,12 +189,15 @@ Public Class JsonCustomConstructor As AbstractJsonConstructor
 		Call samsaraTouchFunction(getMeTypeForDebug & "createObject")
 
 		Dim execString as String
+        Dim sourceVal as String
 		Dim i as Integer
 		DebugPrint_Samsara getMeTypeForDebug & "Trying to create new " & libName & ":" & className
 
 		Try
 			DebugPrint_Samsara getMeTypeForDebug & "Using custom params constructor"
 			DebugPrint_Samsara getMeTypeForDebug & "Extracting parameter values from source"
+			If source is Nothing Then Set source = New JsonObject(False)
+            sourceVal = source.shortValue
 			Call loadParamValuesFromJsonObject(source, converters)
 
 			DebugPrint_Samsara getMeTypeForDebug & "Building execute statement"
@@ -205,7 +211,7 @@ Public Class JsonCustomConstructor As AbstractJsonConstructor
 			Set createObject = samsaraObj
 			DebugPrint_Samsara getMeTypeForDebug & "Created " & className & " with custom args constructor"
 		Catch
-			Error 1400, getMeTypeForDebug & "Unable to create " & className & " using constructor " & execString & ": " & SamsaraErrorMsg()
+			Error 1400, "Unable to create " & className & " using custom constructor " & execString & " from " & sourceVal
 		Finally
 			Call Me.cleanup()
 		End Try
@@ -298,10 +304,9 @@ Public Class JsonCustomConstructor As AbstractJsonConstructor
 					Call extractParam(source, i, currParam, converters)
 					Call source.removeChild(currParam.label)
 				End Select
-
 			Next
 		Catch
-			Error 1501, SamsaraErrorMsg()
+			Call getErrorSession().createErrorEntry(LOG_ERROR)
 		End Try
 	End Sub
 
@@ -400,6 +405,7 @@ Public Class AbstractJsonConverter
 
 	'{{SETI_AUTHOR_CODE_AbstractJsonConverter_Private_Variables
 	Private customPropertyName as String
+	Private mainHelper as JsonConversionHelper
 	'}}
 
 	'{{SETI_AUTHOR_CODE_AbstractJsonConverter_Private_Properties
@@ -452,13 +458,10 @@ Public Class AbstractJsonConverter
 			DebugPrint_Samsara getMeTypeForDebug() & execString
 			Execute(execString)
 			DebugPrint_Samsara getMeTypeForDebug & "extracted " & propName & " as " & TypeName(samsaraVal)
-			Call serializeToProperty(toJson(samsaraVal), target)
+			Call serializeFromProperty(toJson(samsaraVal), target)
 			DebugPrint_Samsara getMeTypeForDebug() & |Passed | & propName & | to | & Me.labelName
 		Catch
-			Dim msg as String
-			msg = getMeTypeForDebug() & "Cannot set " & labelName & " to extracted value: " & SamsaraErrorMsg() & chr(10)
-			msg = msg & GetThreadInfo(12)
-			Error 1500, msg
+			If Not me.mainHelper.suppressErrors Then Call getErrorSession().createCustomErrorEntry("Cannot set " & labelName & " to extracted value: " & samsaraVal, 1500, Erl(), LOG_ERROR)
 		Finally
 			Call Me.cleanup()
 		End Try
@@ -586,6 +589,23 @@ If not used, the code will look for a property that matches the label in the JSO
 
 	End Function
 
+
+	%REM
+		Function fromHelper 
+		Passes the current helper into the converter, so we know whether or not to suppress errors. <b>NOTE:</b> This method is called from the JsonConversionHelper, you should not call it in your own custom code.
+	
+		@param	helper 	Helper from which the converter is being used
+
+		@return	AbstractJsonConverter
+	%END REM
+	Public Function fromHelper(helper As JsonConversionHelper) As AbstractJsonConverter 
+		'{{SETI_AUTHOR_CODE_fromHelper_implementation
+		Set me.mainHelper = helper
+		Return Me
+		'}}
+
+	End Function
+
 	'{{SETI_AUTHOR_CODE_AbstractJsonConverter_Private_Methods
 	%REM
 		Deserializes a JSON object into a specific property name in a holder object
@@ -624,11 +644,8 @@ If not used, the code will look for a property that matches the label in the JSO
 			Execute execString
 			DebugPrint_Samsara getMeTypeForDebug() & "Executed " & execString
 		Catch
-			Dim msg as String
-			msg = getMeTypeForDebug() & "Cannot set " & propertyName & " to extracted value: " & SamsaraErrorMsg()
-			msg = msg & GetThreadInfo(12)
-			Error 1500, msg
-		Finally
+            If Not me.mainHelper.suppressErrors Then Call getErrorSession().createCustomErrorEntry("Cannot set " & propertyName & " to extracted value: " & samsaraVal, 1500, Erl(), LOG_ERROR)
+        Finally
 			Call Me.cleanup()
 		End Try
 	End Sub
@@ -638,15 +655,15 @@ If not used, the code will look for a property that matches the label in the JSO
 		@param extracted		Variant JSON Object, Array or scalar
 		@param target			JSON Object into which to put the extracted value
 	%END REM
-	Private Sub serializeToProperty(extracted As Variant, target As JsonObject)
-		DebugPrint_Samsara getMeTypeForDebug & "serializing " & Typename(extracted)
+	Private Sub serializeFromProperty(extracted As Variant, target As JsonObject)
+		DebugPrint_Samsara getMeTypeForDebug & "serializing " & TypeName(extracted)
+		Dim temp as JsonObject
 		If (TypeName(extracted) = "JSONOBJECT") Then
-			DebugPrint_Samsara getMeTypeForDebug & "serializing JsonObject, calling insertObject"
-			Dim jsonObj as JsonObject
-			Set jsonObj = extracted
-			Call target.insertObject(jsonObj, Me.labelName)
+			' JsonObject in a Variant needs casting to explicit JsonObject before being passed to insertValue
+			' Otherwise it throws "Value is not a supported data type"
+			Set temp = extracted
+			Call target.insertValue(Me.labelName, temp)
 		Else
-			DebugPrint_Samsara getMeTypeForDebug & "serializing " & TypeName(extracted) & ", calling insertValue"
 			Call target.insertValue(Me.labelName, extracted)
 		End If
 	End Sub
@@ -864,7 +881,7 @@ Public Class JsonGetterConverter As AbstractJsonFunctionConverter
 			DebugPrint_Samsara GetThreadInfo(12)
 			Dim msg as String
 			msg = Chr(10) & Chr(9) & getMeTypeForDebug() & "Cannot call getter " & Me.getterName & ": " & Error() & " on line " & Erl
-			Error 1500, msg
+			If Not me.mainHelper.suppressErrors Then Call getErrorSession().createCustomErrorEntry(msg, 1500, Erl(), LOG_ERROR)
 		Finally
 			Call Me.cleanup()
 		End Try
@@ -923,7 +940,7 @@ Public Class JsonGetterConverter As AbstractJsonFunctionConverter
 
 			Next
 		Catch
-			Error 1501, SamsaraErrorMsg()
+			If Not me.mainHelper.suppressErrors Then Call getErrorSession().createErrorEntry(LOG_ERROR)
 		End Try
 	End Sub
 
@@ -1010,8 +1027,10 @@ Public Class JsonSetterConverter As AbstractJsonFunctionConverter
 		Catch
 			DebugPrint_Samsara GetThreadInfo(12)
 			Dim msg as String
-			msg = Chr(10) & Chr(9) & getMeTypeForDebug() & "Cannot call setter " & Me.setterName & ": " & Error() & " on line " & Erl
-			Error 1500, msg
+			If Not me.mainHelper.suppressErrors Then
+				msg = Chr(10) & Chr(9) & getMeTypeForDebug() & "Cannot call setter " & Me.setterName & ": " & Error() & " on line " & Erl
+				Call getErrorSession().createCustomErrorEntry(msg, 1500, Erl(), LOG_ERROR)
+			End If
 		Finally
 			Call Me.cleanup()
 		End Try
@@ -1106,7 +1125,7 @@ The value will be added to the end of the params array, as the nth parameter to 
 
 			Next
 		Catch
-			Error 1501, SamsaraErrorMsg()
+			If Not me.mainHelper.suppressErrors Then Call getErrorSession.createErrorEntry(LOG_ERROR)
 		End Try
 	End Sub
 	'}} 
@@ -1186,8 +1205,10 @@ Public Class JsonArrayConverter As AbstractJsonConverter
 		Catch
 			DebugPrint_Samsara GetThreadInfo(12)
 			Dim msg as String
-			msg = Chr(10) & Chr(9) & getMeTypeForDebug() & "Cannot convert " & arrayName & ":" & Error() & " on line " & Erl
-			Error 1500, msg
+			If Not me.mainHelper.suppressErrors Then
+				msg = Chr(10) & Chr(9) & getMeTypeForDebug() & "Cannot convert " & arrayName & ":" & Error() & " on line " & Erl
+				Call getErrorSession().createCustomErrorEntry(msg, 1500, Erl(), LOG_ERROR)
+			End If
 		End Try
 		'}}
 
@@ -1317,7 +1338,7 @@ Public Class JsonBasicObjectArrayConverter As AbstractJsonConverter
 		Function toJson 
 		Overridden function. The toJson method is called from AbstractJsonConverter's serialize method.
 	
-		@param	source 	Variant cotaining the property to be serialized
+		@param	source 	Variant containing the property to be serialized
 
 		@return	Variant
 	%END REM
@@ -1326,7 +1347,7 @@ Public Class JsonBasicObjectArrayConverter As AbstractJsonConverter
 		Dim helper as New JsonConversionHelper()
 		Dim jsonObj as JsonObject
 		If (Me.helper Is Nothing) Then
-			Error 1400, "Cannot serialize properties without a helper with converters"
+			Error 1400, "Serializing properties requires a helper with converters"
 		End If
 		If IsEmpty(source) Then Return New JsonObject(True)
 		Set jsonObj = Me.helper.toJson(source)
@@ -1347,7 +1368,27 @@ Public Class JsonBasicObjectArrayConverter As AbstractJsonConverter
 	Public Function withHelper(helper As JsonConversionHelper) As JsonBasicObjectArrayConverter 
 		'{{SETI_AUTHOR_CODE_withHelper_implementation
 		Set Me.helper = helper
+		If me.mainHelper Is Nothing Then Return Me
+		If me.mainHelper.suppressErrors Then me.helper.suppressErrors = True
 		Set withHelper = Me
+		'}}
+
+	End Function
+
+
+	%REM
+		Function fromHelper 
+		Overrides base function
+	
+		@param	helper 	Helper from which the converter is being used
+
+		@return	AbstractJsonConverter
+	%END REM
+	Public Function fromHelper(helper As JsonConversionHelper) As AbstractJsonConverter 
+		'{{SETI_AUTHOR_CODE_fromHelper_implementation
+		Set me.mainHelper = helper
+		If (Not Me.helper Is Nothing) Then Me.helper.suppressErrors = Me.mainHelper.suppressErrors
+		Return Me
 		'}}
 
 	End Function
@@ -1428,6 +1469,8 @@ Public Class JsonBasicObjectConverter As AbstractJsonConverter
 	Public Function withHelper(helper As JsonConversionHelper) As JsonBasicObjectConverter 
 		'{{SETI_AUTHOR_CODE_withHelper_implementation
 		Set Me.helper = helper
+		If me.mainHelper Is Nothing Then Return Me
+		If Me.mainHelper.suppressErrors Then me.helper.suppressErrors = True
 		Set withHelper = Me
 		'}}
 
@@ -1448,10 +1491,28 @@ Public Class JsonBasicObjectConverter As AbstractJsonConverter
 		Dim jsonObj as JsonObject
 		DebugPrint_Samsara getMeTypeForDebug & "Running toJson"
 		If (Me.helper Is Nothing) Then
-			Error 1400, "Cannot serialize properties without a helper with converters"
+			Error 1400, "Serializing properties requires a helper with converters"
 		End If
 		Set jsonObj = Me.helper.toJson(source)
 		Set toJson = jsonObj
+		'}}
+
+	End Function
+
+
+	%REM
+		Function fromHelper 
+		Overrides base method
+	
+		@param	helper 	Helper from which the converter is being used
+
+		@return	AbstractJsonConverter
+	%END REM
+	Public Function fromHelper(helper As JsonConversionHelper) As AbstractJsonConverter 
+		'{{SETI_AUTHOR_CODE_fromHelper_implementation
+		Set me.mainHelper = helper
+		If (Not Me.helper Is Nothing) Then Me.helper.suppressErrors = Me.mainHelper.suppressErrors
+		Return Me
 		'}}
 
 	End Function
@@ -1630,10 +1691,35 @@ Public Class JsonConversionHelper
 	'{{SETI_AUTHOR_CODE_JsonConversionHelper_Private_Variables
 	Private converters List As AbstractJsonConverter
 	Private constructor as JsonCustomConstructor
-	Private THROW_ERRORS as Boolean
+	Private m_suppressErrors as Boolean
 	Private mainHolder as JsonConversionHolder
 	Private labelsToIgnore() as String
 	'}}
+
+
+	%REM
+		Property suppressErrors 
+
+		@return	Boolean
+	%END REM
+	Public Property Get suppressErrors As Boolean 
+		'{{SETI_AUTHOR_CODE_Get.suppressErrors_implementation
+		Return m_suppressErrors
+		'}}
+
+	End Property
+
+
+	%REM
+		Property suppressErrors 
+
+	%END REM
+	Public Property Set suppressErrors As Boolean 
+		'{{SETI_AUTHOR_CODE_Set.suppressErrors_implementation
+		m_suppressErrors = suppressErrors
+		'}}
+
+	End Property
 
 	'{{SETI_AUTHOR_CODE_JsonConversionHelper_Private_Properties
 	'}}
@@ -1647,7 +1733,6 @@ Public Class JsonConversionHelper
 	Public Sub New() 
 		'{{SETI_AUTHOR_CODE_New_implementation
 		Set mainHolder = New JsonConversionHolder()
-		THROW_ERRORS = true
 		'}}
 
 	End Sub
@@ -1660,9 +1745,6 @@ Public Class JsonConversionHelper
 	%END REM
 	Public Sub Delete() 
 		'{{SETI_AUTHOR_CODE_Delete_implementation
-		If (SAMSARA_DEBUG And Not isEmpty(SamsaraFunctionsTouched)) Then
-			Call DebugPrint_Samsara(Join(ArrayUnique(SamsaraFunctionsTouched), ","))
-		End If
 		Erase converters
 		'}}
 
@@ -1696,19 +1778,6 @@ Public Class JsonConversionHelper
 
 
 	%REM
-		Sub failSilently 
-		Prevents throwing errors if deserialization / serialization fails, instead just aborts settings the properties.
-	
-	%END REM
-	Public Sub failSilently() 
-		'{{SETI_AUTHOR_CODE_failSilently_implementation
-		THROW_ERRORS = False
-		'}}
-
-	End Sub
-
-
-	%REM
 		Function fromJson 
 		Main function to deserialize a JSON object to a VoltScript object.
 	
@@ -1725,9 +1794,13 @@ Public Class JsonConversionHelper
 		Dim children As Variant
 		Dim child As JsonObject
 		Dim elemName As String
+        Dim elemValue as String
 		Dim i As Integer
+		Dim inErrors as Integer
 
 		DebugPrint_Samsara "Processing " & obj.label & " as object"
+
+		inErrors = getErrorSession().errorCount
 
 		If (obj.childCount > 0) Then
 			DebugPrint_Samsara "Children not empty"
@@ -1747,11 +1820,13 @@ Public Class JsonConversionHelper
 				End If
 			End Try
 
+			DebugPrint_Samsara "Parsing manually"
 			children = obj.getchildren()
 			For i = 0 To UBound(children)
 				Set child = children(i) 
 				elemName = child.label
-				DebugPrint_Samsara "Loading " & elemName & ", short value " & child.shortValue
+                elemValue = child.shortValue
+				DebugPrint_Samsara "Loading " & elemName & ", short value " & elemValue
 				If (Not shouldIgnoreLabel(elemName)) Then
 					Try
 						Set converter = getCustomConverter(elemName)
@@ -1765,6 +1840,7 @@ Public Class JsonConversionHelper
 						Else
 							If (child.isArray()) Then
 								Set arrayConverter = new JsonArrayConverter()
+								Call arrayConverter.fromHelper(Me)
 								Call arrayConverter.withCustomConverter(converter).deserialize(mainHolder, child)
 							Else
 								If (child.isObject()) Then
@@ -1773,18 +1849,25 @@ Public Class JsonConversionHelper
 								Else
 									DebugPrint_Samsara |Adding | & elemName & |: | & child.scalarValue
 									Set converter = New JsonScalarConverter()
+									Call converter.fromHelper(Me)
 									Call converter.deserialize(mainHolder, child)
 								End If
 							End If
 						End If
 					Catch
-						If (THROW_ERRORS) Then
-							DebugPrint_Samsara Error()
-							Error 1400, "Error processing " & elemName & ": " & child.shortValue & " - " & Error()
+						If (Not Me.suppressErrors) Then
+							Call getErrorSession().createCustomErrorEntry("Error processing " & elemName & ": " & elemValue & " - " & Error(), 1400, Erl(), LOG_ERROR)
+						Else
+							Call DebugPrint_Samsara(Error$)
 						End If
 					End Try
 				End If
 			Next
+		End If
+
+		If (Not Me.suppressErrors && getErrorSession().errorCount > inErrors) Then
+			Error 1400, "Errors occurred during deserialization, see log for more details"
+			Return Nothing
 		End If
 
 		DebugPrint_Samsara "Finished processing object " & obj.label
@@ -1942,7 +2025,7 @@ Public Class JsonConversionHelper
 		'{{SETI_AUTHOR_CODE_withScalarConverter_implementation
 		Call samsaraTouchFunction("withScalarConverter")
 		Dim converter as New JsonScalarConverter()
-		converter.labelName = labelName
+		converter.fromHelper(Me).labelName = labelName
 		Set converters(labelName) = converter
 		Set withScalarConverter = Me
 		'}}
@@ -1996,7 +2079,7 @@ Public Class JsonConversionHelper
 			Parser.Loadfromjson(source)
 		Catch
 			DebugPrint_Samsara "Bad JSON: " & source
-			Error 1400, "Unable to parse JSON: " & SamsaraErrorMsg()
+			Error 1400, "Unable to parse JSON: Error " & Err & " on line " & Erl
 			Exit Function
 		End Try
 
@@ -2067,11 +2150,14 @@ Public Class JsonConversionHelper
 		Dim tmpArray() as Variant
 		Dim i as Long
 		Dim idxString as String
+		Dim inErrors as Integer
 
-		Try
-			arrayName = array.label
-			children = array.getchildren()
-			For i = 0 to UBound(children)
+		inErrors = getErrorSession().errorCount
+
+		arrayName = array.label
+		children = array.getchildren()
+		For i = 0 to UBound(children)
+			Try
 				idxString =  |(| & i & |)|
 				Set child = children(i)
 				Redim Preserve tmpArray(i)
@@ -2083,14 +2169,18 @@ Public Class JsonConversionHelper
 					Set tmpArray(i) = toObject(child, className, libName)._
 						fromJson(child)
 				End If
-nextElem:
-			Next
 
-			jsonArrayToObjects = tmpArray
-		Catch
-			DebugPrint_Samsara GetThreadInfo(12)
-			Error 1500, SamsaraErrorMsg()
-		End Try
+			Catch
+				Call getErrorSession().createCustomErrorEntry("Error processing " & arrayName & idxString & ": " & child.shortValue & " - " & Error(), 1400, Erl(), LOG_ERROR)
+				Set tmpArray(i) = Nothing
+			End Try
+		Next
+
+		If (Not me.suppressErrors && getErrorSession().errorCount > inErrors) Then
+			Error 1400, "Errors occurred during deserialization of array, see log for more details"
+		End If
+
+		Return tmpArray
 		'}}
 
 	End Function
@@ -2109,7 +2199,7 @@ nextElem:
 	Public Function withCustomConverter(labelName As String, converter As AbstractJsonConverter) As JsonConversionHelper 
 		'{{SETI_AUTHOR_CODE_withCustomConverter_implementation
 		Call samsaraTouchFunction("withCustomConverter")
-		converter.labelName = labelName
+		converter.fromHelper(Me).labelName = labelName
 		Set converters(labelName) = converter
 		Set withCustomConverter = Me
 		'}}
@@ -2187,7 +2277,7 @@ nextElem:
 				DebugPrint_Samsara "Processed " & ListTag(converter)
 			End ForAll
 		Catch
-			Error 1500, SamsaraErrorMsg
+			Call getErrorSession().createErrorEntry(LOG_ERROR)
 		end Try
 
 		Set processObjectToJson = returnObj
@@ -2245,12 +2335,7 @@ End Class
 Public Sub samsaraTouchFunction(functionName As String) 
 	'{{SETI_AUTHOR_CODE_samsaraTouchFunction_implementation
 	If Not SAMSARA_DEBUG Then Exit Sub
-	If (isEmpty(SamsaraFunctionsTouched)) Then
-		Redim SamsaraFunctionsTouched(0)
-	Else
-		Redim Preserve SamsaraFunctionsTouched(UBound(SamsaraFunctionsTouched)+1)
-	End If
-	SamsaraFunctionsTouched(UBound(SamsaraFunctionsTouched)) = functionName
+	Call globalLogSession.createLogEntry(LOG_TRACE, "Touched " & functionName, "")
 	'}}
 
 End Sub
@@ -2265,7 +2350,7 @@ End Sub
 %END REM
 Public Sub DebugPrint_Samsara(msg As String) 
 	'{{SETI_AUTHOR_CODE_DebugPrintSamsara_implementation
-	If SAMSARA_DEBUG Then Print msg
+	If SAMSARA_DEBUG Then Call globalLogSession.createLogEntry(LOG_DEBUG, msg, "")
 	'}}
 
 End Sub
@@ -2318,20 +2403,103 @@ Public Sub extractParam(source As JsonObject, idex As Integer, currParam As Conv
 					DebugPrint_Samsara |Processing with object converter: | & key
 					Error 1400, "Children that are JsonObjects require custom converters - " & key & ", shortValue: " & child.shortValue
 				Else
-					DebugPrint_Samsara |Adding param | & key & |: | & child.scalarValue
+					DebugPrint_Samsara |Adding param | & key & |: | & child.scalarValue & " (" & TypeName(child.scalarValue) & ")"
 					Set converter = New JsonScalarConverter()
 					samsaraParamVals(idex) = converter.fromJson(child)
 				End If
 			End If
 		End If
 	Catch
-		Error 1501, SamsaraErrorMsg
+		Call getErrorSession().createErrorEntry(LOG_ERROR)
 	Finally
 		Set converter = Nothing
 	End Try
 	'}}
 
 End Sub
+
+
+%REM
+	Function loadLogWritersFromJson 
+
+	@param	context 	String of JSON or path to file
+
+	@return	Variant
+	@throws	Invalid JSON string or file 	
+%END REM
+Public Function loadLogWritersFromJson(context As String) As Variant 
+	'{{SETI_AUTHOR_CODE_loadLogWritersFromJson_implementation
+	Dim parser As New JsonParser
+	Dim root As JsonObject
+	Dim childObj as JsonObject
+	Dim writers As Variant
+	Dim logWriter as BaseLogWriter
+	Dim constructor as JsonCustomConstructor
+	Dim constructorArgs as JsonObject
+	Dim argKey as String
+	Dim argVal as Variant
+	Dim logWriterClassName as String
+	Dim logWriterFilePath as String
+
+	Try
+		If (parser.isValidJSON(context)) Then
+			Call parser.loadFromJson(context)
+		Else
+			Call parser.loadFromFile(context)
+		End If
+	Catch
+		Error 1502, "Invalid JSON string or file"
+	End Try
+
+	Set root = parser.getRootObject()
+	If (Not root.isArray()) Then
+		Error 1503, "JSON string or file must be an array"
+	End If
+
+	ForAll child in root.getChildren()
+		Set childObj = child
+		Call validateWriterJson(childObj)
+
+		logWriterClassName = childObj.getChild("writerClass").scalarValue
+		logWriterFilePath = childObj.getChild("writerFilePath").scalarValue
+
+
+		Set constructorArgs = childObj.getChild("constructorArgs")
+        If (constructorArgs.childCount = 0) Then
+            Set constructor = New JsonNoArgsConstructor()
+        Else
+            Set constructor = New JsonCustomConstructor()
+            ForAll arg in childObj.getChild("constructorOrder").getChildren()
+                argKey = arg.scalarValue
+                If constructorArgs.isChild(argKey) Then
+                    argVal = constructorArgs.getChild(argKey).scalarValue
+                    If (CStr(argVal) Like "{{LEVEL_*") Then
+                        Call constructor.withLiteralParam(parseLogLevel(CStr(argVal)))
+                    ElseIf (CStr(argVal) = "{{NO_LOGGING}}") Then
+                        Call constructor.withLiteralParam(0)
+                    Else
+                        Call constructor.withLiteralParam(argVal)
+                    End If
+                Else
+                    Error 1505, "Missing constructor argument: " & CStr(arg.scalarValue)
+                End If
+            End ForAll
+        End If
+        Set logWriter = constructor.createObject(logWriterClassName, logWriterFilePath)
+
+        If (IsEmpty(writers)) Then
+            Redim writers(0)
+        Else
+    		Redim Preserve writers(UBound(writers) + 1)
+        End If
+		Call globalLogSession.addLogWriter(logWriter)
+		Set writers(UBound(writers)) = logWriter
+	End ForAll
+
+	Return writers
+	'}}
+
+End Function
 
 '{{SETI_AUTHOR_CODE_VoltScriptJSONConverter_Private_Methods
 
@@ -2372,10 +2540,54 @@ End Sub
 		samsaraParamVals = innerObj
 	End Sub
 
-	%REM
-		Generates a simple error message
-	%END REM
-	Private Function SamsaraErrorMsg() as String
-		SamsaraErrorMsg = Error() & " on line " & Erl()
+	Private function validateWriterJson(jsonObj as JsonObject)
+		Dim testSuite as New TestSuite("")
+		Dim i as Integer
+		Dim errString as String
+
+		testSuite.suppressReport = True
+		Call testSuite.describe("LogWriter JSON should be object").assertTrue(jsonObj.isObject())
+		Call testSuite.describe("LogWriter has writerClass").assertTrue(jsonObj.isChild("writerClass"))
+		If (jsonObj.isChild("writerClass")) Then
+			Call testSuite.describe("LogWriter has writerClass as string").assertIs("STRING", jsonObj.getChild("writerClass").scalarValue)
+		End If
+		Call testSuite.describe("LogWriter has writerFilePath").assertTrue(jsonObj.isChild("writerFilePath"))
+		if (jsonObj.isChild("writerFilePath")) Then
+			Call testSuite.describe("LogWriter has writerFilePath as string").assertIs("STRING", jsonObj.getChild("writerFilePath").scalarValue)
+		End If
+		Call testSuite.describe("LogWriter has constructorOrder").assertTrue(jsonObj.isChild("constructorOrder"))
+		Call testSuite.describe("LogWriter's constructorOrder should be an array").assertTrue(jsonObj.getChild("constructorOrder").isArray())
+		Call testSuite.describe("LogWriter has constructorArgs").assertTrue(jsonObj.isChild("constructorArgs"))
+		if (jsonObj.isChild("constructorArgs")) Then
+			Call testSuite.describe("LogWriter's constructorArgs should be an object").assertTrue(jsonObj.getChild("constructorArgs").isObject())
+			If (jsonObj.getChild("constructorArgs").childCount > 0) Then
+                ForAll child in jsonObj.getChild("constructorArgs").getChildren()
+                    Call testSuite.describe("LogWriter's constructorArgs " & ++i & " should be a scalar").assertTrue(child.isScalar())
+                End ForAll
+            End If
+		End If
+
+		If Not testSuite.ranSuccessfully() Then
+			errString = "Invalid LogWriter JSON: " & jsonObj.toString(False)
+			ForAll test in testSuite.results
+				If Not test.outcome = "Passed" Then
+					errString = errString & Chr(13) & test.description
+				End If
+			End ForAll
+			Error 1504, errString
+		End If
+	End Function
+
+	Function parseLogLevel(level As String) As Integer
+		Select Case level
+			Case "{{NO_LOGGING}}": Return NO_LOGGING
+			Case "{{LEVEL_TRACE}}": Return LOG_TRACE
+			Case "{{LEVEL_DEBUG}}": Return LOG_DEBUG
+			Case "{{LEVEL_INFO}}": Return LOG_INFO
+			Case "{{LEVEL_WARN}}": Return LOG_WARN
+			Case "{{LEVEL_ERROR}}": Return LOG_ERROR
+			Case "{{LEVEL_FATAL}}": Return LOG_FATAL
+			Case Else: Error 1503, "Invalid log level: " & level
+		End Select
 	End Function
 	'}} 

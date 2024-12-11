@@ -1,0 +1,24 @@
+@startjson
+#highlight "MyWayCoolWriter"/"writerClass"
+#highlight "MyWayCoolWriter"/"writerFilePath"
+#highlight "MyWayCoolWriter"/"constructorArgs"
+#highlight "MyWayCoolWriter"/"constructorOrder"
+{
+    "MyWayCoolWriter": {
+        "writerClass": "BaseLogWriter",
+        "writerFilePath": "./libs/VoltScriptLogging",
+        "constructorArgs": {
+            "label": "SimpleLogWriter",
+            "minLevel": "LOG_ERROR",
+            "maxLevel": "LOG_FATAL",
+            "formatter": "{{MESSAGE}}, logged from {{CALLEELINENUM}}"
+        },
+        "constructorOrder": [
+            "label",
+            "minLevel",
+            "maxLevel",
+            "formatter"
+        ]
+    }
+}
+@endjson

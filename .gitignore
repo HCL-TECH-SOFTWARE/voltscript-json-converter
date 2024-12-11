@@ -5,10 +5,14 @@
 .devcontainer/
 .devcontainer.json
 
+# VS Code
+.vscode/
+
 # VoltScript
 core
 vses
 libs/VoltScriptTesting.vss
+libs/VoltScriptLogging.vss
 *_UNMERGED.vss
 /unit-test-reports/*/
 test/unit-test-reports/

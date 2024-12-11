@@ -1,0 +1,158 @@
+%REM
+	Copyright 2024 HCL America, Inc.
+	Licensed under the Apache License, Version 2.0 (the "License"); 
+	you may not use this file except in compliance with the License. 
+	You may obtain a copy of the License at
+
+	http://www.apache.org/licenses/LICENSE-2.0
+
+	Unless required by applicable law or agreed to in writing, 
+	software distributed under the License is distributed on an "AS IS" BASIS, 
+	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
+	See the License for the specific language governing permissions and limitations under the License	
+%END REM
+
+Option Public
+Option Declare
+Use "../src/VoltScriptJsonConverter"
+
+Private Const RELATIVE_PATH_PREFIX = "../test/"
+
+Function runLogWritersTest as Boolean
+
+    Dim testRunner as New TestRunner("LogWritersTest")
+    Dim result as Boolean
+    
+    result = testJsonLoading(testRunner)
+
+    Return result
+
+End Function
+
+Class SimpleLogWriter as BaseLogWriter
+
+    Sub New(), BaseLogWriter("SimpleLogWriter", LOG_TRACE, LOG_FATAL, "{{MESSAGE}}")
+
+    End Sub
+
+End Class
+
+Function testJsonLoading(testRunner as TestRunner) as Boolean
+
+    Dim testSuite as New TestSuite("JSON Tests")
+    Call testRunner.addTestSuite(testSuite)
+    Dim writers as Variant
+
+    Dim jsonStr as String
+    jsonStr = |{"label":"Bad JSON st...|
+
+    Try
+        Call testSuite.describe("Test loading bad JSON string")
+        Call loadLogWritersFromJson(jsonStr)
+        Call testSuite.addResult(False, "Expected error not thrown")
+    Catch
+        Call testSuite.addResult(True, "")
+        Call testSuite.describe("Check bad string error message").assertEqualsString("Invalid JSON string or file", Error(), True)
+    End Try
+
+    Try
+        Call testSuite.describe("Test loading bad JSON file")
+        Call loadLogWritersFromJson(RELATIVE_PATH_PREFIX & "badLogWriterJson.json")
+        Call testSuite.addResult(False, "Expected error not thrown")
+    Catch
+        Call testSuite.addResult(True, "")
+        Call testSuite.describe("Check bad file error message").assertEqualsString("Invalid JSON string or file", Error(), True)
+    End Try
+
+    jsonStr = |{"writerClass":"BaseLogWriter","writerFilePath":"../libs/VoltScriptLogging","constructorOrder":["label","minLevel","maxLevel","formatter"],"constructorArgs": {"arg1":"val"}}|
+    Try
+        Call testSuite.describe("Test loading non-array")
+        Call loadLogWritersFromJson(jsonStr)
+        Call testSuite.addResult(False, "Expected error not thrown")
+    Catch
+        Call testSuite.addResult(True, "")
+        Call testSuite.describe("Check error code is 1503").assertEqualsInteger(1503, Err())
+        Call testSuite.describe("Check non-array error message").assertEqualsString("JSON string or file must be an array", Error(), True)
+    End Try
+
+    jsonStr = |[{"writersClass":"BaseLogWriter","writerFilePath":2,"constructorOrder":["label","minLevel","maxLevel","formatter"],"constructorArgs": {"arg1":"one"}}]|
+    Try
+        Call testSuite.describe("Test missing writerClass and writerFilePath")
+        Call loadLogWritersFromJson(jsonStr)
+        Call testSuite.addResult(False, "Expected error not thrown")
+    Catch
+        Call testSuite.addResult(True, "")
+        Call testSuite.describe("Check error code is 1504").assertEqualsInteger(1504, Err())
+        Call testSuite.describe("Check bad writerClass error message")
+        If (Instr(Error(), "LogWriter has writerClass") > 0) Then
+            Call testSuite.addResult(True, "")
+        Else
+            Call testSuite.addResult(False, "Error message does not include 'LogWriter has writerClass': " & Error())
+        End If
+        Call testSuite.describe("Check bad writerFilePath error message")
+        If (Instr(Error(), "LogWriter has writerFilePath as string") > 0) Then
+            Call testSuite.addResult(True, "")
+        Else
+            Call testSuite.addResult(False, "Error message does not include 'LogWriter has writerFilePath as string': " & Error())
+        End If
+    End Try
+
+    jsonStr = |[{"writerClass":"BaseLogWriter","writerFilePath":"../libs/VoltScriptLogging","constructorOrder":["label","minLevel","maxLevel","formatter"],"constructorArgs": [1,2]}]|
+    Try
+        Call testSuite.describe("Test loading invalid array")
+        Call loadLogWritersFromJson(jsonStr)
+        Call testSuite.addResult(False, "Expected error not thrown")
+    Catch
+        Call testSuite.addResult(True, "")
+        Call testSuite.describe("Check bad constructorArgs error message")
+        If (Instr(Error(), "LogWriter's constructorArgs should be an object") > 0) Then
+            Call testSuite.addResult(True, "")
+        Else
+            Call testSuite.addResult(False, "Error message does not include 'LogWriter's constructorArgs should be an object': " & Error())
+        End If
+    End Try
+
+    Call globalLogSession.reset()
+
+    jsonStr = |[{"writerClass":"BaseLogWriter","writerFilePath":"../libs/VoltScriptLogging","constructorOrder":["label","minLevel","maxLevel","formatter"],"constructorArgs":{"label":"base writer","minLevel":1,"maxLevel":32,"formatter":"{{MESSAGE}}"}}]|
+    Call testSuite.describe("Test loading valid JSON")
+    Try
+        writers = loadLogWritersFromJson(jsonStr)
+        Call testSuite.addResult(True, "")
+        Call testSuite.describe("Check writer count").assertEqualsInteger(1, Ubound(writers) + 1)
+        Call testSuite.describe("Check writer class").assertIs("BaseLogWriter", writers(0))
+        Call testSuite.describe("Check writer min level").assertEqualsInteger(LOG_TRACE, writers(0).minLevel())
+        Call testSuite.describe("Check writer max level").assertEqualsInteger(LOG_FATAL, writers(0).maxLevel())
+    Catch
+        Call testSuite.addResult(False, "Unexpected error: " & Error())
+    End Try
+
+    Call globalLogSession.reset()
+
+    jsonStr = |[{"writerClass":"BaseLogWriter","writerFilePath":"../libs/VoltScriptLogging","constructorOrder":["label","minLevel","maxLevel","formatter"],"constructorArgs":{"label":"base writer","minLevel":"{{LEVEL_TRACE}}","maxLevel":"{{LEVEL_FATAL}}","formatter":"{{MESSAGE}}"}}]|
+    Call testSuite.describe("Test loading valid JSON with level enum")
+    Try
+        writers = loadLogWritersFromJson(jsonStr)
+        Call testSuite.addResult(True, "")
+        Call testSuite.describe("Check writer min level enum").assertEqualsInteger(LOG_TRACE, writers(0).minLevel())
+        Call testSuite.describe("Check writer max level enum").assertEqualsInteger(LOG_FATAL, writers(0).maxLevel())
+    Catch
+        Call testSuite.addResult(False, "Unexpected error: " & Error())
+    End Try
+
+    Call globalLogSession.reset()
+
+    jsonStr = |[{"writerClass":"SimpleLogWriter","writerFilePath":"../test/LogWritersTest","constructorOrder":[],"constructorArgs":{}}]|
+    Call testSuite.describe("Test loading valid JSON with no constructor args")
+    Try
+        writers = loadLogWritersFromJson(jsonStr)
+        Call testSuite.addResult(True, "")
+        Call testSuite.describe("Check writer class").assertIs("SimpleLogWriter", writers(0))
+    Catch
+        Call testSuite.addResult(False, "Unexpected error: " & Error())
+    End Try
+
+    Call globalLogSession.reset()
+
+    Return testSuite.ranSuccessfully()
+End Function
