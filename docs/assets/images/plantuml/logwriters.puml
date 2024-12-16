@@ -1,10 +1,10 @@
 @startjson
-#highlight "MyWayCoolWriter"/"writerClass"
-#highlight "MyWayCoolWriter"/"writerFilePath"
-#highlight "MyWayCoolWriter"/"constructorArgs"
-#highlight "MyWayCoolWriter"/"constructorOrder"
-{
-    "MyWayCoolWriter": {
+#highlight 0/"writerClass"
+#highlight 0/"writerFilePath"
+#highlight 0/"constructorArgs"
+#highlight 0/"constructorOrder"
+[
+    {
         "writerClass": "BaseLogWriter",
         "writerFilePath": "./libs/VoltScriptLogging",
         "constructorArgs": {
@@ -20,5 +20,5 @@
             "formatter"
         ]
     }
-}
+]
 @endjson
