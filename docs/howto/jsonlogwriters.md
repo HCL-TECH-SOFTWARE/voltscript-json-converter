@@ -20,3 +20,5 @@ The LogWriters created will automatically be added to the `globalLogSession`. Th
 ## Writing LogWriter JSON files
 
 The "VoltScript Build Manager" Visual Studio Code extension will validate JSON against the schema, providing the filename ends "vslogging.conf". There is also a snippet available with the snippet prefix "vslogging". This is the recommended approach.
+
+All property name in `constructorArgs` should also exist in `constructorOrder`. However, a JSON schema cannot validate this. So if you omit one or type its name incorrectly, you will not be warned when saving the file.
