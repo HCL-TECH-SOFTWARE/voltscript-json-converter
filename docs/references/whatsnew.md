@@ -12,7 +12,9 @@ The section provides information on the latest features, improvements, and resol
     **Improvements**
 
     - Add function to load LogWriters from a file.
-    - Add VoltScriptLogging to VoltScript JSON Converter.
+    - Add VoltScriptLogging to VoltScript JSON Converter and documentation.
+    - <span style="color:red">Changed `failSilently()` function to `suppressErrors()` boolean property, for consistency with VoltScript Collections.</span>
+    - API Docs updated.
 
 ???+ info "v1.0.4 - What's new or changed"
 
