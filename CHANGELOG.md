@@ -3,6 +3,7 @@
 ## [1.0.5] - Unreleased
 
 - MXOP-22009: Add function to load LogWriters from JSON file
+- MXOP-22330: Changed failSilently() to suppressErrors boolean property
 
 ## [1.0.4] - 2024-09-23
 
