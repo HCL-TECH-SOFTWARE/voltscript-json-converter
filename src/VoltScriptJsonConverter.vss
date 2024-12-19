@@ -2335,7 +2335,7 @@ End Class
 Public Sub samsaraTouchFunction(functionName As String) 
 	'{{SETI_AUTHOR_CODE_samsaraTouchFunction_implementation
 	If Not SAMSARA_DEBUG Then Exit Sub
-	Call globalLogSession.createLogEntry(LOG_TRACE, "Touched " & functionName, "")
+	Call globalLogSession.createLogEntry(LOG_TRACE, "Touched " & functionName, "", Nothing)
 	'}}
 
 End Sub
@@ -2350,7 +2350,7 @@ End Sub
 %END REM
 Public Sub DebugPrint_Samsara(msg As String) 
 	'{{SETI_AUTHOR_CODE_DebugPrintSamsara_implementation
-	If SAMSARA_DEBUG Then Call globalLogSession.createLogEntry(LOG_DEBUG, msg, "")
+	If SAMSARA_DEBUG Then Call globalLogSession.createLogEntry(LOG_DEBUG, msg, "", Nothing)
 	'}}
 
 End Sub

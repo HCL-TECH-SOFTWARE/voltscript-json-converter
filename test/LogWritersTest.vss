@@ -114,7 +114,7 @@ Function testJsonLoading(testRunner as TestRunner) as Boolean
 
     Call globalLogSession.reset()
 
-    jsonStr = |[{"writerClass":"BaseLogWriter","writerFilePath":"../libs/VoltScriptLogging","constructorOrder":["label","minLevel","maxLevel","formatter"],"constructorArgs":{"label":"base writer","minLevel":1,"maxLevel":32,"formatter":"{{MESSAGE}}"}}]|
+    jsonStr = |[{"writerClass":"BaseLogWriter","writerFilePath":"../libs/VoltScriptLogging","constructorOrder":["label","minLevel","maxLevel","formatter"],"constructorArgs":{"label":"base writer","minLevel":1,"maxLevel":6,"formatter":"{{MESSAGE}}"}}]|
     Call testSuite.describe("Test loading valid JSON")
     Try
         writers = loadLogWritersFromJson(jsonStr)
