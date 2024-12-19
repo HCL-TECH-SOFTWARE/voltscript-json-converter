@@ -1,0 +1,6 @@
+!!! tip
+    When parameters are extracted for custom constructors or custom setters, we cannot identify the data type the method signature expects. When adding the parameter to the custom constructor or custom setter, you can define the default value to use if the JSON object doesn't have that label. But it's not possible to identify the datatype of the *variable declaration* for the default value - a String is a String, whether it's stored in a String variable or Variant variable. And there are valid use cases where method signatures *should* accept a Variant of differing datatypes.
+
+    So if a JSON object contains a value for a specific label, it will just be passed as-is to the custom constructor or custom setter. It is the developer's responsibility to ensure the JSON value is of a valid datatype, or return the error message and require the user to fix up the data.
+
+    Best practice is to validate the JSON object *before* using VoltScript JSON Converter. You can see that paradigm in practice in `loadLogWritersFromJson()`, which calls `validateWriterJson()` to validate each LogWriter JSON object. The same approach is also done in VoltScript's dependency management, in `archipelago_functions.vss`.

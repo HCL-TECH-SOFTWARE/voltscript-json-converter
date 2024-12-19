@@ -14,3 +14,5 @@ If you are re-using the same `JsonConversionHelper` multiple times and want to r
 To capture if VoltScript JSON Converter is correctly calling a function you've added, you can use `Call samsaraTouchFunction("myFunctionName")`.
 
 To log custom messages from the converter, use `DebugPrint_Samsara getMeTypeForDebug() & "My custom message"`.
+
+--8<-- "validate.md"

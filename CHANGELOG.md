@@ -4,6 +4,7 @@
 
 - MXOP-22009: Add function to load LogWriters from JSON file
 - MXOP-22330: Changed failSilently() to suppressErrors boolean property
+- MXOP-22622: documentation on using VoltScript Testing Framework to perform validation
 
 ## [1.0.4] - 2024-09-23
 

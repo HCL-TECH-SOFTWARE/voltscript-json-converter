@@ -37,7 +37,7 @@ You create a new JsonCustomConstructor and define where to find the two paramete
 
 [Example code](../../assets/example_code/deser-70.txt){: target="_new" rel="noopener noreferrer"}
 
-## Using a JsonCustomConstructor inside a custom converter
+## Using a JsonCustomConstructor inside a custom converter
 
 Imagine the following classes:
 
@@ -102,5 +102,7 @@ Set person = helper.fromJsonString(json, "Person", "deser-80")
 ```
 
 Create the petConverter and helper, pass the converter into the helper on line 7, and load it from the JSON string.
+
+--8<-- "validate.md"
 
 [Example code](../../assets/example_code/deser-80.txt){: target="_new" rel="noopener noreferrer"}

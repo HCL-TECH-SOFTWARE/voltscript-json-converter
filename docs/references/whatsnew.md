@@ -15,6 +15,7 @@ The section provides information on the latest features, improvements, and resol
     - Add VoltScriptLogging to VoltScript JSON Converter and documentation.
     - <span style="color:red">Changed `failSilently()` function to `suppressErrors()` boolean property, for consistency with VoltScript Collections.</span>
     - API Docs updated.
+    - Documentation on using VoltScript Testing Framework to validate before conversion.
 
 ???+ info "v1.0.4 - What's new or changed"
 

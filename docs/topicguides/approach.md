@@ -23,3 +23,5 @@ For deserialization, the labels in the JSON object are iterated. But for seriali
 ## Classes with fromJson / toJson function
 
 If a class has a `fromJson()` or a `toJson()` function with the correct signature, this will be used instead of iterating elements within the JSON. More details are in the [How-to guides](../howto/index.md).
+
+--8<-- "validate.md"

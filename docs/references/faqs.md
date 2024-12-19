@@ -19,3 +19,7 @@ VoltScript JSON Converter is designed to convert JSON objects using the hierarch
 - Parse both as normal. Then, from the parent, create a reverse linkage back to the child.
 - Parse and return the parent object, skipping the property that contains its child / children. Then use a separate helper to parse and return the child. Finally pass the parent to the child's property.
 - If the child requires the parent as a parameter of the constructor, parse and return the parent object, skipping the property that contains its child / children. Then create the constructor, passing the relevant parameters, including a literal parameter containing the parent. Now use a separate helper to parse and return the child.
+
+## The JSON I receive may not be valid
+
+Best practice is to use VoltScript Testing Framework to perform unit tests on the JSON and validate it before passing to VoltScript JSON Converter. You can see that paradigm in practice in `loadLogWritersFromJson()`, which calls `validateWriterJson()` to validate each LogWriter JSON object. The same approach is also done in VoltScript's dependency management, in `archipelago_functions.vss`.
