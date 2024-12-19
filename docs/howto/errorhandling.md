@@ -45,3 +45,5 @@ N -- Yes --> O([Throw error])
 ```
 
 You can find all detailed errors for individual array elements by querying the ErrorSession or checking the logs, if you have added a LogWriter to the LogSession.
+
+--8<-- "validate.md"

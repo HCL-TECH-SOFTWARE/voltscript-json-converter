@@ -93,4 +93,6 @@ Call helper.withCustomConverter("enable", dataConverter.forSetter("enable"))
 
 In line 2, you need to pass _something_ as a default argument for `dataConverter.forSetter`, even though the code overrides it, otherwise the `deserialize()` function will error. So you pass "enable" as the default.
 
+--8<-- "validate.md"
+
 [Example code](../../assets/example_code/deser-40.txt){: target="_new" rel="noopener noreferrer"}

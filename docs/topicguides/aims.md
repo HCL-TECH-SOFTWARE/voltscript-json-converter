@@ -9,3 +9,5 @@
 Like frameworks in other languages, the framework is designed _only_ to speed up conversion from JSON to VoltScript objects, so that they can subsequently be processed _as_ VoltScript objects. The framework isn't designed to enable you to complete all your custom processing directly from the JSON objects. To do so would overcomplicate the framework.
 
 The framework can be used to create relationships, but only uni-directionally, like in the corresponding JSON. The framework can use JSON in the format `{"firstName":"Ron","lastName":"Burgundy","pet": {"name":"Baxter","type":"Dog"}}` to define a `pet` property in a Person object, but not an `owner` property in the Pet object. That should be done as part of your subsequent processing.
+
+The framework does not attempt to validate the JSON before processing. With a language that supports reflection, that's easier because it's possible to interrogate the method signatures. With VoltScript, that's not possible. So the best practice approach - and one we have used internally on multiple occasions - is to use VoltScript Testing Framework to perform the validation, then VoltScript JSON Converter to perform the conversion.
