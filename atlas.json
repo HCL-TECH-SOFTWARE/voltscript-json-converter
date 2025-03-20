@@ -46,7 +46,7 @@
         {
             "id": "volt-mx-marketplace",
             "type": "marketplace",
-            "url": "https://community.hclvoltmx.com/marketplace"
+            "url": "https://community.demo-hclvoltmx.com/marketplace"
         }
     ],
     "dependencies": [
