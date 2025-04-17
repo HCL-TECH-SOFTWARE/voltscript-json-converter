@@ -37,7 +37,7 @@ You'll then need to add this to the JSON object in your [atlas-settings.json](ht
         "type": "marketplace",
         "username": "YOUR_USERNAME",
         "password": "YOUR_PASSWORD",
-        "authUrl": "https://accounts.auth.hclvoltmx.net/login"
+        "authUrl": "https://accounts.auth.demo-hclvoltmx.net/login"
     }
 ```
 
@@ -70,7 +70,7 @@ You'll need the relevant dependency to add to your **dependencies** or **testDep
 
 See [CONTRIBUTING.md](contributing.md).
 
-## Code of Conduct
+## Code of Conduct
 
 See [CODE_OF_CONDUCT.md](code_of_conduct.md).
 

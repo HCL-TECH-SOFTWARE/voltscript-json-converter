@@ -2,9 +2,11 @@
 
 ## [1.0.5] - Unreleased
 
+- MXOP-25899: Updated marketplace URLs
+- MXOP-23280: Updated to use new VoltScriptLogging
 - MXOP-22009: Add function to load LogWriters from JSON file
 - MXOP-22330: Changed failSilently() to suppressErrors boolean property
-- MXOP-22622: documentation on using VoltScript Testing Framework to perform validation
+- MXOP-22622: Documentation on using VoltScript Testing Framework to perform validation
 
 ## [1.0.4] - 2024-09-23
 

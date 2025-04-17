@@ -1,7 +1,7 @@
 {
     "name": "VoltScriptJsonConverter",
     "library": "VoltScript-Json-Converter",
-    "version": "1.0.4",
+    "version": "1.0.5",
     "displayName": "VoltScript JSON Converter",
     "description": "JSON serialization and deserialization classes for VoltScript",
     "authors": [
@@ -52,13 +52,13 @@
     "dependencies": [
         {
             "library": "voltscript-testing",
-            "version": "latest",
+            "version": "1.0.1",
             "module": "VoltScriptTesting.vss",
             "repository": "hcl-github"
         },
         {
             "library": "voltscript-logging",
-            "version": "latest",
+            "version": "1.0.1",
             "module": "VoltScriptLogging.vss",
             "repository": "hcl-github"
         }
@@ -66,7 +66,7 @@
     "vseDependencies": {
         "JsonVSE": {
             "library": "JsonVSE VoltScript Extension",
-            "version": "1.0.2",
+            "version": "1.0.3",
             "module": "JsonVSE",
             "repository": "volt-mx-marketplace"
         }

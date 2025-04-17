@@ -16,6 +16,7 @@ libs/VoltScriptLogging.vss
 *_UNMERGED.vss
 /unit-test-reports/*/
 test/unit-test-reports/
+seti.ini
 
 # effective-atlas.json
 effective-atlas.json 

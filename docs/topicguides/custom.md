@@ -10,11 +10,11 @@ The following custom converters are available out-of-the-box:
 - **JsonBasicObjectArrayConverter** is used to convert an array of values that are JSON objects. It works the same as the JsonBasicObjectConverter.
 - **JsonSetterConverter** is used to call a custom setter function in the relevant object while it's being converted from JSON. This can only be used for deserialization. The setter function will require parameters, so three function are available to pass parameters from different sources:
     - **withValueParam** is used to pass the scalar value in the JSON element with which the converter is associated.
-    - **withSiblingParam** is used to pass the scalar value of a JSON element at the same level as the one with which the converter is associated. A default value is required and this will be used if the JSON element doesn't exist. 
+    - **withSiblingParam** is used to pass the scalar value of a JSON element at the same level as the one with which the converter is associated. A default value is required and this will be used if the JSON element doesn't exist.
 
         !!!note
             If the JSON element exists its value will be passed, even if it's an empty string or empty array. A custom converter will be used, if it matches.
-          
+
     - **withLiteralParam** is used to pass a literal value.
 
 - **JsonGetterConverter** is used to call a custom function in the relevant object to return a JSON value. This can only be used for serialization. The return value will be inserted, without additional conversion, into the JSON object. As a result, it can only be used if the function returns a scalar value (string, number, string of type date etc). The getter may require additional parameters. If so, two functions are available to pass parameters from different sources:

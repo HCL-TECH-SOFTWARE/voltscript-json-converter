@@ -74,7 +74,7 @@ Set jsonObj = helper.withScalarConverter("firstName")._
     .toJson(person)
 ```
 
-First, you instantiate the variables: 
+First, you instantiate the variables:
 
 - A `JsonConversionHelper` is created to serialize the pet on line 1.
 - A `JsonBasicObjectConverter` is created to convert the Pet on line 2.

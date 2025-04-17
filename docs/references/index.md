@@ -6,6 +6,7 @@ References provide technical references and descriptions for VoltScript JSON Con
 ## What's new
 
 Check the [latest information](whatsnew.md) about VoltScript JSON Converter.
+
 ## Repository structure
 
 - All the code for the framework itself is in `VoltScriptJsonConverter.vss`.
@@ -13,7 +14,7 @@ Check the [latest information](whatsnew.md) about VoltScript JSON Converter.
 - A set of unit tests for validating the code is in the `unittests` directory.
 - `runAllTests.vss` is a script file to verify all tests pass. The output is written to the `unit-test-reports` directory.
 
-## API documentation
+## API documentation
 
 [Full API Documentation for VoltScript JSON Converter](./apidocs/index.html){: target="_new" rel="noopener noreferrer"}
 
@@ -40,7 +41,7 @@ Simple deserialization and serialization [examples](example.md).
 
 ## FAQs
 
-List of [frequently asked questions](faqs.md) related to VoltScript JSON Converter. 
+List of [frequently asked questions](faqs.md) related to VoltScript JSON Converter.
 
 ## Documentation and source code
 

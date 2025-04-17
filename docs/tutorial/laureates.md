@@ -28,6 +28,7 @@
             "repository": "hcl-github"
         }
     ```
+
 1. Save the atlas.json and ensure no validation errors.
 1. Run dependency management (Ctrl + Chift + P / Cmd + Shift + P and choose "VoltScript: Install Dependencies").
 1. Ensure **libs** contains "VoltScriptJsonConverter" and **vses** contains the JSONVSE extensions.
@@ -56,7 +57,7 @@
 !!! warning
     All classes need to be public for VoltScript JSON Converter to create an instance. This is because it will run an `Execute` statement pointing to this script. If the class is private, the `Execute` statement will fail.
 
-### Laureate Class
+### Laureate Class
 
 1. Create a class called "Laureate"
 1. Add a public String variable called "id".
@@ -70,6 +71,7 @@
 
 1. Create a `Sub Initialize`. This will be triggered automatically by VoltScript when the script runs. Ensure the name is correct, or the code won't be triggered.
 1. Add the following code:
+
     ```vbscript
     Dim parser as new JsonParser()
     Dim root as JsonObject
@@ -79,9 +81,10 @@
     Set root = parser.getRootObject
     prizes = root.getChild("prizes").getChildren()
     ```
+
     This loads the file and gets the "prizes" JSON object.
 
-!!! warning 
+!!! warning
     **CurDir()** returns a RUN-TIME representation of the directory from which the script is BEING RUN; not the COMPILE-TIME directory in which that the script file resides. For Visual Studio Code, this is the folder that is open.
 
 !!! note
@@ -90,6 +93,7 @@
 ## Converting the JSON
 
 1. Add the following code:
+
     ```vbscript
     Dim helper as New JsonConversionHelper
     Dim converter as New JsonBasicObjectArrayConverter("Laureate", "NobelPrizes")
@@ -106,6 +110,7 @@
         Set prizeList(prize.year & "-" & prize.category) = prize
     Next
     ```
+
 1. You can then check information based on properties of the VoltScript objects. For example, `Print prizeList("2021-economics").laureates(0).getName()` will print the name of the first Laureate for the 2021 Economics prize.
 
 ??? success

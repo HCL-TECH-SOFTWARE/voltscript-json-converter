@@ -1,6 +1,6 @@
 # Create a custom converter
 
-## Overriding toJson()
+## Overriding toJson()
 
 Imagine you have a class that has `Public modified as Variant` where this is a date variant. But you want to output it in JSON as a string of date-time format. This can't be directly serialized to a JsonObject.
 

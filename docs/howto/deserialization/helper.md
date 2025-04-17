@@ -1,4 +1,4 @@
-# Convert JSON to an object
+# Convert JSON to an object
 
 ## Converting a string to an object
 

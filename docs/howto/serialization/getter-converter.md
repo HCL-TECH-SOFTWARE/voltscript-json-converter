@@ -1,6 +1,6 @@
 # Use JsonGetterConverters
 
-## Simple JsonGetterConverter
+## Simple JsonGetterConverter
 
 The previous examples only address scenarios where the properties in your class map directly to the entities in the JSON you want to output. That's not always the case. You could manually generate the JSON using a `toJson()` function in your class. Alternatively, if you class has a function that outputs what you need, you can use a **JsonGetterConverter**. Imagine you have the following class:
 

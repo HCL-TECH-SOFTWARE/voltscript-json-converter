@@ -1,4 +1,4 @@
-# Merge into existing VoltScript object
+# Merge into existing VoltScript object
 
 There may be occasions where you use VoltScript JSON Converter to create an object from one JSON object, but then you need to merge in elements from another. For example, imagine you have a feed of pets with IDs of the owner, and you need to merge in the owner information for each pet, like this:
 
@@ -38,10 +38,4 @@ Next
     - In this scenario, the helper object didn't have any custom converters or label-ignores added when parsing the pets. If it had, the safest approach would have been to re-initialize the helper object before the `for` loop.
     - In rare cases, you may be able to just re-use a helper without needing to call `withObject`. But this only works if you're wanting to add to the last object the helper processed.
 
-<!--!!! note
-    
-
-!!! info-->
-    
 [Example code](../../assets/example_code/deser-90.txt){: target="_new"}
-<!--<a href="../../../example_code/deser-90.txt" target="_blank">Example Code</a>-->
