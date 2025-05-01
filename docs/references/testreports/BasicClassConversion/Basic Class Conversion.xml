@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><testrun name="Basic Class Conversion" tests="15" time="231103T111523" failures="0" errors="0">
+<?xml version="1.0" encoding="UTF-8"?><testrun name="Basic Class Conversion" tests="18" time="250425T141227" failures="0" errors="0">
   <testsuite name="Test Basic Class deserialization" time="0" displayname="Test Basic Class deserialization" id="[engine:testsuite-voltscript]/[Test Basic Class deserialization]">
     <testcase name="Deserialization" classname="Test Basic Class deserialization" time="0" displayname="Deserialization" id="[engine:testsuite-voltscript]/[Test Basic Class deserialization]/[Deserialization]">
     </testcase>
@@ -31,6 +31,12 @@
     <testcase name="Test currency" classname="Test Basic Class serialization" time="0" displayname="Test currency" id="[engine:testsuite-voltscript]/[Test Basic Class serialization]/[Test currency]">
     </testcase>
     <testcase name="Test Array contents" classname="Test Basic Class serialization" time="0" displayname="Test Array contents" id="[engine:testsuite-voltscript]/[Test Basic Class serialization]/[Test Array contents]">
+    </testcase>
+    <testcase name="Serialization Empty Arr" classname="Test Basic Class serialization" time="0" displayname="Serialization Empty Arr" id="[engine:testsuite-voltscript]/[Test Basic Class serialization]/[Serialization Empty Arr]">
+    </testcase>
+    <testcase name="Test empty arr" classname="Test Basic Class serialization" time="0" displayname="Test empty arr" id="[engine:testsuite-voltscript]/[Test Basic Class serialization]/[Test empty arr]">
+    </testcase>
+    <testcase name="Test JSON output" classname="Test Basic Class serialization" time="0" displayname="Test JSON output" id="[engine:testsuite-voltscript]/[Test Basic Class serialization]/[Test JSON output]">
     </testcase>
   </testsuite>
 </testrun>

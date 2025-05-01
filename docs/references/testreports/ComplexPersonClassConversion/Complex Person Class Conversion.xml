@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><testrun name="Complex Person Class Conversion" tests="16" time="231103T111524" failures="0" errors="0">
+<?xml version="1.0" encoding="UTF-8"?><testrun name="Complex Person Class Conversion" tests="16" time="250425T141227" failures="0" errors="0">
   <testsuite name="Test Complex Person Class deserialization" time="0" displayname="Test Complex Person Class deserialization" id="[engine:testsuite-voltscript]/[Test Complex Person Class deserialization]">
     <testcase name="Deserialization" classname="Test Complex Person Class deserialization" time="0" displayname="Deserialization" id="[engine:testsuite-voltscript]/[Test Complex Person Class deserialization]/[Deserialization]">
     </testcase>
@@ -16,7 +16,7 @@
     </testcase>
     <testcase name="Test second pet name" classname="Test Complex Person Class deserialization" time="0" displayname="Test second pet name" id="[engine:testsuite-voltscript]/[Test Complex Person Class deserialization]/[Test second pet name]">
     </testcase>
-    <testcase name="Test first pet type_1" classname="Test Complex Person Class deserialization" time="0" displayname="Test first pet type_1" id="[engine:testsuite-voltscript]/[Test Complex Person Class deserialization]/[Test first pet type_1]">
+    <testcase name="Test second pet type" classname="Test Complex Person Class deserialization" time="0" displayname="Test second pet type" id="[engine:testsuite-voltscript]/[Test Complex Person Class deserialization]/[Test second pet type]">
     </testcase>
   </testsuite>
   <testsuite name="Test Person Class serialization" time="0" displayname="Test Person Class serialization" id="[engine:testsuite-voltscript]/[Test Person Class serialization]">

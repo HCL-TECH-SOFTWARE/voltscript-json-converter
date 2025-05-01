@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?><testrun name="Error Tests" tests="37" time="250425T141227" failures="0" errors="0">
+  <testsuite name="Test Basic Class Errors" time="0" displayname="Test Basic Class Errors" id="[engine:testsuite-voltscript]/[Test Basic Class Errors]">
+    <testcase name="Test no args constructor bad JSON" classname="Test Basic Class Errors" time="0" displayname="Test no args constructor bad JSON" id="[engine:testsuite-voltscript]/[Test Basic Class Errors]/[Test no args constructor bad JSON]">
+    </testcase>
+    <testcase name="verify error message" classname="Test Basic Class Errors" time="0" displayname="verify error message" id="[engine:testsuite-voltscript]/[Test Basic Class Errors]/[verify error message]">
+    </testcase>
+    <testcase name="Check testObj is Nothing" classname="Test Basic Class Errors" time="0" displayname="Check testObj is Nothing" id="[engine:testsuite-voltscript]/[Test Basic Class Errors]/[Check testObj is Nothing]">
+    </testcase>
+    <testcase name="Check errors" classname="Test Basic Class Errors" time="0" displayname="Check errors" id="[engine:testsuite-voltscript]/[Test Basic Class Errors]/[Check errors]">
+    </testcase>
+    <testcase name="Check for unexpected bad messages" classname="Test Basic Class Errors" time="0" displayname="Check for unexpected bad messages" id="[engine:testsuite-voltscript]/[Test Basic Class Errors]/[Check for unexpected bad messages]">
+    </testcase>
+    <testcase name="Test no args constructor with suppressErrors" classname="Test Basic Class Errors" time="0" displayname="Test no args constructor with suppressErrors" id="[engine:testsuite-voltscript]/[Test Basic Class Errors]/[Test no args constructor with suppressErrors]">
+    </testcase>
+    <testcase name="Check testObj created" classname="Test Basic Class Errors" time="0" displayname="Check testObj created" id="[engine:testsuite-voltscript]/[Test Basic Class Errors]/[Check testObj created]">
+    </testcase>
+    <testcase name="Check no errors" classname="Test Basic Class Errors" time="0" displayname="Check no errors" id="[engine:testsuite-voltscript]/[Test Basic Class Errors]/[Check no errors]">
+    </testcase>
+    <testcase name="Check firstName" classname="Test Basic Class Errors" time="0" displayname="Check firstName" id="[engine:testsuite-voltscript]/[Test Basic Class Errors]/[Check firstName]">
+    </testcase>
+    <testcase name="Check lastName" classname="Test Basic Class Errors" time="0" displayname="Check lastName" id="[engine:testsuite-voltscript]/[Test Basic Class Errors]/[Check lastName]">
+    </testcase>
+    <testcase name="Check age" classname="Test Basic Class Errors" time="0" displayname="Check age" id="[engine:testsuite-voltscript]/[Test Basic Class Errors]/[Check age]">
+    </testcase>
+    <testcase name="Test no args constructor bad JSON element in array" classname="Test Basic Class Errors" time="0" displayname="Test no args constructor bad JSON element in array" id="[engine:testsuite-voltscript]/[Test Basic Class Errors]/[Test no args constructor bad JSON element in array]">
+    </testcase>
+    <testcase name="Check error is for array" classname="Test Basic Class Errors" time="0" displayname="Check error is for array" id="[engine:testsuite-voltscript]/[Test Basic Class Errors]/[Check error is for array]">
+    </testcase>
+    <testcase name="Check objects is empty array" classname="Test Basic Class Errors" time="0" displayname="Check objects is empty array" id="[engine:testsuite-voltscript]/[Test Basic Class Errors]/[Check objects is empty array]">
+    </testcase>
+    <testcase name="Check two errors" classname="Test Basic Class Errors" time="0" displayname="Check two errors" id="[engine:testsuite-voltscript]/[Test Basic Class Errors]/[Check two errors]">
+    </testcase>
+    <testcase name="Check for unexpected bad messages_1" classname="Test Basic Class Errors" time="0" displayname="Check for unexpected bad messages_1" id="[engine:testsuite-voltscript]/[Test Basic Class Errors]/[Check for unexpected bad messages_1]">
+    </testcase>
+    <testcase name="Test no args constructor bad JSON element in array with suppressErrors" classname="Test Basic Class Errors" time="0" displayname="Test no args constructor bad JSON element in array with suppressErrors" id="[engine:testsuite-voltscript]/[Test Basic Class Errors]/[Test no args constructor bad JSON element in array with suppressErrors]">
+    </testcase>
+    <testcase name="Check UBound of array is 1" classname="Test Basic Class Errors" time="0" displayname="Check UBound of array is 1" id="[engine:testsuite-voltscript]/[Test Basic Class Errors]/[Check UBound of array is 1]">
+    </testcase>
+    <testcase name="Check element 1 is BasicErrorClass" classname="Test Basic Class Errors" time="0" displayname="Check element 1 is BasicErrorClass" id="[engine:testsuite-voltscript]/[Test Basic Class Errors]/[Check element 1 is BasicErrorClass]">
+    </testcase>
+    <testcase name="Check element 2 is a BasicErrorClass" classname="Test Basic Class Errors" time="0" displayname="Check element 2 is a BasicErrorClass" id="[engine:testsuite-voltscript]/[Test Basic Class Errors]/[Check element 2 is a BasicErrorClass]">
+    </testcase>
+    <testcase name="Check element 1 age is 0" classname="Test Basic Class Errors" time="0" displayname="Check element 1 age is 0" id="[engine:testsuite-voltscript]/[Test Basic Class Errors]/[Check element 1 age is 0]">
+    </testcase>
+    <testcase name="Check element 2 age is 40" classname="Test Basic Class Errors" time="0" displayname="Check element 2 age is 40" id="[engine:testsuite-voltscript]/[Test Basic Class Errors]/[Check element 2 age is 40]">
+    </testcase>
+  </testsuite>
+  <testsuite name="Test Simple Args Class Error" time="0" displayname="Test Simple Args Class Error" id="[engine:testsuite-voltscript]/[Test Simple Args Class Error]">
+    <testcase name="Test no args constructor bad JSON" classname="Test Simple Args Class Error" time="0" displayname="Test no args constructor bad JSON" id="[engine:testsuite-voltscript]/[Test Simple Args Class Error]/[Test no args constructor bad JSON]">
+    </testcase>
+    <testcase name="Check error is on constructing" classname="Test Simple Args Class Error" time="0" displayname="Check error is on constructing" id="[engine:testsuite-voltscript]/[Test Simple Args Class Error]/[Check error is on constructing]">
+    </testcase>
+    <testcase name="Test args constructor with suppressErrors" classname="Test Simple Args Class Error" time="0" displayname="Test args constructor with suppressErrors" id="[engine:testsuite-voltscript]/[Test Simple Args Class Error]/[Test args constructor with suppressErrors]">
+    </testcase>
+    <testcase name="Check error is on constructing with suppressErrors" classname="Test Simple Args Class Error" time="0" displayname="Check error is on constructing with suppressErrors" id="[engine:testsuite-voltscript]/[Test Simple Args Class Error]/[Check error is on constructing with suppressErrors]">
+    </testcase>
+    <testcase name="Test no args constructor bad JSON element in array" classname="Test Simple Args Class Error" time="0" displayname="Test no args constructor bad JSON element in array" id="[engine:testsuite-voltscript]/[Test Simple Args Class Error]/[Test no args constructor bad JSON element in array]">
+    </testcase>
+    <testcase name="Check error is for array" classname="Test Simple Args Class Error" time="0" displayname="Check error is for array" id="[engine:testsuite-voltscript]/[Test Simple Args Class Error]/[Check error is for array]">
+    </testcase>
+    <testcase name="Check objects is empty array" classname="Test Simple Args Class Error" time="0" displayname="Check objects is empty array" id="[engine:testsuite-voltscript]/[Test Simple Args Class Error]/[Check objects is empty array]">
+    </testcase>
+    <testcase name="Check one error" classname="Test Simple Args Class Error" time="0" displayname="Check one error" id="[engine:testsuite-voltscript]/[Test Simple Args Class Error]/[Check one error]">
+    </testcase>
+    <testcase name="Check for unexpected bad messages" classname="Test Simple Args Class Error" time="0" displayname="Check for unexpected bad messages" id="[engine:testsuite-voltscript]/[Test Simple Args Class Error]/[Check for unexpected bad messages]">
+    </testcase>
+    <testcase name="Test args constructor bad JSON element in array" classname="Test Simple Args Class Error" time="0" displayname="Test args constructor bad JSON element in array" id="[engine:testsuite-voltscript]/[Test Simple Args Class Error]/[Test args constructor bad JSON element in array]">
+    </testcase>
+    <testcase name="Check UBound of array is 1" classname="Test Simple Args Class Error" time="0" displayname="Check UBound of array is 1" id="[engine:testsuite-voltscript]/[Test Simple Args Class Error]/[Check UBound of array is 1]">
+    </testcase>
+    <testcase name="Check element 1 is Empty" classname="Test Simple Args Class Error" time="0" displayname="Check element 1 is Empty" id="[engine:testsuite-voltscript]/[Test Simple Args Class Error]/[Check element 1 is Empty]">
+    </testcase>
+    <testcase name="Check element 2 is a FullConstructorClass" classname="Test Simple Args Class Error" time="0" displayname="Check element 2 is a FullConstructorClass" id="[engine:testsuite-voltscript]/[Test Simple Args Class Error]/[Check element 2 is a FullConstructorClass]">
+    </testcase>
+    <testcase name="Check errors logged is 1" classname="Test Simple Args Class Error" time="0" displayname="Check errors logged is 1" id="[engine:testsuite-voltscript]/[Test Simple Args Class Error]/[Check errors logged is 1]">
+    </testcase>
+    <testcase name="Check for unexpected bad messages when suppressErrors" classname="Test Simple Args Class Error" time="0" displayname="Check for unexpected bad messages when suppressErrors" id="[engine:testsuite-voltscript]/[Test Simple Args Class Error]/[Check for unexpected bad messages when suppressErrors]">
+    </testcase>
+  </testsuite>
+</testrun>

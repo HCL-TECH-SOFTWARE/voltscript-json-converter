@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## [1.0.5] - Unreleased
+## [1.0.5] - May 2025
 
 - MXOP-25899: Updated marketplace URLs
 - MXOP-23280: Updated to use new VoltScriptLogging

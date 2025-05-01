@@ -16,7 +16,7 @@ Check the [latest information](whatsnew.md) about VoltScript JSON Converter.
 
 ## API documentation
 
-[Full API Documentation for VoltScript JSON Converter](./apidocs/index.html){: target="_new" rel="noopener noreferrer"}
+[Full API Documentation for VoltScript JSON Converter](./apidoc/index.html){: target="_new" rel="noopener noreferrer"}
 
 ## Examples
 
@@ -38,6 +38,8 @@ Simple deserialization and serialization [examples](example.md).
 - [Basic Object Summary Class Conversion](./testreports/ObjectClassConversion/index.html){: target="_new" rel="noopener noreferrer"}
 - [Person Class with Custom Getter Function Conversion](./testreports/PersonClasswithCustomGetterFunctions/index.html){: target="_new" rel="noopener noreferrer"}
 - [Person Class with Custom Setter Function Conversion](./testreports/PersonClasswithCustomSetterConversion/index.html){: target="_new" rel="noopener noreferrer"}
+- [Error Tests](./testreports/ErrorTests/index.html){: target="_new" rel="noopener noreferrer"}
+- [LogWriters Tests](./testreports/LogWritersTest/index.html){: target="_new" rel="noopener noreferrer"}
 
 ## FAQs
 

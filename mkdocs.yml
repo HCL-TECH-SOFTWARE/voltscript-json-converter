@@ -107,6 +107,5 @@ plugins:
   - awesome-pages
   - search
   - tags
-  - section-index
   - git-revision-date-localized:
       type: date
