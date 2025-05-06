@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?><testrun name="FromJson Class Conversion" tests="13" time="250425T141227" failures="0" errors="0">
+  <testsuite name="Test fromJson Class deserialization" time="0" displayname="Test fromJson Class deserialization" id="[engine:testsuite-voltscript]/[Test fromJson Class deserialization]">
+    <testcase name="Deserialization" classname="Test fromJson Class deserialization" time="0" displayname="Deserialization" id="[engine:testsuite-voltscript]/[Test fromJson Class deserialization]/[Deserialization]">
+    </testcase>
+    <testcase name="Test person first name" classname="Test fromJson Class deserialization" time="0" displayname="Test person first name" id="[engine:testsuite-voltscript]/[Test fromJson Class deserialization]/[Test person first name]">
+    </testcase>
+    <testcase name="Test person last name" classname="Test fromJson Class deserialization" time="0" displayname="Test person last name" id="[engine:testsuite-voltscript]/[Test fromJson Class deserialization]/[Test person last name]">
+    </testcase>
+    <testcase name="Test age" classname="Test fromJson Class deserialization" time="0" displayname="Test age" id="[engine:testsuite-voltscript]/[Test fromJson Class deserialization]/[Test age]">
+    </testcase>
+    <testcase name="Serialization" classname="Test fromJson Class deserialization" time="0" displayname="Serialization" id="[engine:testsuite-voltscript]/[Test fromJson Class deserialization]/[Serialization]">
+    </testcase>
+  </testsuite>
+  <testsuite name="Test fromJson into existing object deserialization" time="0" displayname="Test fromJson into existing object deserialization" id="[engine:testsuite-voltscript]/[Test fromJson into existing object deserialization]">
+    <testcase name="Deserialization" classname="Test fromJson into existing object deserialization" time="0" displayname="Deserialization" id="[engine:testsuite-voltscript]/[Test fromJson into existing object deserialization]/[Deserialization]">
+    </testcase>
+    <testcase name="Test person first name" classname="Test fromJson into existing object deserialization" time="0" displayname="Test person first name" id="[engine:testsuite-voltscript]/[Test fromJson into existing object deserialization]/[Test person first name]">
+    </testcase>
+    <testcase name="Test person last name" classname="Test fromJson into existing object deserialization" time="0" displayname="Test person last name" id="[engine:testsuite-voltscript]/[Test fromJson into existing object deserialization]/[Test person last name]">
+    </testcase>
+    <testcase name="Test age" classname="Test fromJson into existing object deserialization" time="0" displayname="Test age" id="[engine:testsuite-voltscript]/[Test fromJson into existing object deserialization]/[Test age]">
+    </testcase>
+  </testsuite>
+  <testsuite name="Test fromJson Class serialization" time="0" displayname="Test fromJson Class serialization" id="[engine:testsuite-voltscript]/[Test fromJson Class serialization]">
+    <testcase name="Test person first name" classname="Test fromJson Class serialization" time="0" displayname="Test person first name" id="[engine:testsuite-voltscript]/[Test fromJson Class serialization]/[Test person first name]">
+    </testcase>
+    <testcase name="Test person last name" classname="Test fromJson Class serialization" time="0" displayname="Test person last name" id="[engine:testsuite-voltscript]/[Test fromJson Class serialization]/[Test person last name]">
+    </testcase>
+    <testcase name="Test age" classname="Test fromJson Class serialization" time="0" displayname="Test age" id="[engine:testsuite-voltscript]/[Test fromJson Class serialization]/[Test age]">
+    </testcase>
+    <testcase name="Test JSON" classname="Test fromJson Class serialization" time="0" displayname="Test JSON" id="[engine:testsuite-voltscript]/[Test fromJson Class serialization]/[Test JSON]">
+    </testcase>
+  </testsuite>
+</testrun>

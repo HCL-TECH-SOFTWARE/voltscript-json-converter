@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?><testrun name="Object Class Conversion" tests="8" time="250425T141227" failures="0" errors="0">
+  <testsuite name="Test Object Class deserialization" time="0" displayname="Test Object Class deserialization" id="[engine:testsuite-voltscript]/[Test Object Class deserialization]">
+    <testcase name="Deserialization" classname="Test Object Class deserialization" time="0" displayname="Deserialization" id="[engine:testsuite-voltscript]/[Test Object Class deserialization]/[Deserialization]">
+    </testcase>
+    <testcase name="Test unid" classname="Test Object Class deserialization" time="0" displayname="Test unid" id="[engine:testsuite-voltscript]/[Test Object Class deserialization]/[Test unid]">
+    </testcase>
+    <testcase name="Test action" classname="Test Object Class deserialization" time="0" displayname="Test action" id="[engine:testsuite-voltscript]/[Test Object Class deserialization]/[Test action]">
+    </testcase>
+    <testcase name="Test modified" classname="Test Object Class deserialization" time="0" displayname="Test modified" id="[engine:testsuite-voltscript]/[Test Object Class deserialization]/[Test modified]">
+    </testcase>
+  </testsuite>
+  <testsuite name="Test Object Summary Class serialization" time="0" displayname="Test Object Summary Class serialization" id="[engine:testsuite-voltscript]/[Test Object Summary Class serialization]">
+    <testcase name="Test unid" classname="Test Object Summary Class serialization" time="0" displayname="Test unid" id="[engine:testsuite-voltscript]/[Test Object Summary Class serialization]/[Test unid]">
+    </testcase>
+    <testcase name="Test action" classname="Test Object Summary Class serialization" time="0" displayname="Test action" id="[engine:testsuite-voltscript]/[Test Object Summary Class serialization]/[Test action]">
+    </testcase>
+    <testcase name="Test modified" classname="Test Object Summary Class serialization" time="0" displayname="Test modified" id="[engine:testsuite-voltscript]/[Test Object Summary Class serialization]/[Test modified]">
+    </testcase>
+    <testcase name="Test string" classname="Test Object Summary Class serialization" time="0" displayname="Test string" id="[engine:testsuite-voltscript]/[Test Object Summary Class serialization]/[Test string]">
+    </testcase>
+  </testsuite>
+</testrun>

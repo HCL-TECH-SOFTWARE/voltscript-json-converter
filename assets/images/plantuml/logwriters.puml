@@ -1,0 +1,24 @@
+@startjson
+#highlight 0/"writerClass"
+#highlight 0/"writerFilePath"
+#highlight 0/"constructorArgs"
+#highlight 0/"constructorOrder"
+[
+    {
+        "writerClass": "BaseLogWriter",
+        "writerFilePath": "./libs/VoltScriptLogging",
+        "constructorArgs": {
+            "label": "SimpleLogWriter",
+            "minLevel": "LOG_ERROR",
+            "maxLevel": "LOG_FATAL",
+            "formatter": "{{MESSAGE}}, logged from {{CALLEELINENUM}}"
+        },
+        "constructorOrder": [
+            "label",
+            "minLevel",
+            "maxLevel",
+            "formatter"
+        ]
+    }
+]
+@endjson

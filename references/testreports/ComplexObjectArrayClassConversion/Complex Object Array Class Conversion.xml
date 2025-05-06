@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?><testrun name="Complex Object Array Class Conversion" tests="17" time="250425T141227" failures="0" errors="0">
+  <testsuite name="Test Complex Object Class deserialization" time="0" displayname="Test Complex Object Class deserialization" id="[engine:testsuite-voltscript]/[Test Complex Object Class deserialization]">
+    <testcase name="Deserialization" classname="Test Complex Object Class deserialization" time="0" displayname="Deserialization" id="[engine:testsuite-voltscript]/[Test Complex Object Class deserialization]/[Deserialization]">
+    </testcase>
+    <testcase name="Test testObjs is an array" classname="Test Complex Object Class deserialization" time="0" displayname="Test testObjs is an array" id="[engine:testsuite-voltscript]/[Test Complex Object Class deserialization]/[Test testObjs is an array]">
+    </testcase>
+    <testcase name="Test two objects extracted" classname="Test Complex Object Class deserialization" time="0" displayname="Test two objects extracted" id="[engine:testsuite-voltscript]/[Test Complex Object Class deserialization]/[Test two objects extracted]">
+    </testcase>
+    <testcase name="Test unid" classname="Test Complex Object Class deserialization" time="0" displayname="Test unid" id="[engine:testsuite-voltscript]/[Test Complex Object Class deserialization]/[Test unid]">
+    </testcase>
+    <testcase name="Test action" classname="Test Complex Object Class deserialization" time="0" displayname="Test action" id="[engine:testsuite-voltscript]/[Test Complex Object Class deserialization]/[Test action]">
+    </testcase>
+    <testcase name="Test modified" classname="Test Complex Object Class deserialization" time="0" displayname="Test modified" id="[engine:testsuite-voltscript]/[Test Complex Object Class deserialization]/[Test modified]">
+    </testcase>
+    <testcase name="Test second unid" classname="Test Complex Object Class deserialization" time="0" displayname="Test second unid" id="[engine:testsuite-voltscript]/[Test Complex Object Class deserialization]/[Test second unid]">
+    </testcase>
+    <testcase name="Test second action" classname="Test Complex Object Class deserialization" time="0" displayname="Test second action" id="[engine:testsuite-voltscript]/[Test Complex Object Class deserialization]/[Test second action]">
+    </testcase>
+    <testcase name="Test second modified" classname="Test Complex Object Class deserialization" time="0" displayname="Test second modified" id="[engine:testsuite-voltscript]/[Test Complex Object Class deserialization]/[Test second modified]">
+    </testcase>
+  </testsuite>
+  <testsuite name="Test Complex Object Class serialization" time="0" displayname="Test Complex Object Class serialization" id="[engine:testsuite-voltscript]/[Test Complex Object Class serialization]">
+    <testcase name="Serialization" classname="Test Complex Object Class serialization" time="0" displayname="Serialization" id="[engine:testsuite-voltscript]/[Test Complex Object Class serialization]/[Serialization]">
+    </testcase>
+    <testcase name="Test two objects extracted" classname="Test Complex Object Class serialization" time="0" displayname="Test two objects extracted" id="[engine:testsuite-voltscript]/[Test Complex Object Class serialization]/[Test two objects extracted]">
+    </testcase>
+    <testcase name="Test unid" classname="Test Complex Object Class serialization" time="0" displayname="Test unid" id="[engine:testsuite-voltscript]/[Test Complex Object Class serialization]/[Test unid]">
+    </testcase>
+    <testcase name="Test action" classname="Test Complex Object Class serialization" time="0" displayname="Test action" id="[engine:testsuite-voltscript]/[Test Complex Object Class serialization]/[Test action]">
+    </testcase>
+    <testcase name="Test modified" classname="Test Complex Object Class serialization" time="0" displayname="Test modified" id="[engine:testsuite-voltscript]/[Test Complex Object Class serialization]/[Test modified]">
+    </testcase>
+    <testcase name="Test second unid" classname="Test Complex Object Class serialization" time="0" displayname="Test second unid" id="[engine:testsuite-voltscript]/[Test Complex Object Class serialization]/[Test second unid]">
+    </testcase>
+    <testcase name="Test second action" classname="Test Complex Object Class serialization" time="0" displayname="Test second action" id="[engine:testsuite-voltscript]/[Test Complex Object Class serialization]/[Test second action]">
+    </testcase>
+    <testcase name="Test second modified" classname="Test Complex Object Class serialization" time="0" displayname="Test second modified" id="[engine:testsuite-voltscript]/[Test Complex Object Class serialization]/[Test second modified]">
+    </testcase>
+  </testsuite>
+</testrun>

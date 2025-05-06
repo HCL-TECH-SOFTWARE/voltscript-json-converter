@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?><testrun name="Custom Functions" tests="8" time="250425T141227" failures="0" errors="0">
+  <testsuite name="Test Function deserialization" time="0" displayname="Test Function deserialization" id="[engine:testsuite-voltscript]/[Test Function deserialization]">
+    <testcase name="Deserialization" classname="Test Function deserialization" time="0" displayname="Deserialization" id="[engine:testsuite-voltscript]/[Test Function deserialization]/[Deserialization]">
+    </testcase>
+    <testcase name="Test person first name" classname="Test Function deserialization" time="0" displayname="Test person first name" id="[engine:testsuite-voltscript]/[Test Function deserialization]/[Test person first name]">
+    </testcase>
+    <testcase name="Test person last name" classname="Test Function deserialization" time="0" displayname="Test person last name" id="[engine:testsuite-voltscript]/[Test Function deserialization]/[Test person last name]">
+    </testcase>
+    <testcase name="Test created by custom deserialization" classname="Test Function deserialization" time="0" displayname="Test created by custom deserialization" id="[engine:testsuite-voltscript]/[Test Function deserialization]/[Test created by custom deserialization]">
+    </testcase>
+  </testsuite>
+  <testsuite name="Test Function serialization" time="0" displayname="Test Function serialization" id="[engine:testsuite-voltscript]/[Test Function serialization]">
+    <testcase name="Serialization" classname="Test Function serialization" time="0" displayname="Serialization" id="[engine:testsuite-voltscript]/[Test Function serialization]/[Serialization]">
+    </testcase>
+    <testcase name="Test person first name" classname="Test Function serialization" time="0" displayname="Test person first name" id="[engine:testsuite-voltscript]/[Test Function serialization]/[Test person first name]">
+    </testcase>
+    <testcase name="Test person last name" classname="Test Function serialization" time="0" displayname="Test person last name" id="[engine:testsuite-voltscript]/[Test Function serialization]/[Test person last name]">
+    </testcase>
+    <testcase name="Test created from custom serialization" classname="Test Function serialization" time="0" displayname="Test created from custom serialization" id="[engine:testsuite-voltscript]/[Test Function serialization]/[Test created from custom serialization]">
+    </testcase>
+  </testsuite>
+</testrun>

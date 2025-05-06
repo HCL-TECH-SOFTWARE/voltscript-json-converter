@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?><testrun name="Class With Arrays Conversion" tests="22" time="250425T141227" failures="0" errors="0">
+  <testsuite name="Test Class With Arrays deserialization" time="0" displayname="Test Class With Arrays deserialization" id="[engine:testsuite-voltscript]/[Test Class With Arrays deserialization]">
+    <testcase name="Deserialization" classname="Test Class With Arrays deserialization" time="0" displayname="Deserialization" id="[engine:testsuite-voltscript]/[Test Class With Arrays deserialization]/[Deserialization]">
+    </testcase>
+    <testcase name="Test String" classname="Test Class With Arrays deserialization" time="0" displayname="Test String" id="[engine:testsuite-voltscript]/[Test Class With Arrays deserialization]/[Test String]">
+    </testcase>
+    <testcase name="Test type" classname="Test Class With Arrays deserialization" time="0" displayname="Test type" id="[engine:testsuite-voltscript]/[Test Class With Arrays deserialization]/[Test type]">
+    </testcase>
+    <testcase name="Test my strings" classname="Test Class With Arrays deserialization" time="0" displayname="Test my strings" id="[engine:testsuite-voltscript]/[Test Class With Arrays deserialization]/[Test my strings]">
+    </testcase>
+    <testcase name="Test myStrings(0) is a string" classname="Test Class With Arrays deserialization" time="0" displayname="Test myStrings(0) is a string" id="[engine:testsuite-voltscript]/[Test Class With Arrays deserialization]/[Test myStrings(0) is a string]">
+    </testcase>
+    <testcase name="Test myStrings elem 0" classname="Test Class With Arrays deserialization" time="0" displayname="Test myStrings elem 0" id="[engine:testsuite-voltscript]/[Test Class With Arrays deserialization]/[Test myStrings elem 0]">
+    </testcase>
+    <testcase name="Test myStrings elem 1" classname="Test Class With Arrays deserialization" time="0" displayname="Test myStrings elem 1" id="[engine:testsuite-voltscript]/[Test Class With Arrays deserialization]/[Test myStrings elem 1]">
+    </testcase>
+    <testcase name="Test UBound myInts" classname="Test Class With Arrays deserialization" time="0" displayname="Test UBound myInts" id="[engine:testsuite-voltscript]/[Test Class With Arrays deserialization]/[Test UBound myInts]">
+    </testcase>
+    <testcase name="Test myInts elem 0" classname="Test Class With Arrays deserialization" time="0" displayname="Test myInts elem 0" id="[engine:testsuite-voltscript]/[Test Class With Arrays deserialization]/[Test myInts elem 0]">
+    </testcase>
+    <testcase name="Test myInts elem 1" classname="Test Class With Arrays deserialization" time="0" displayname="Test myInts elem 1" id="[engine:testsuite-voltscript]/[Test Class With Arrays deserialization]/[Test myInts elem 1]">
+    </testcase>
+    <testcase name="Test myInts elem 2" classname="Test Class With Arrays deserialization" time="0" displayname="Test myInts elem 2" id="[engine:testsuite-voltscript]/[Test Class With Arrays deserialization]/[Test myInts elem 2]">
+    </testcase>
+  </testsuite>
+  <testsuite name="Test Class with Arrays serialization" time="0" displayname="Test Class with Arrays serialization" id="[engine:testsuite-voltscript]/[Test Class with Arrays serialization]">
+    <testcase name="Serialization" classname="Test Class with Arrays serialization" time="0" displayname="Serialization" id="[engine:testsuite-voltscript]/[Test Class with Arrays serialization]/[Serialization]">
+    </testcase>
+    <testcase name="Test String" classname="Test Class with Arrays serialization" time="0" displayname="Test String" id="[engine:testsuite-voltscript]/[Test Class with Arrays serialization]/[Test String]">
+    </testcase>
+    <testcase name="Test type" classname="Test Class with Arrays serialization" time="0" displayname="Test type" id="[engine:testsuite-voltscript]/[Test Class with Arrays serialization]/[Test type]">
+    </testcase>
+    <testcase name="Test my strings" classname="Test Class with Arrays serialization" time="0" displayname="Test my strings" id="[engine:testsuite-voltscript]/[Test Class with Arrays serialization]/[Test my strings]">
+    </testcase>
+    <testcase name="Test myStrings(0) is a string" classname="Test Class with Arrays serialization" time="0" displayname="Test myStrings(0) is a string" id="[engine:testsuite-voltscript]/[Test Class with Arrays serialization]/[Test myStrings(0) is a string]">
+    </testcase>
+    <testcase name="Test myStrings elem 0" classname="Test Class with Arrays serialization" time="0" displayname="Test myStrings elem 0" id="[engine:testsuite-voltscript]/[Test Class with Arrays serialization]/[Test myStrings elem 0]">
+    </testcase>
+    <testcase name="Test myStrings elem 1" classname="Test Class with Arrays serialization" time="0" displayname="Test myStrings elem 1" id="[engine:testsuite-voltscript]/[Test Class with Arrays serialization]/[Test myStrings elem 1]">
+    </testcase>
+    <testcase name="Test UBound myInts" classname="Test Class with Arrays serialization" time="0" displayname="Test UBound myInts" id="[engine:testsuite-voltscript]/[Test Class with Arrays serialization]/[Test UBound myInts]">
+    </testcase>
+    <testcase name="Test myInts elem 0" classname="Test Class with Arrays serialization" time="0" displayname="Test myInts elem 0" id="[engine:testsuite-voltscript]/[Test Class with Arrays serialization]/[Test myInts elem 0]">
+    </testcase>
+    <testcase name="Test myInts elem 1" classname="Test Class with Arrays serialization" time="0" displayname="Test myInts elem 1" id="[engine:testsuite-voltscript]/[Test Class with Arrays serialization]/[Test myInts elem 1]">
+    </testcase>
+    <testcase name="Test myInts elem 2" classname="Test Class with Arrays serialization" time="0" displayname="Test myInts elem 2" id="[engine:testsuite-voltscript]/[Test Class with Arrays serialization]/[Test myInts elem 2]">
+    </testcase>
+  </testsuite>
+</testrun>

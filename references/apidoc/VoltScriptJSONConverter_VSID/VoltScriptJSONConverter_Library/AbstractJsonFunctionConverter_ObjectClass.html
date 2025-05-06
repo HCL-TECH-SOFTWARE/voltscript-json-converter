@@ -1,0 +1,198 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<!-- {{vsidgenerated}} -->
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>Class: AbstractJsonFunctionConverter</title>
+	<meta name="date" content="2025-04-22">
+	<meta name="keywords" content="withCustomConverter()"><meta name="keywords" content="withLiteralParam()"><meta name="keywords" content="deserialize()"><meta name="keywords" content="Delete()"><meta name="keywords" content="New()"><meta name="keywords" content="serialize()"><meta name="keywords" content="params()"><meta name="keywords" content="VoltScriptJSONConverter.AbstractJsonFunctionConverter Class">
+	<link rel="stylesheet" type="text/css" href="..\..\resources/vsid.css" title="balistyle">
+	<script type="text/javascript" src="..\..\resources/vsid.js"></script>
+</head>
+<body>
+<script type="text/javascript"></script>
+<noscript><div>JavaScript is disabled on your browser.</div></noscript>
+
+
+<header id="masterHeader" class="dark master-header dark-master">
+	<div id="header-topbar" class="header-topbar">
+		<div class="container">
+			<div class="row">
+				<div class="col-xs-6 text-left">
+					<a href="https://www.hcltechsw.com/" target="_blank" class="logo-hcl" rel="nofollow"><img src="..\..\resources/hcl-white.png" class="img-responsive"></a>
+				</div>
+				<div class="col-xs-6 text-right">
+					<a href="https://www.hcltechsw.com/" target="_blank" class="logo-hcl-tech" rel="nofollow">HCL Software</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</header>
+<!-- ========= START OF TOP NAVBAR ======= -->
+<div class="topNav">
+	<a name="navbar.top">
+	<!--   -->
+	</a>
+	<div class="skipNav"><a href="#skip.navbar.top" title="Skip navigation links">Skip navigation links</a></div>
+	<a name="navbar.top.firstrow">
+	<!--   -->
+	</a>	
+	<ul class="navList" title="Navigation">
+		<!-- -->
+		<li><a href="..\VoltScriptJSONConverter_VSID.html" title="Navigate to VoltScriptJSONConverter">VoltScript JSON Converter</a></li><li><a href="..\VoltScriptJSONConverter_Library.html" title="Navigate to VoltScriptJSONConverter.VoltScriptJSONConverter">VoltScriptJSONConverter</a></li> 
+		<li class="navBarCell1Rev">AbstractJsonFunctionConverter</li>
+	</ul>
+</div>
+
+<div class="subNav">
+	<ul class="navList">
+	<!-- --> 
+	</ul>
+	<div><!--  -->
+		<script type="text/javascript"><!--
+		navcontentLink = document.getElementById("navcontent_navbar_top");
+		if (!!navcontentLink) {
+		  if(window==top) {
+			navcontentLink.style.display = "block";
+		  }
+		  else {
+			navcontentLink.style.display = "none";
+		  }
+		}
+		  //-->
+		</script>
+	</div>
+	<div>
+		<ul class="subNavList">
+			
+		</ul>
+	</div>
+	<a name="skip.navbar.top">
+	<!--   -->
+	</a>
+</div>
+<!-- ========= END OF TOP NAVBAR ========= -->
+
+<!-- Class -->
+
+<!-- ======== START OF CLASS DATA ======== -->
+<div class="header">
+	<h1 title="Class AbstractJsonFunctionConverter" class="title">Public Class AbstractJsonFunctionConverter As AbstractJsonConverter</h1>
+</div>
+
+<div class="contentContainer">
+	<ul class="inheritance">
+		<!-- --> 
+
+		<ul class="inheritance">
+		<!-- --> 
+
+			<ul class="inheritance">
+				<li><h2>VoltScriptJSONConverter.AbstractJsonFunctionConverter</h2></li>
+			</ul>
+		</ul>
+	</ul>
+
+	<hr />
+
+	<div class="description">	<ul class="blockList">		<li class="blockList">			<div class="comments"><!-- comment --><pre>Custom Converter to convert between a JSON value or values and VoltScript datatype or objects, using a specific sub or function in the underlying class. Used as the abstract class for JsonGetterConverter and JsonSetterConverter.</pre></div>			<hr />		</li>	</ul></div>
+	<ul class="blockList">	<li class="blockList">		<a name="class.summary"><!--   --></a>		<h3>Class Summary</h3>		<table class="memberSummary" border="0" cellpadding="3" cellspacing="0" summary="Class Summary Table">			<thead>						</thead>			<tbody>			<tr class="altColor"><td class="colFirst"><span class="memberNameLabel" title="{{fqn}}">Project ID</span></td><td class="colLast">086680CD3A1F050280258935003E6DFD</td></tr><tr class="rowColor"><td class="colFirst"><span class="memberNameLabel" title="{{fqn}}">Version</span></td><td class="colLast">3</td></tr><tr class="altColor"><td class="colFirst"><span class="memberNameLabel" title="{{fqn}}">Class ID</span></td><td class="colLast">70C54CFEABBE9D84802589350041EE25</td></tr><tr class="rowColor"><td class="colFirst"><span class="memberNameLabel" title="{{fqn}}">Class Type</span></td><td class="colLast">Derived</td></tr><tr class="altColor"><td class="colFirst"><span class="memberNameLabel" title="{{fqn}}">Derived From</span></td><td class="colLast">AbstractJsonConverter</td></tr><tr class="rowColor"><td class="colFirst"><span class="memberNameLabel" title="{{fqn}}">Attributes</span></td><td class="colLast"></td></tr>			</tbody>		</table>	</li></ul>
+	
+	<div class="summary">
+		<ul class="blockList">
+			<li class="blockList">
+				
+				<ul class="blockList">	<li class="blockList">		<a name="variables.summary"><!--   --></a>		<h3>Variables</h3>		<table class="memberSummary" border="0" cellpadding="3" cellspacing="0" summary="Variable Summary table, listing variables">			<thead>			<tr><th class="colFirst">Name</th><th class="colOne">Type</th><th class="colLast">Comment</th></tr>			</thead>			<tbody>			<tr class="rowColor"><td class="colFirst"><code>Public <strong>params</strong></code></td><td><code> As ConverterParam Array</code></td><td class="colLast comment"><em>&nbsp;</em></td></tr>			</tbody>		</table>	</li></ul> 
+				
+				  
+				
+				<ul class="blockList">	<li class="blockList">		<a name="methods.summary"><!--   --></a>		<h3>Method Summaries</h3>		<table class="memberSummary" border="0" cellpadding="3" cellspacing="0" summary="Method Summary table, listing methods and comments">			<thead>						</thead>			<tbody>			<tr class="rowColor"><td class="colFirst"><code><span class="memberNameLink"><a href="#VoltScriptJSONConverter.AbstractJsonFunctionConverter.withCustomConverter-">withCustomConverter</a></span>(labelName As String, converter As AbstractJsonConverter) As Variant</code></td></tr><tr class="altColor"><td class="colFirst"><code><span class="memberNameLink"><a href="#VoltScriptJSONConverter.AbstractJsonFunctionConverter.withLiteralParam-">withLiteralParam</a></span>(paramVal As Variant) As AbstractJsonFunctionConverter</code></td></tr><tr class="rowColor"><td class="colFirst"><code><span class="memberNameLink"><a href="#VoltScriptJSONConverter.AbstractJsonFunctionConverter.deserialize-">deserialize</a></span>(holder As JsonConversionHolder, source As JsonObject)</code></td></tr><tr class="altColor"><td class="colFirst"><code><span class="memberNameLink"><a href="#VoltScriptJSONConverter.AbstractJsonFunctionConverter.Delete-">Delete</a></span>()</code></td></tr><tr class="rowColor"><td class="colFirst"><code><span class="memberNameLink"><a href="#VoltScriptJSONConverter.AbstractJsonFunctionConverter.New-">New</a></span>()</code></td></tr><tr class="altColor"><td class="colFirst"><code><span class="memberNameLink"><a href="#VoltScriptJSONConverter.AbstractJsonFunctionConverter.serialize-">serialize</a></span>(source As Variant, target As JsonObject)</code></td></tr>			</tbody>		</table>	</li></ul> 
+			</li>
+		</ul>
+	</div>
+
+	<div class="details">
+		<ul class="blockList">
+			<li class="blockList">
+				<!-- ========= CODE SAMPLE ======== --><ul class="blockList">	<li class="blockList">		<a name="{{fqn}}.codesample"><!-- --></a>		<h3>Code Sample</h3>		<ul class="blockListLast">			<li class="blockList">				<pre class="codesample">See JsonGetterConverter and JsonSetterConverter</pre>			</li>		</ul>	</li></ul>
+				
+				
+				<!-- ============ METHOD DETAIL ========== --><ul class="blockList">	<li class="blockList">		<a name="method.detail"><!--   --></a>		<h3>Methods Detail</h3>		<!-- Method Detail Element --><a name="VoltScriptJSONConverter.AbstractJsonFunctionConverter.withCustomConverter-"><!--  --></a><ul class="blockList">	<li class="blockList">		<a name="VoltScriptJSONConverter.AbstractJsonFunctionConverter.withCustomConverter"><!--   --></a>		<h4>withCustomConverter</h4>		<table class="methoddetail" border="0" cellpadding="3" cellspacing="0" summary="withCustomConverter method detail table">			<thead>				<tr><th class="colFirst" scope="col" colspan="5"><pre>Public Function withCustomConverter<em>(labelName As String, converter As AbstractJsonConverter)</em> As Variant</pre></th></tr>			</thead>			<tbody>	<tr class="altColor"><td class="colFirst" colspan="5"><a name="VoltScriptJSONConverter.AbstractJsonFunctionConverter.withCustomConverter.comments"><!--   --></a>Passes a custom converter to this AbstractJsonFunctionConverter. The converter will be used to convert the relevant label to a VoltScript object rather than a scalar or scalar array.</td></tr>	<tr>	<th class="colFirst min" scope="col">idx</th>	<th class="colOne" scope="col"><a name="VoltScriptJSONConverter.AbstractJsonFunctionConverter.withCustomConverter.arguments"><!--   --></a>Argument</th>	<th class="colOne" scope="col">Data Type</th>	<th class="colOne attributes" scope="col">Attributes</th>	<th class="colLast comment" scope="col">Comments</th></tr><tr class="altColor"><td class="colFirst min">1</strong></td><td class="colOne"><strong>labelName</strong></td><td class="colOne">String</td><td class="colOne attributes"></td><td class="colLast comment"><em>Label to look for in the parent JSON object&nbsp;</em></td></tr><tr class="altColor"><td class="colFirst min">2</strong></td><td class="colOne"><strong>converter</strong></td><td class="colOne">AbstractJsonConverter</td><td class="colOne attributes"></td><td class="colLast comment"><em>AbstractJsonConverter to use when deserializing the value&nbsp;</em></td></tr>	<tr><td>&nbsp;</td></tr><tr><th class="colFirst" scope="col" colspan="5">Code Sample</th></tr><tr class="altColor"><td class="colFirst" colspan="5" style="padding-top:0;"><a name="VoltScriptJSONConverter.AbstractJsonFunctionConverter.withCustomConverter.codesample"><!--   --></a><pre class="codesample">%REM<br />Run a class&apos;s setName(firstName, lastName) function, but convert last name to upper case before passing it in.<br />%END REM<br />Dim converter as New JsonSetterConverter<br />Dim upperCaseConverter as New ConvertToUCaseConverter()<br />Call converter.forSetter(&quot;setName&quot;).withValueParam().withSiblingParam(&quot;lastName&quot;)<br />Call converter.withCustomConverter(&quot;lastName&quot;, upperCaseConverter)</pre></td></tr>		</tbody>		</table>			</li></ul><!-- Method Detail Element --><a name="VoltScriptJSONConverter.AbstractJsonFunctionConverter.withLiteralParam-"><!--  --></a><ul class="blockList">	<li class="blockList">		<a name="VoltScriptJSONConverter.AbstractJsonFunctionConverter.withLiteralParam"><!--   --></a>		<h4>withLiteralParam</h4>		<table class="methoddetail" border="0" cellpadding="3" cellspacing="0" summary="withLiteralParam method detail table">			<thead>				<tr><th class="colFirst" scope="col" colspan="5"><pre>Public Function withLiteralParam<em>(paramVal As Variant)</em> As AbstractJsonFunctionConverter</pre></th></tr>			</thead>			<tbody>	<tr class="altColor"><td class="colFirst" colspan="5"><a name="VoltScriptJSONConverter.AbstractJsonFunctionConverter.withLiteralParam.comments"><!--   --></a>Fluent method to pass a literal value as a parameter for the converter</td></tr>	<tr>	<th class="colFirst min" scope="col">idx</th>	<th class="colOne" scope="col"><a name="VoltScriptJSONConverter.AbstractJsonFunctionConverter.withLiteralParam.arguments"><!--   --></a>Argument</th>	<th class="colOne" scope="col">Data Type</th>	<th class="colOne attributes" scope="col">Attributes</th>	<th class="colLast comment" scope="col">Comments</th></tr><tr class="altColor"><td class="colFirst min">1</strong></td><td class="colOne"><strong>paramVal</strong></td><td class="colOne">Variant</td><td class="colOne attributes"></td><td class="colLast comment"><em>Literal value to pass to the relevant setter as nth parameter&nbsp;</em></td></tr>	<tr><td>&nbsp;</td></tr><tr><th class="colFirst" scope="col" colspan="5">Code Sample</th></tr><tr class="altColor"><td class="colFirst" colspan="5" style="padding-top:0;"><a name="VoltScriptJSONConverter.AbstractJsonFunctionConverter.withLiteralParam.codesample"><!--   --></a><pre class="codesample">%REM<br />Ensures that when extracting the gender element from a JSON object, the target class&apos;s setGender method is called with the literal value &quot;M&quot;. <br />This is found in the CustomSetterTest sample, a hard-coded test for validation purposes only.<br />%END REM<br />Dim helper as New JsonConversionHelper()<br />Dim genderConverter as New JsonSetterConverter()<br />Call genderConverter.forSetter(setGender).withLiteralParam(&quot;M&quot;)<br />Call helper.withCustomConverter(&quot;gender&quot;, genderConverter)</pre></td></tr>		</tbody>		</table>			</li></ul><!-- Method Detail Element --><a name="VoltScriptJSONConverter.AbstractJsonFunctionConverter.deserialize-"><!--  --></a><ul class="blockList">	<li class="blockList">		<a name="VoltScriptJSONConverter.AbstractJsonFunctionConverter.deserialize"><!--   --></a>		<h4>deserialize</h4>		<table class="methoddetail" border="0" cellpadding="3" cellspacing="0" summary="deserialize method detail table">			<thead>				<tr><th class="colFirst" scope="col" colspan="5"><pre>Public Sub deserialize<em>(holder As JsonConversionHolder, source As JsonObject)</em></pre></th></tr>			</thead>			<tbody>	<tr class="altColor"><td class="colFirst" colspan="5"><a name="VoltScriptJSONConverter.AbstractJsonFunctionConverter.deserialize.comments"><!--   --></a>Overridden function</td></tr>	<tr>	<th class="colFirst min" scope="col">idx</th>	<th class="colOne" scope="col"><a name="VoltScriptJSONConverter.AbstractJsonFunctionConverter.deserialize.arguments"><!--   --></a>Argument</th>	<th class="colOne" scope="col">Data Type</th>	<th class="colOne attributes" scope="col">Attributes</th>	<th class="colLast comment" scope="col">Comments</th></tr><tr class="altColor"><td class="colFirst min">1</strong></td><td class="colOne"><strong>holder</strong></td><td class="colOne">JsonConversionHolder</td><td class="colOne attributes"></td><td class="colLast comment"><em>Object to deserialize to&nbsp;</em></td></tr><tr class="altColor"><td class="colFirst min">2</strong></td><td class="colOne"><strong>source</strong></td><td class="colOne">JsonObject</td><td class="colOne attributes"></td><td class="colLast comment"><em>JSON object to deserialize from&nbsp;</em></td></tr>		<tr><td>&nbsp;</td></tr><tr><th class="colFirst" scope="col" colspan="5">Throws Exceptions</th></tr><tr>	<th class="colFirst" scope="col"><a name="VoltScriptJSONConverter.AbstractJsonFunctionConverter.deserialize.exceptions"><!--   --></a>Message</th>	<th class="colOne" scope="col">Error Code</th>	<th class="colLast" scope="col" colspan="3">Comments</th></tr><!-- ExceptionElement  --><tr class="altColor"><td class="colFirst min">Not Implemented</td><td class="colOne">1501</td><td class="colLast comment" colspan="3"><em>&nbsp;</em></td></tr>	</tbody>		</table>			</li></ul><!-- Method Detail Element --><a name="VoltScriptJSONConverter.AbstractJsonFunctionConverter.Delete-"><!--  --></a><ul class="blockList">	<li class="blockList">		<a name="VoltScriptJSONConverter.AbstractJsonFunctionConverter.Delete"><!--   --></a>		<h4>Delete</h4>		<table class="methoddetail" border="0" cellpadding="3" cellspacing="0" summary="Delete method detail table">			<thead>				<tr><th class="colFirst" scope="col" colspan="5"><pre>Public Sub Delete<em>()</em></pre></th></tr>			</thead>			<tbody>	<tr class="altColor"><td class="colFirst" colspan="5"><a name="VoltScriptJSONConverter.AbstractJsonFunctionConverter.Delete.comments"><!--   --></a>Destructor, erases converters List</td></tr>				</tbody>		</table>			</li></ul><!-- Method Detail Element --><a name="VoltScriptJSONConverter.AbstractJsonFunctionConverter.New-"><!--  --></a><ul class="blockList">	<li class="blockList">		<a name="VoltScriptJSONConverter.AbstractJsonFunctionConverter.New"><!--   --></a>		<h4>New</h4>		<table class="methoddetail" border="0" cellpadding="3" cellspacing="0" summary="New method detail table">			<thead>				<tr><th class="colFirst" scope="col" colspan="5"><pre>Public Sub New<em>()</em></pre></th></tr>			</thead>			<tbody>					</tbody>		</table>			</li></ul><!-- Method Detail Element --><a name="VoltScriptJSONConverter.AbstractJsonFunctionConverter.serialize-"><!--  --></a><ul class="blockList">	<li class="blockList">		<a name="VoltScriptJSONConverter.AbstractJsonFunctionConverter.serialize"><!--   --></a>		<h4>serialize</h4>		<table class="methoddetail" border="0" cellpadding="3" cellspacing="0" summary="serialize method detail table">			<thead>				<tr><th class="colFirst" scope="col" colspan="5"><pre>Public Sub serialize<em>(source As Variant, target As JsonObject)</em></pre></th></tr>			</thead>			<tbody>	<tr class="altColor"><td class="colFirst" colspan="5"><a name="VoltScriptJSONConverter.AbstractJsonFunctionConverter.serialize.comments"><!--   --></a>Overridden function</td></tr>	<tr>	<th class="colFirst min" scope="col">idx</th>	<th class="colOne" scope="col"><a name="VoltScriptJSONConverter.AbstractJsonFunctionConverter.serialize.arguments"><!--   --></a>Argument</th>	<th class="colOne" scope="col">Data Type</th>	<th class="colOne attributes" scope="col">Attributes</th>	<th class="colLast comment" scope="col">Comments</th></tr><tr class="altColor"><td class="colFirst min">1</strong></td><td class="colOne"><strong>source</strong></td><td class="colOne">Variant</td><td class="colOne attributes"></td><td class="colLast comment"><em>VoltScript object from which to serialize&nbsp;</em></td></tr><tr class="altColor"><td class="colFirst min">2</strong></td><td class="colOne"><strong>target</strong></td><td class="colOne">JsonObject</td><td class="colOne attributes"></td><td class="colLast comment"><em>JsonObject to write to&nbsp;</em></td></tr>		<tr><td>&nbsp;</td></tr><tr><th class="colFirst" scope="col" colspan="5">Throws Exceptions</th></tr><tr>	<th class="colFirst" scope="col"><a name="VoltScriptJSONConverter.AbstractJsonFunctionConverter.serialize.exceptions"><!--   --></a>Message</th>	<th class="colOne" scope="col">Error Code</th>	<th class="colLast" scope="col" colspan="3">Comments</th></tr><!-- ExceptionElement  --><tr class="altColor"><td class="colFirst min">Not Implemented</td><td class="colOne">1501</td><td class="colLast comment" colspan="3"><em>&nbsp;</em></td></tr>	</tbody>		</table>			</li></ul>	</li></ul>
+			</li>
+		</ul>
+	</div> 
+
+</div>
+<!-- ========= END OF CLASS DATA ========= -->
+<!-- ======= START OF BOTTOM NAVBAR ====== -->
+<div class="bottomNav">
+	<a name="navbar.bottom"><!--   --></a>
+	<div class="skipNav"><a href="#skip.navbar.bottom" title="Skip navigation links">Skip navigation links</a></div>
+	
+	<a name="navbar.bottom.firstrow"><!--   --></a>
+	<ul class="navList" title="Navigation">
+		<!--  -->
+	</ul>
+</div>
+
+<div class="subNav">
+	<ul class="navList">
+		<!-- 
+		<li><a href="prevelement (class or package)url.html" title="previous element (class or package) fqn in parent/package"><span element (class or package)="typeNameLink">Previous element (class or package) Name</span></a></li>
+		{{link_prevelement}}
+		-->
+
+		<!-- 
+		<li><a href="nextelement (class or package)url.html" title="next element (class or package) fqn in parent/package"><span element (class or package)="typeNameLink">Next element (class or package) Name</span></a></li>
+		{{link_nextelement}}
+		-->
+	</ul>
+	<ul class="navList">
+	<!-- 
+		<li><a href="../../../../index.html?url for frames" target="_top">Frames</a></li>
+		<li><a href="{{elementurl}}" target="_top">No&nbsp;Frames</a></li>
+	-->
+	</ul>
+	<ul class="navList" id="navcontent_navbar_bottom">
+	<!-- 
+		<li><a href="../../../nav-content-noframe.html">All&nbsp;Classes</a></li>
+	 -->
+	</ul>
+	
+	<div>
+		<script type="text/javascript"><!--
+		  navcontentLink = document.getElementById("navcontent_navbar_bottom");
+		  if(window==top) {
+			navcontentLink.style.display = "block";
+		  }
+		  else {
+			navcontentLink.style.display = "none";
+		  }
+		  //-->
+		</script>
+	</div>
+	
+	<div>
+		<ul class="subNavList">
+		<!-- 
+			<li>Summary:&nbsp;</li>
+			<li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
+			<li><a href="#method.summary">Method</a></li>
+		 -->
+		</ul>
+		<ul class="subNavList">
+		<!-- 
+			<li>Detail:&nbsp;</li>
+			<li>Field&nbsp;|&nbsp;</li>
+			<li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
+			<li><a href="#method.detail">Method</a></li>
+		 -->
+		</ul>
+	</div>
+	
+	<a name="skip.navbar.bottom"><!--   --></a>
+</div>
+<!-- ======== END OF BOTTOM NAVBAR ======= -->
+<p class="legalCopy"><small>Copyright &#169; <a href="https://www.hcltechsw.com/">HCL America, Inc.</a> 1999, 2023. All Rights Reserved.</small></p>
+</body>
+</html>

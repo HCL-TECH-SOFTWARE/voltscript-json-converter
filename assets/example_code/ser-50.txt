@@ -1,0 +1,78 @@
+%REM
+	Copyright 2022-2023 HCL America, Inc.
+	Licensed under the Apache License, Version 2.0 (the "License"); 
+	you may not use this file except in compliance with the License. 
+	You may obtain a copy of the License at
+
+	http://www.apache.org/licenses/LICENSE-2.0
+
+	Unless required by applicable law or agreed to in writing, 
+	software distributed under the License is distributed on an "AS IS" BASIS, 
+	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
+	See the License for the specific language governing permissions and limitations under the License	
+%END REM
+
+Option Public
+Option Declare
+
+' Modify use statement as appropriate for your environent to point to relative path
+Use "../../../src/VoltScriptJsonConverter" 
+
+Class Laureate
+    Public firstName as String
+    Public lastName as String
+    Public share as String
+
+    Function getName() as String
+        getName = Me.firstName & " " & Me.lastName
+    End Function
+
+    Function getFullName(firstNameFirst as Boolean)
+        If (firstNameFirst) Then
+            getFullName = Me.firstName & " " & Me.lastName
+        Else
+            getFullName = Me.lastName & ", " & Me.firstName
+        End If
+    End Function
+End Class
+
+Sub Initialize
+    Print "Running Sample1"
+    Call sample1()
+    Print "Running Sample2"
+    Call sample2()
+End Sub
+
+Sub sample1()
+    Dim laureate as New Laureate()
+    laureate.firstName = "Guglielmo"
+    laureate.lastName = "Marconi"
+    laureate.share = "2"
+
+    Dim helper as New JsonConversionHelper
+    Dim jsonObj as JsonObject
+    Dim nameConverter as New JsonGetterConverter()
+    Set jsonObj = helper.withScalarConverter("share")._
+        withCustomConverter("name", nameConverter.forGetter("getName"))._
+        toJson(laureate)
+    
+    Print jsonObj.getChild("name").scalarValue
+End Sub
+
+Sub sample2()
+    Dim laureate as New Laureate()
+    laureate.firstName = "Guglielmo"
+    laureate.lastName = "Marconi"
+    laureate.share = "2"
+
+    Dim helper as New JsonConversionHelper
+    Dim jsonObj as JsonObject
+    Dim nameConverter as New JsonGetterConverter()
+    Set jsonObj = helper.withScalarConverter("share")._
+        withCustomConverter("name", nameConverter._
+            forGetter("getFullName")._
+            withLiteralParam(true))._
+        toJson(laureate)
+    
+    Print jsonObj.getChild("name").scalarValue
+End Sub

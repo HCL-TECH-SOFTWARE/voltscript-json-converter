@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?><testrun name="Person Class with Custom Getter Functions" tests="4" time="250425T141227" failures="0" errors="0">
+  <testsuite name="Test Custom Getter serialization - True" time="0" displayname="Test Custom Getter serialization - True" id="[engine:testsuite-voltscript]/[Test Custom Getter serialization - True]">
+    <testcase name="Serialization" classname="Test Custom Getter serialization - True" time="0" displayname="Serialization" id="[engine:testsuite-voltscript]/[Test Custom Getter serialization - True]/[Serialization]">
+    </testcase>
+    <testcase name="Check name" classname="Test Custom Getter serialization - True" time="0" displayname="Check name" id="[engine:testsuite-voltscript]/[Test Custom Getter serialization - True]/[Check name]">
+    </testcase>
+  </testsuite>
+  <testsuite name="Test Custom Getter serialization - False" time="0" displayname="Test Custom Getter serialization - False" id="[engine:testsuite-voltscript]/[Test Custom Getter serialization - False]">
+    <testcase name="Serialization" classname="Test Custom Getter serialization - False" time="0" displayname="Serialization" id="[engine:testsuite-voltscript]/[Test Custom Getter serialization - False]/[Serialization]">
+    </testcase>
+    <testcase name="Check name" classname="Test Custom Getter serialization - False" time="0" displayname="Check name" id="[engine:testsuite-voltscript]/[Test Custom Getter serialization - False]/[Check name]">
+    </testcase>
+  </testsuite>
+</testrun>
